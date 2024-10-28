@@ -5,9 +5,11 @@
 
 namespace directhook::d3d9
 {
+	using PFN_Direct3DCreate9 = IDirect3D9*(*)(UINT);
+
 	DHStatus Initialize(MethodTable& methodTable)
 	{
-		WNDCLASSEXA windowClass;
+		WNDCLASSEX windowClass;
 		windowClass.cbSize = sizeof(WNDCLASSEX);
 		windowClass.style = CS_HREDRAW | CS_VREDRAW;
 		windowClass.lpfnWndProc = DefWindowProc;
@@ -18,33 +20,33 @@ namespace directhook::d3d9
 		windowClass.hCursor = nullptr;
 		windowClass.hbrBackground = nullptr;
 		windowClass.lpszMenuName = nullptr;
-		windowClass.lpszClassName = "DirectHook";
+		windowClass.lpszClassName = L"DirectHook";
 		windowClass.hIconSm = nullptr;
 
-		::RegisterClassExA(&windowClass);
-		HWND window = ::CreateWindowA(windowClass.lpszClassName, "Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, windowClass.hInstance, nullptr);
+		::RegisterClassEx(&windowClass);
+		HWND window = ::CreateWindow(windowClass.lpszClassName, L"Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, windowClass.hInstance, nullptr);
 
 		HMODULE libD3D9 = ::GetModuleHandleA("d3d9.dll");
 		if (libD3D9 == nullptr)
 		{
 			::DestroyWindow(window);
-			::UnregisterClassA(windowClass.lpszClassName, windowClass.hInstance);
+			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return DHStatus::Error_APIInitFailed;
 		}
 
-		void* Direct3DCreate9;
-		if ((Direct3DCreate9 = ::GetProcAddress(libD3D9, "Direct3DCreate9")) == NULL)
+		PFN_Direct3DCreate9 Direct3DCreate9 = (PFN_Direct3DCreate9)::GetProcAddress(libD3D9, "Direct3DCreate9");
+		if (Direct3DCreate9 == nullptr)
 		{
 			::DestroyWindow(window);
-			::UnregisterClassA(windowClass.lpszClassName, windowClass.hInstance);
+			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return DHStatus::Error_APIInitFailed;
 		}
 
-		LPDIRECT3D9 direct3D9;
-		if ((direct3D9 = ((LPDIRECT3D9(__stdcall*)(uint32_t))(Direct3DCreate9))(D3D_SDK_VERSION)) == NULL)
+		LPDIRECT3D9 direct3D9 = Direct3DCreate9(D3D_SDK_VERSION);
+		if (direct3D9 == nullptr)
 		{
 			::DestroyWindow(window);
-			::UnregisterClassA(windowClass.lpszClassName, windowClass.hInstance);
+			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return DHStatus::Error_APIInitFailed;
 		}
 
@@ -69,10 +71,20 @@ namespace directhook::d3d9
 		{
 			direct3D9->Release();
 			::DestroyWindow(window);
-			::UnregisterClassA(windowClass.lpszClassName, windowClass.hInstance);
+			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return DHStatus::Error_APIInitFailed;
 		}
 		methodTable.AddVTableEntries(device, DEVICE_ENTRIES);
+
+		device->Release();
+		device = nullptr;
+
+		direct3D9->Release();
+		direct3D9 = nullptr;
+
+		::DestroyWindow(window);
+		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
+
 		return DHStatus::Success;
 	}
 

@@ -1,7 +1,4 @@
 #include <d3d9.h>
-#pragma warning( disable : 4996 ) // disable deprecated warning 
-#include <strsafe.h>
-#pragma warning( default : 4996 )
 
 #pragma comment(lib, "d3d9.lib")
 
@@ -43,9 +40,9 @@ HRESULT InitVB()
 {
 	CUSTOMVERTEX vertices[] =
 	{
-		{ 150.0f,  50.0f, 0.5f, 1.0f, 0xffff0000, }, // x, y, z, rhw, color
-		{ 250.0f, 250.0f, 0.5f, 1.0f, 0xff00ff00, },
-		{  50.0f, 250.0f, 0.5f, 1.0f, 0xff00ffff, },
+		{ 400.0f,  50.0f, 0.5f, 1.0f, 0xffff0000, }, // x, y, z, rhw, color
+		{ 750.0f, 750.0f, 0.5f, 1.0f, 0xff00ff00, },
+		{  50.0f, 750.0f, 0.5f, 1.0f, 0xff00ffff, },
 	};
 
 	if (FAILED(g_pd3dDevice->CreateVertexBuffer(3 * sizeof(CUSTOMVERTEX),
@@ -113,12 +110,12 @@ INT WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 	{
 		sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L,
 		GetModuleHandle(NULL), NULL, NULL, NULL, NULL,
-		L"D3D Tutorial", NULL
+		L"D3D9 Triangle", NULL
 	};
 	RegisterClassEx(&wc);
 
-	HWND hWnd = CreateWindow(L"D3D Tutorial", L"D3D Tutorial 02: Vertices",
-		WS_OVERLAPPEDWINDOW, 100, 100, 300, 300,
+	HWND hWnd = CreateWindow(L"D3D9 Triangle", L"D3D9 Triangle",
+		WS_OVERLAPPEDWINDOW, 100, 100, 800, 800,
 		NULL, NULL, wc.hInstance, NULL);
 
 	if (SUCCEEDED(InitD3D(hWnd)))
@@ -128,7 +125,6 @@ INT WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 
 		if (SUCCEEDED(InitVB()))
 		{
-			// Show the window
 			ShowWindow(hWnd, SW_SHOWDEFAULT);
 			UpdateWindow(hWnd);
 
@@ -142,11 +138,13 @@ INT WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 					DispatchMessage(&msg);
 				}
 				else
+				{
 					Render();
+				}
 			}
 		}
 	}
 
-	UnregisterClass(L"D3D Tutorial", wc.hInstance);
+	UnregisterClass(L"D3D9 Triangle", wc.hInstance);
 	return 0;
 }

@@ -10,6 +10,9 @@
 #if DH_USE_D3D11
 #include "D3D11/d3d11hook.h"
 #endif
+#if DH_USE_D3D12
+#include "D3D12/d3d12hook.h"
+#endif
 
 namespace directhook
 {
@@ -29,6 +32,12 @@ namespace directhook
 		}
 #elif DH_USE_D3D11
 		DHStatus status = d3d11::Initialize(gMethodTable);
+		if (status != DHStatus::Success)
+		{
+			return status;
+		}
+#elif DH_USE_D3D12
+		DHStatus status = d3d12::Initialize(gMethodTable);
 		if (status != DHStatus::Success)
 		{
 			return status;

@@ -44,6 +44,11 @@
 #include "D3D11/d3d11hook_indices.h"
 #endif
 
+#if DH_USE_D3D12
+#include "D3D12/d3d12hook_aliases.h"
+#include "D3D12/d3d12hook_indices.h"
+#endif
+
 namespace directhook
 {
 	using uint8		= std::uint8_t;
@@ -72,7 +77,6 @@ namespace directhook
 	DHStatus Hook(uint16 index, void** original, void* function);
 	DHStatus Unhook(uint16 index);
 	void* GetOriginal(uint16 index);
-
 
 	template<typename FuncT>
 	DHStatus Hook(uint16 index, FuncT& original, void* function)

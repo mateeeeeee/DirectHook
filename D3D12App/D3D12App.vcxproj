@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2589786f-23e5-4ba6-854e-35219d9f45d1}</ProjectGuid>
-    <RootNamespace>D3D11App</RootNamespace>
+    <ProjectGuid>{7f284551-fff4-4144-a3ce-16c36b3e82c0}</ProjectGuid>
+    <RootNamespace>D3D12App</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,11 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="D3D11App.cpp" />
+    <ClInclude Include="d3dx12.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\D3D11Hook\D3D11Hook.vcxproj">
-      <Project>{305eb503-a5c3-4b28-9229-d343e734b7cc}</Project>
+    <ClCompile Include="D3D12App.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\D3D12Hook\D3D12Hook.vcxproj">
+      <Project>{7c9c163b-f7e7-4e4c-9ee8-19a8c2e6e392}</Project>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemGroup>

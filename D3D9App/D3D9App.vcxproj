@@ -127,20 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="D3D9App.h" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="D3D9App.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="D3D9App.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="D3D9App.ico" />
-    <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\D3D9Hook\D3D9Hook.vcxproj">
