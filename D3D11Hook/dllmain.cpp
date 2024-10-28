@@ -1,14 +1,9 @@
-#include <d3d11_1.h>
 #include "directhook.h"
-
-using PFN_D3D11Draw = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT);
-using PFN_DXGIPresent = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT, UINT);
-
-static PFN_D3D11Draw d3d11Draw = nullptr;
-static PFN_DXGIPresent dxgiPresent = nullptr;
 
 using namespace directhook;
 
+static d3d11::PFN_D3D11DeviceContext_Draw d3d11Draw = nullptr;
+static d3d11::PFN_DXGISwapChain_Present   dxgiPresent = nullptr;
 
 void STDMETHODCALLTYPE MyDraw(
 	ID3D11DeviceContext* DeviceContext,
@@ -34,15 +29,15 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 	return dxgiPresent(SwapChain, SyncInterval, Flags);
 }
 
-int d3d11hookThread()
+int D3D11HookThread()
 {
 	if (DHStatus dh = Initialize(); dh == DHStatus::Success)
 	{
-		d3d11Draw = GetOriginalT<PFN_D3D11Draw>(74);
-		Hook(74, (void**)&d3d11Draw, MyDraw);
+		GetOriginal(d3d11::Context_Draw, d3d11Draw);
+		Hook(d3d11::Context_Draw, d3d11Draw, MyDraw);
 
-		dxgiPresent = GetOriginalT<PFN_DXGIPresent>(8);
-		Hook(8, (void**)&dxgiPresent, MyPresent);
+		GetOriginal(d3d11::SwapChain_Present, dxgiPresent);
+		Hook(d3d11::SwapChain_Present, dxgiPresent, MyPresent);
 	}
 	return 0;
 }
@@ -50,11 +45,10 @@ int d3d11hookThread()
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID)
 {
 	DisableThreadLibraryCalls(hInstance);
-
 	switch (fdwReason)
 	{
 	case DLL_PROCESS_ATTACH:
-		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)d3d11hookThread, NULL, 0, NULL);
+		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)D3D11HookThread, NULL, 0, NULL);
 		break;
 	}
 	return TRUE;

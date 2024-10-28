@@ -4,7 +4,6 @@
 
 namespace directhook
 {
-
 	class MethodTable
 	{
 	public:
@@ -13,7 +12,6 @@ namespace directhook
 		template<typename D3DInterfaceT>
 		void AddVTableEntries(D3DInterfaceT* d3dInterface, uint32 vtableEntriesCount)
 		{
-			static_assert(sizeof(address_t) == sizeof(void*));
 			methods.reserve(methods.size() + vtableEntriesCount);
 			void** vTableBase = *reinterpret_cast<void***>(d3dInterface);
 			for (uint32 i = 0; i < vtableEntriesCount; ++i)

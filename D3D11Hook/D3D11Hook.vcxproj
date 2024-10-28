@@ -156,11 +156,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\DirectHook\D3D11\d3d11hook.cpp" />
     <ClCompile Include="..\DirectHook\directhook.cpp" />
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\DirectHook\Backends\d3d11hook.h" />
+    <ClInclude Include="..\DirectHook\D3D11\d3d11hook.h" />
+    <ClInclude Include="..\DirectHook\D3D11\d3d11hook_aliases.h" />
+    <ClInclude Include="..\DirectHook\D3D11\d3d11hook_indices.h" />
     <ClInclude Include="..\DirectHook\directhook.h" />
     <ClInclude Include="..\DirectHook\method_table.h" />
   </ItemGroup>

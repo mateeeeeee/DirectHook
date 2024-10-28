@@ -5,7 +5,7 @@
 #include "method_table.h"
 
 #if DH_USE_D3D11
-#include "Backends/d3d11hook.h"
+#include "D3D11/d3d11hook.h"
 #endif
 
 namespace directhook
@@ -19,11 +19,11 @@ namespace directhook
 	DHStatus Initialize()
 	{
 #if DH_USE_D3D11
-			DHStatus status = InitializeD3D11(gMethodTable);
-			if (status != DHStatus::Success)
-			{
-				return status;
-			}
+		DHStatus status = d3d11::Initialize(gMethodTable);
+		if (status != DHStatus::Success)
+		{
+			return status;
+		}
 #endif
 		
 		MH_STATUS mhStatus = MH_Initialize();

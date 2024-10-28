@@ -1,18 +1,10 @@
-#pragma once
-# include <dxgi.h>
-# include <d3d11_1.h>
-#include "../directhook.h"
+#include <dxgi.h>
+#include <d3d11_1.h>
+#include "d3d11hook.h"
 #include "../method_table.h"
 
-namespace directhook
+namespace directhook::d3d11
 {
-	//move stuff to .cpp
-	//for use with hook as index parameter
-	enum Direct3D11HookIndex : uint16
-	{
-		//add indices
-	};
-
 	using PFN_D3D11CreateDeviceAndSwapChain = HRESULT(__stdcall*)(
 		IDXGIAdapter*,
 		D3D_DRIVER_TYPE,
@@ -27,7 +19,7 @@ namespace directhook
 		D3D_FEATURE_LEVEL*,
 		ID3D11DeviceContext**);
 
-	DHStatus InitializeD3D11(MethodTable& methodTable)
+	DHStatus Initialize(MethodTable& methodTable)
 	{
 		WNDCLASSEXA windowClass;
 		windowClass.cbSize = sizeof(WNDCLASSEX);
@@ -105,4 +97,6 @@ namespace directhook
 
 		return DHStatus::Success;
 	}
+
 }
+

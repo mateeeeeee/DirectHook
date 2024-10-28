@@ -33,6 +33,11 @@
 #define DH_USE_D3D12  0
 #endif
 
+#if DH_USE_D3D11
+#include "D3D11/d3d11hook_aliases.h"
+#include "D3D11/d3d11hook_indices.h"
+#endif
+
 namespace directhook
 {
 	using uint8		= std::uint8_t;
@@ -43,11 +48,6 @@ namespace directhook
 	using int16		= std::int16_t;
 	using int32		= std::int32_t;
 	using int64		= std::int64_t;
-#ifdef _X86_
-	using address_t = uint32;
-#else
-	using address_t = uint64;
-#endif
 
 	enum class DHStatus : uint8
 	{
@@ -68,15 +68,15 @@ namespace directhook
 	void* GetOriginal(uint16 index);
 
 
-	template<typename PFN>
-	DHStatus HookT(uint16 index, PFN original, void* function)
+	template<typename FuncT>
+	DHStatus Hook(uint16 index, FuncT& original, void* function)
 	{
 		return Hook(index, (void**)&original, function);
 	}
 
-	template<typename PFN>
-	PFN GetOriginalT(uint16 index)
+	template<typename FuncT>
+	void GetOriginal(uint16 index, FuncT& F)
 	{
-		return (PFN)GetOriginal(index);
+		F = (FuncT)GetOriginal(index);
 	}
 }
