@@ -33,6 +33,10 @@
 #define DH_USE_D3D12  0
 #endif
 
+#if DH_USE_DDRAW
+#include "DDraw/ddrawhook_aliases.h"
+#include "DDraw/ddrawhook_indices.h"
+#endif
 
 #if DH_USE_D3D9
 #include "D3D9/d3d9hook_aliases.h"
