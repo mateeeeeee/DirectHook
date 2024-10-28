@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="..\..\DirectHook\directhook.cpp">
+      <Filter>directhook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\DirectHook\D3D11\d3d11hook.cpp">
+      <Filter>directhook\D3D11</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="directhook">
+      <UniqueIdentifier>{5e4f4f40-ee7b-42bb-ab4b-b23e8d1a01e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="directhook\D3D11">
+      <UniqueIdentifier>{9c5961f5-c8d3-4994-9671-6ae2b3c91641}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\DirectHook\directhook.h">
+      <Filter>directhook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\DirectHook\method_table.h">
+      <Filter>directhook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\DirectHook\D3D11\d3d11hook.h">
+      <Filter>directhook\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\DirectHook\D3D11\d3d11hook_aliases.h">
+      <Filter>directhook\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\DirectHook\D3D11\d3d11hook_indices.h">
+      <Filter>directhook\D3D11</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

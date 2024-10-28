@@ -155,16 +155,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\DirectHook\D3D12\d3d12hook.cpp" />
-    <ClCompile Include="..\DirectHook\directhook.cpp" />
+    <ClCompile Include="..\..\DirectHook\D3D12\d3d12hook.cpp" />
+    <ClCompile Include="..\..\DirectHook\directhook.cpp" />
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\DirectHook\D3D12\d3d12hook.h" />
-    <ClInclude Include="..\DirectHook\D3D12\d3d12hook_aliases.h" />
-    <ClInclude Include="..\DirectHook\D3D12\d3d12hook_indices.h" />
-    <ClInclude Include="..\DirectHook\directhook.h" />
-    <ClInclude Include="..\DirectHook\method_table.h" />
+    <ClInclude Include="..\..\DirectHook\D3D12\d3d12hook.h" />
+    <ClInclude Include="..\..\DirectHook\D3D12\d3d12hook_aliases.h" />
+    <ClInclude Include="..\..\DirectHook\D3D12\d3d12hook_indices.h" />
+    <ClInclude Include="..\..\DirectHook\directhook.h" />
+    <ClInclude Include="..\..\DirectHook\method_table.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
