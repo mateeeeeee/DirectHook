@@ -9,7 +9,6 @@
 #define DIRECTDRAW_VERSION 0x0700
 #include <ddraw.h>
 
-// Defines
 #define WINDOW_CLASS_NAME L"DirectDrawExample"
 #define WINDOW_TITLE_NAME L"DirectDraw Example"
 
@@ -18,7 +17,6 @@ int Height = 600;
 BOOL Execute = TRUE;
 BOOL Resize = FALSE;
 
-// Direct Draw Properties
 IDirectDraw7* Instance = NULL;
 IDirectDrawSurface7* Main = NULL;
 IDirectDrawSurface7* Back = NULL;
@@ -110,25 +108,21 @@ int Render(HWND hWnd)
 
 	if (Back->Lock(NULL, &desc, DDLOCK_WAIT | DDLOCK_WRITEONLY, NULL) != DD_OK) { return ERROR_LOCK_BACK_SURFACE; }
 
-	// Update surface
 	Draw((unsigned char*)desc.lpSurface, desc.lPitch);
 
 	if (Back->Unlock(NULL) != DD_OK) { return ERROR_UNLOCK_BACK_SURFACE; }
 
-	// Update screen surface.
-	RECT src; // Source blit rectangle.
-	RECT dst; // Destination blit rectangle.
+	RECT src;
+	RECT dst;
 
 	POINT p;
 	ZeroMemory(&p, sizeof(POINT));
 
-	// Find where on the primary surface our window is.
 	ClientToScreen(hWnd, &p);
 	GetClientRect(hWnd, &dst);
 	OffsetRect(&dst, p.x, p.y);
 	SetRect(&src, 0, 0, Width, Height);
 
-	// Copy back surface to the primary surface.
 	if (Main->Blt(&dst, Back, &src, DDBLT_WAIT, NULL) != DD_OK) { return ERROR_BLIT_PRIMARY_SURFACE; }
 
 	return ERROR_NONE;
@@ -184,7 +178,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (Instance->SetCooperativeLevel(hwnd, DDSCL_NORMAL) != DD_OK) { Release(hInstance, hwnd); return ERROR_CREATE_DIRECT_DRAW_COOPERATIVE_LEVEL; }
 
-	// Create Primary Surface
 	{
 		DDSURFACEDESC2 desc;
 		ZeroMemory(&desc, sizeof(DDSURFACEDESC2));
@@ -198,7 +191,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (Instance->CreateSurface(&desc, &Main, NULL) != DD_OK) { Release(hInstance, hwnd); return ERROR_CREATE_DIRECT_DRAW_PRIMARY_SURFACE; }
 	}
 
-	// Create Back Surface
 	{
 		DDSURFACEDESC2 desc;
 		ZeroMemory(&desc, sizeof(DDSURFACEDESC2));
@@ -215,17 +207,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (Instance->CreateSurface(&desc, &Back, NULL) != DD_OK) { Release(hInstance, hwnd);  return ERROR_CREATE_DIRECT_DRAW_PRIMARY_SURFACE; }
 	}
 
-	// Create Clipper
 	{
 		if (Instance->CreateClipper(0, &Clipper, NULL) != DD_OK) { Release(hInstance, hwnd);  return ERROR_CREATE_DIRECT_DRAW_CLIPPLER; }
 		if (Clipper->SetHWnd(0, hwnd) != DD_OK) { Release(hInstance, hwnd); return ERROR_SET_DIRECT_DRAW_SET_CLIPPLER; }
 		if (Main->SetClipper(Clipper) != DD_OK) { Release(hInstance, hwnd); return ERROR_SET_DIRECT_DRAW_PRIMARY_SURFACE_CLIPPER; }
 	}
 
-	// Render
+	LoadLibrary(L"DDrawHook.dll");
+
 	while (Execute)
 	{
-		// Process Windows messages
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) > 0)
 		{
 			TranslateMessage(&msg);
@@ -234,7 +225,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (msg.message == WM_QUIT) { Execute = FALSE; break; }
 		}
 
-		// Render
 		if (Execute && Width != 0 && Height != 0)
 		{
 			const int result = Render(hwnd);
@@ -243,7 +233,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	// Clean
 	Release(hInstance, hwnd);
 
 	return ERROR_NONE;

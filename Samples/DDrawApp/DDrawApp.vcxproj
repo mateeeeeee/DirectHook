@@ -129,6 +129,12 @@
   <ItemGroup>
     <ClCompile Include="DDrawApp.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DDrawHook\DDrawHook.vcxproj">
+      <Project>{2d085539-6629-46ef-9558-3bf2b76305b4}</Project>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
