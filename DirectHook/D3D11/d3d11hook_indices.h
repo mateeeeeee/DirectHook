@@ -1,10 +1,13 @@
 #pragma once
 
+#define ENTRY_COUNT(Class) (Class##_LastEntry - Class##_FirstEntry + 1)
+
 namespace directhook::d3d11
 {
 	enum 
 	{
-		SwapChain_QueryInterface,
+		SwapChain_FirstEntry = 0,
+		SwapChain_QueryInterface = SwapChain_FirstEntry,
 		SwapChain_AddRef,
 		SwapChain_Release,
 		SwapChain_SetPrivateData,
@@ -22,7 +25,9 @@ namespace directhook::d3d11
 		SwapChain_GetContainingOutput,
 		SwapChain_GetFrameStatistics,
 		SwapChain_GetLastPresentCount,
-		Device_QueryInterface,
+		SwapChain_LastEntry = SwapChain_GetLastPresentCount,
+		Device_FirstEntry,
+		Device_QueryInterface = Device_FirstEntry,
 		Device_AddRef,
 		Device_Release,
 		Device_CreateBuffer,
@@ -65,7 +70,9 @@ namespace directhook::d3d11
 		Device_GetImmediateContext,
 		Device_SetExceptionMode,
 		Device_GetExceptionMode,
-		Context_QueryInterface,
+		Device_LastEntry = Device_GetExceptionMode,
+		Context_FirstEntry,
+		Context_QueryInterface = Context_FirstEntry,
 		Context_AddRef,
 		Context_Release,
 		Context_GetDevice,
@@ -208,6 +215,11 @@ namespace directhook::d3d11
 		Context_IsAnnotationEnabled,
 		Context_SetMarkerInt,
 		Context_BeginEventInt,
-		Context_EndEvent
+		Context_EndEvent,
+		Context_LastEntry = Context_EndEvent
 	};
+
+	static constexpr int SWAPCHAIN_ENTRIES = ENTRY_COUNT(SwapChain);
+	static constexpr int DEVICE_ENTRIES = ENTRY_COUNT(Device);
+	static constexpr int CONTEXT_ENTRIES = ENTRY_COUNT(Context);
 }

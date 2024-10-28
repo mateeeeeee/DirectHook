@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="..\DirectHook\directhook.cpp">
+      <Filter>directhook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectHook\D3D9\d3d9hook.cpp">
+      <Filter>directhook\D3D9</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="directhook">
+      <UniqueIdentifier>{aaacf9c6-bc60-489d-91c7-39327f296f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="directhook\D3D9">
+      <UniqueIdentifier>{80864d77-c1f6-4897-a724-4642e038a052}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\DirectHook\directhook.h">
+      <Filter>directhook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectHook\method_table.h">
+      <Filter>directhook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectHook\D3D9\d3d9hook.h">
+      <Filter>directhook\D3D9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectHook\D3D9\d3d9hook_aliases.h">
+      <Filter>directhook\D3D9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectHook\D3D9\d3d9hook_indices.h">
+      <Filter>directhook\D3D9</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

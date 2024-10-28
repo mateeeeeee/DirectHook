@@ -9,7 +9,6 @@
 #include <string>
 
 
-// Global Variables
 HINSTANCE hInst;
 HWND hWnd;
 ID3D11Device* device = nullptr;
@@ -21,7 +20,6 @@ ID3D11PixelShader* pixelShader = nullptr;
 ID3D11InputLayout* inputLayout = nullptr;
 IDXGISwapChain* swapChain = nullptr;
 
-// Vertex structure
 struct Vertex 
 {
 	DirectX::XMFLOAT3 position;
@@ -29,7 +27,6 @@ struct Vertex
 };
 
 
-// Hardcoded shaders
 const char* vertexShaderSource = R"(
 struct VS_INPUT {
     float4 position : POSITION;
@@ -57,7 +54,6 @@ float4 PS(PS_INPUT input) : SV_TARGET {
 }
 )";
 
-// Window Procedure
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
 	switch (uMsg) {
@@ -68,7 +64,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-// Function to create a triangle
 void CreateTriangle() 
 {
 	Vertex vertices[] = 
@@ -78,7 +73,6 @@ void CreateTriangle()
 		{ {-0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }  // Vertex 3 (Blue)
 	};
 
-	// Create Vertex Buffer
 	D3D11_BUFFER_DESC bufferDesc = {};
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.ByteWidth = sizeof(vertices);
@@ -94,7 +88,6 @@ void CreateTriangle()
 	}
 }
 
-// Function to compile shaders
 ID3DBlob* CompileShader(const char* source, const char* entryPoint, const char* target) 
 {
 	ID3DBlob* blob = nullptr;
@@ -115,7 +108,6 @@ ID3DBlob* CompileShader(const char* source, const char* entryPoint, const char* 
 	return blob;
 }
 
-// Function to initialize D3D11
 void InitD3D() 
 {
 	UINT flags = 0;
@@ -150,7 +142,6 @@ void InitD3D()
 		exit(-1);
 	}
 
-	// Create render target view
 	ID3D11Texture2D* backBuffer = nullptr;
 	hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
 	if (FAILED(hr)) 
@@ -168,17 +159,14 @@ void InitD3D()
 		exit(-1);
 	}
 
-	// Set render target
 	context->OMSetRenderTargets(1, &renderTargetView, nullptr);
 
-	// Create the shaders
 	ID3DBlob* vsBlob = CompileShader(vertexShaderSource, "VS", "vs_5_0");
 	device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vertexShader);
 
 	ID3DBlob* psBlob = CompileShader(pixelShaderSource, "PS", "ps_5_0");
 	device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &pixelShader);
 
-	// Define the input layout
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -223,7 +211,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nShowCmd)
 
 	InitD3D();
 
-	//usually the dll would be injected, not loaded by the app
+	//usually the dll would be injected, not loaded by the app, this is just for demonstration
 	LoadLibrary(L"D3D11Hook.dll");
 
 	MSG msg{};

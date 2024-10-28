@@ -87,9 +87,9 @@ namespace directhook::d3d11
 			return DHStatus::Error_APIInitFailed;
 		}
 
-		methodTable.AddVTableEntries(swapChain, 18);
-		methodTable.AddVTableEntries(device, 43);
-		methodTable.AddVTableEntries(deviceContext, 144);
+		methodTable.AddVTableEntries(swapChain, SWAPCHAIN_ENTRIES);
+		methodTable.AddVTableEntries(device, DEVICE_ENTRIES);
+		methodTable.AddVTableEntries(deviceContext, CONTEXT_ENTRIES);
 
 		swapChain->Release();
 		device->Release();

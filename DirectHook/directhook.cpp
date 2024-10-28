@@ -4,6 +4,9 @@
 #include "directhook.h"
 #include "method_table.h"
 
+#if DH_USE_D3D9
+#include "D3D9/d3d9hook.h"
+#endif
 #if DH_USE_D3D11
 #include "D3D11/d3d11hook.h"
 #endif
@@ -18,7 +21,13 @@ namespace directhook
 
 	DHStatus Initialize()
 	{
-#if DH_USE_D3D11
+#if DH_USE_D3D9
+		DHStatus status = d3d9::Initialize(gMethodTable);
+		if (status != DHStatus::Success)
+		{
+			return status;
+		}
+#elif DH_USE_D3D11
 		DHStatus status = d3d11::Initialize(gMethodTable);
 		if (status != DHStatus::Success)
 		{
