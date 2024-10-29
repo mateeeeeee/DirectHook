@@ -54,13 +54,36 @@ namespace directhook::d3d12
 		Device_GetAdapterLuid,
 		Device_LastEntry = Device_GetAdapterLuid,
 
-		//Device1_CreatePipelineLibrary,
-		//Device1_SetEventOnMultipleFenceCompletion,
-		//Device1_SetResidencyPriority,
-		//Device1_LastEntry = Device1_SetResidencyPriority,
-		//
-		//Device2_CreatePipelineState,
-		//Device2_LastEntry = Device2_CreatePipelineState,
+		Device1_CreatePipelineLibrary,
+		Device1_SetEventOnMultipleFenceCompletion,
+		Device1_SetResidencyPriority,
+		Device1_LastEntry = Device1_SetResidencyPriority,
+		
+		Device2_CreatePipelineState,
+		Device2_LastEntry = Device2_CreatePipelineState,
+
+		Device3_OpenExistingHeapFromFileMapping,
+		Device3_OpenExistingHeapFromAddress,
+		Device3_EnqueueMakeResident,
+		Device3_LastEntry = Device3_EnqueueMakeResident,
+
+		Device4_CreateCommandList1,
+		Device4_CreateProtectedResourceSession,
+		Device4_CreateCommittedResource1,
+		Device4_CreateHeap1,
+		Device4_CreateReservedResource1,
+		Device4_GetResourceAllocationInfo1,
+		Device4_LastEntry = Device4_GetResourceAllocationInfo1,
+
+		Device5_CreateLifetimeTracker,
+		Device5_RemoveDevice,
+		Device5_EnumerateMetaCommands,
+		Device5_EnumerateMetaCommandParameters,
+		Device5_CreateMetaCommand,
+		Device5_CreateStateObject,
+		Device5_GetRaytracingAccelerationStructurePrebuildInfo,
+		Device5_CheckDriverMatchingIdentifier,
+		Device5_LastEntry,
 
 		Queue_FirstEntry,
 		Queue_QueryInterface = Queue_FirstEntry,
@@ -210,6 +233,13 @@ namespace directhook::d3d12
 	};
 
 	static constexpr int DEVICE_ENTRIES = ENTRY_COUNT(Device);
+	static constexpr int DEVICE1_ENTRIES = ENTRY_COUNT_(Device, 1);
+	static constexpr int DEVICE2_ENTRIES = ENTRY_COUNT_(Device, 2);
+	static constexpr int DEVICE3_ENTRIES = ENTRY_COUNT_(Device, 3);
+	static constexpr int DEVICE4_ENTRIES = ENTRY_COUNT_(Device, 4);
+	static constexpr int DEVICE5_ENTRIES = ENTRY_COUNT_(Device, 5);
+	static constexpr int MAX_DEVICE_ENTRIES = DEVICE5_ENTRIES;
+
 	static constexpr int QUEUE_ENTRIES  = ENTRY_COUNT(Queue);
 	static constexpr int ALLOCATOR_ENTRIES  = ENTRY_COUNT(Allocator);
 	static constexpr int LIST_ENTRIES  = ENTRY_COUNT(List);

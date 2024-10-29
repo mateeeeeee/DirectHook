@@ -98,57 +98,59 @@ namespace directhook::d3d11
 		}
 
         IDXGISwapChain3* swapChain3 = nullptr;
-        swapChain->QueryInterface(IID_PPV_ARGS(&swapChain3));
-        IDXGISwapChain2* swapChain2 = nullptr;
-        swapChain->QueryInterface(IID_PPV_ARGS(&swapChain2));
+		IDXGISwapChain2* swapChain2 = nullptr;
 		IDXGISwapChain1* swapChain1 = nullptr;
-        swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1));
-		if (swapChain3)
+		if (HRESULT hr = swapChain->QueryInterface(IID_PPV_ARGS(&swapChain3)); hr == S_OK && swapChain3)
 		{
-            methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
+			methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
+			SafeRelease(swapChain3);
 		}
-        else if (swapChain2)
-        {
-            methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
-        }
-		else if (swapChain1)
-        {
-            methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
-        }
+		else if (HRESULT hr = swapChain->QueryInterface(IID_PPV_ARGS(&swapChain2)); hr == S_OK && swapChain2)
+		{
+			methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
+			SafeRelease(swapChain2);
+		}
+		else if (HRESULT hr = swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1)); hr == S_OK && swapChain1)
+		{
+			methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
+			SafeRelease(swapChain1);
+		}
 		else
 		{
-            methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
+			methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 		}
 
 		ID3D11Device* device1 = nullptr;
-		device->QueryInterface(IID_PPV_ARGS(&device1));
 		ID3D11Device* device2 = nullptr;
-		device->QueryInterface(IID_PPV_ARGS(&device2));
 		ID3D11Device* device3 = nullptr;
-		device->QueryInterface(IID_PPV_ARGS(&device3));
 		ID3D11Device* device4 = nullptr;
-		device->QueryInterface(IID_PPV_ARGS(&device4));
 		ID3D11Device* device5 = nullptr;
-		device->QueryInterface(IID_PPV_ARGS(&device5));
-		if (device5)
+		if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device5)); hr == S_OK && device5)
 		{
 			methodTable.AddEntries(device5, DEVICE5_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device5);
 		}
-		else if (device4)
+		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device4)); hr == S_OK && device4)
 		{
 			methodTable.AddEntries(device4, DEVICE4_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device4);
+
 		}
-		else if (device3)
+		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device3)); hr == S_OK && device3)
 		{
 			methodTable.AddEntries(device3, DEVICE3_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device3);
+
 		}
-		else if (device2)
+		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device2)); hr == S_OK && device2)
 		{
 			methodTable.AddEntries(device2, DEVICE2_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device2);
 		}
-		else if (device1)
+		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device1)); hr == S_OK && device1)
 		{
 			methodTable.AddEntries(device1, DEVICE1_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device1);
 		}
 		else
 		{
@@ -156,29 +158,28 @@ namespace directhook::d3d11
 		}
 
 		ID3D11DeviceContext1* deviceContext1 = nullptr;
-		deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext1));
 		ID3D11DeviceContext2* deviceContext2 = nullptr;
-		deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext2));
 		ID3D11DeviceContext3* deviceContext3 = nullptr;
-		deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext3));
 		ID3D11DeviceContext4* deviceContext4 = nullptr;
-		deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext4));
-
-		if (deviceContext4)
+		if (HRESULT hr = deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext4)); hr == S_OK && deviceContext4)
 		{
 			methodTable.AddEntries(deviceContext4, CONTEXT4_ENTRIES, MAX_CONTEXT_ENTRIES);
+			SafeRelease(deviceContext4);
 		}
-		else if (deviceContext3)
+		else if (HRESULT hr = deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext3)); hr == S_OK && deviceContext3)
 		{
 			methodTable.AddEntries(deviceContext3, CONTEXT3_ENTRIES, MAX_CONTEXT_ENTRIES);
+			SafeRelease(deviceContext3);
 		}
-		else if (deviceContext2)
+		else if (HRESULT hr = deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext2)); hr == S_OK && deviceContext2)
 		{
 			methodTable.AddEntries(deviceContext2, CONTEXT2_ENTRIES, MAX_CONTEXT_ENTRIES);
+			SafeRelease(deviceContext2);
 		}
-		else if (deviceContext1)
+		else if (HRESULT hr = deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext1)); hr == S_OK && deviceContext1)
 		{
 			methodTable.AddEntries(deviceContext1, CONTEXT1_ENTRIES, MAX_CONTEXT_ENTRIES);
+			SafeRelease(deviceContext1);
 		}
 		else
 		{
@@ -186,20 +187,8 @@ namespace directhook::d3d11
 		}
 
 		SafeRelease(swapChain);
-		SafeRelease(swapChain1);
-		SafeRelease(swapChain2);
-		SafeRelease(swapChain3);
 		SafeRelease(device);
-		SafeRelease(device1);
-		SafeRelease(device2);
-		SafeRelease(device3);
-		SafeRelease(device4);
-		SafeRelease(device5);
 		SafeRelease(deviceContext);
-		SafeRelease(deviceContext1);
-		SafeRelease(deviceContext2);
-		SafeRelease(deviceContext3);
-		SafeRelease(deviceContext4);
 
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);

@@ -49,6 +49,32 @@ namespace directhook::d3d12
 	using PFN_D3D12Device_GetResourceTiling = void(*)(ID3D12Device*, ID3D12Resource*, UINT*, UINT*, D3D12_SUBRESOURCE_TILING*, UINT*);
 	using PFN_D3D12Device_GetAdapterLuid = LUID(*)(ID3D12Device*);
 
+	using PFN_ID3D12Device1_CreatePipelineLibrary = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device1*, const void*, SIZE_T, REFIID, void**);
+	using PFN_ID3D12Device1_SetEventOnMultipleFenceCompletion = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device1*, UINT, const HANDLE*, D3D12_FENCE_FLAGS, HANDLE);
+	using PFN_ID3D12Device1_SetResidencyPriority = void (STDMETHODCALLTYPE*)(ID3D12Device1*, UINT, ID3D12Resource* const*, D3D12_RESIDENCY_PRIORITY*);
+
+	using PFN_ID3D12Device2_CreatePipelineState = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device2*, const D3D12_PIPELINE_STATE_STREAM_DESC*, REFIID, void**);
+
+	using PFN_ID3D12Device3_OpenExistingHeapFromFileMapping = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, HANDLE, REFIID, void**);
+	using PFN_ID3D12Device3_OpenExistingHeapFromAddress = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, void*, REFIID, void**);
+	using PFN_ID3D12Device3_EnqueueMakeResident = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, UINT, ID3D12Resource* const*, UINT*);
+
+	using PFN_ID3D12Device4_CreateCommandList1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, UINT, D3D12_COMMAND_LIST_TYPE, D3D12_COMMAND_LIST_FLAGS, REFIID, void**);
+	using PFN_ID3D12Device4_CreateProtectedResourceSession = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, const D3D12_PROTECTED_RESOURCE_SESSION_DESC*, REFIID, void**);
+	using PFN_ID3D12Device4_CreateCommittedResource1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, const D3D12_HEAP_PROPERTIES*, D3D12_HEAP_FLAGS, const D3D12_RESOURCE_DESC*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
+	using PFN_ID3D12Device4_CreateHeap1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, const D3D12_HEAP_DESC*, ID3D12ProtectedResourceSession*, REFIID, void**);
+	using PFN_ID3D12Device4_CreateReservedResource1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, const D3D12_RESOURCE_DESC*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
+	using PFN_ID3D12Device4_GetResourceAllocationInfo1 = void (STDMETHODCALLTYPE*)(ID3D12Device4*, UINT, UINT, const D3D12_RESOURCE_DESC*, const D3D12_RESOURCE_ALLOCATION_INFO*);
+
+	using PFN_ID3D12Device5_CreateLifetimeTracker = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device5*, ID3D12LifetimeOwner*, REFIID, void**);
+	using PFN_ID3D12Device5_RemoveDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device5*);
+	using PFN_ID3D12Device5_EnumerateMetaCommands = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device5*, UINT*, D3D12_META_COMMAND_DESC*);
+	using PFN_ID3D12Device5_EnumerateMetaCommandParameters = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device5*, REFGUID, D3D12_META_COMMAND_PARAMETER_STAGE, UINT*, UINT*, D3D12_META_COMMAND_PARAMETER_DESC*);
+	using PFN_ID3D12Device5_CreateMetaCommand = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device5*, REFGUID, UINT, const void*, SIZE_T, REFIID, void**);
+	using PFN_ID3D12Device5_CreateStateObject = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device5*, const D3D12_STATE_OBJECT_DESC*, REFIID, void**);
+	using PFN_ID3D12Device5_GetRaytracingAccelerationStructurePrebuildInfo = void (STDMETHODCALLTYPE*)(ID3D12Device5*, const D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS*, D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO*);
+	using PFN_ID3D12Device5_CheckDriverMatchingIdentifier = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device5*, D3D12_SERIALIZED_DATA_TYPE, const D3D12_SERIALIZED_DATA_DRIVER_MATCHING_IDENTIFIER*);
+
 	using PFN_D3D12CommandQueue_QueryInterface = HRESULT(*)(ID3D12CommandQueue*, REFIID, void**);
 	using PFN_D3D12CommandQueue_AddRef = ULONG(*)(ID3D12CommandQueue*);
 	using PFN_D3D12CommandQueue_Release = ULONG(*)(ID3D12CommandQueue*);
