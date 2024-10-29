@@ -333,6 +333,7 @@ namespace directhook::d3d11
 	static constexpr int SWAPCHAIN1_ENTRIES = ENTRY_COUNT_(SwapChain, 1);
 	static constexpr int SWAPCHAIN2_ENTRIES = ENTRY_COUNT_(SwapChain, 2);
 	static constexpr int SWAPCHAIN3_ENTRIES = ENTRY_COUNT_(SwapChain, 3);
+	static constexpr int MAX_SWAPCHAIN_ENTRIES = SWAPCHAIN3_ENTRIES;
 
 	static constexpr int DEVICE_ENTRIES = ENTRY_COUNT(Device);
 	static constexpr int DEVICE1_ENTRIES = ENTRY_COUNT_(Device, 1);
@@ -340,11 +341,13 @@ namespace directhook::d3d11
 	static constexpr int DEVICE3_ENTRIES = ENTRY_COUNT_(Device, 3);
 	static constexpr int DEVICE4_ENTRIES = ENTRY_COUNT_(Device, 4);
 	static constexpr int DEVICE5_ENTRIES = ENTRY_COUNT_(Device, 5);
+	static constexpr int MAX_DEVICE_ENTRIES = DEVICE5_ENTRIES;
 
 	static constexpr int CONTEXT_ENTRIES = ENTRY_COUNT(Context);
 	static constexpr int CONTEXT1_ENTRIES = ENTRY_COUNT_(Context, 1);
 	static constexpr int CONTEXT2_ENTRIES = ENTRY_COUNT_(Context, 2);
 	static constexpr int CONTEXT3_ENTRIES = ENTRY_COUNT_(Context, 3);
 	static constexpr int CONTEXT4_ENTRIES = ENTRY_COUNT_(Context, 4);
+	static constexpr int MAX_CONTEXT_ENTRIES = CONTEXT4_ENTRIES;
 
 }

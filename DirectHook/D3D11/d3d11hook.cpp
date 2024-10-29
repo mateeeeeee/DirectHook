@@ -105,19 +105,19 @@ namespace directhook::d3d11
         swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1));
 		if (swapChain3)
 		{
-            methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES);
+            methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 		}
         else if (swapChain2)
         {
-            methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES);
+            methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
         }
 		else if (swapChain1)
         {
-            methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES);
+            methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
         }
 		else
 		{
-            methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
+            methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 		}
 
 		ID3D11Device* device1 = nullptr;
@@ -132,27 +132,27 @@ namespace directhook::d3d11
 		device->QueryInterface(IID_PPV_ARGS(&device5));
 		if (device5)
 		{
-			methodTable.AddEntries(device5, DEVICE5_ENTRIES);
+			methodTable.AddEntries(device5, DEVICE5_ENTRIES, MAX_DEVICE_ENTRIES);
 		}
 		else if (device4)
 		{
-			methodTable.AddEntries(device4, DEVICE4_ENTRIES);
+			methodTable.AddEntries(device4, DEVICE4_ENTRIES, MAX_DEVICE_ENTRIES);
 		}
 		else if (device3)
 		{
-			methodTable.AddEntries(device3, DEVICE3_ENTRIES);
+			methodTable.AddEntries(device3, DEVICE3_ENTRIES, MAX_DEVICE_ENTRIES);
 		}
 		else if (device2)
 		{
-			methodTable.AddEntries(device2, DEVICE2_ENTRIES);
+			methodTable.AddEntries(device2, DEVICE2_ENTRIES, MAX_DEVICE_ENTRIES);
 		}
 		else if (device1)
 		{
-			methodTable.AddEntries(device1, DEVICE1_ENTRIES);
+			methodTable.AddEntries(device1, DEVICE1_ENTRIES, MAX_DEVICE_ENTRIES);
 		}
 		else
 		{
-			methodTable.AddEntries(device, DEVICE_ENTRIES);
+			methodTable.AddEntries(device, DEVICE_ENTRIES, MAX_DEVICE_ENTRIES);
 		}
 
 		ID3D11DeviceContext1* deviceContext1 = nullptr;
@@ -166,23 +166,23 @@ namespace directhook::d3d11
 
 		if (deviceContext4)
 		{
-			methodTable.AddEntries(deviceContext4, CONTEXT4_ENTRIES);
+			methodTable.AddEntries(deviceContext4, CONTEXT4_ENTRIES, MAX_CONTEXT_ENTRIES);
 		}
 		else if (deviceContext3)
 		{
-			methodTable.AddEntries(deviceContext3, CONTEXT3_ENTRIES);
+			methodTable.AddEntries(deviceContext3, CONTEXT3_ENTRIES, MAX_CONTEXT_ENTRIES);
 		}
 		else if (deviceContext2)
 		{
-			methodTable.AddEntries(deviceContext2, CONTEXT2_ENTRIES);
+			methodTable.AddEntries(deviceContext2, CONTEXT2_ENTRIES, MAX_CONTEXT_ENTRIES);
 		}
 		else if (deviceContext1)
 		{
-			methodTable.AddEntries(deviceContext1, CONTEXT1_ENTRIES);
+			methodTable.AddEntries(deviceContext1, CONTEXT1_ENTRIES, MAX_CONTEXT_ENTRIES);
 		}
 		else
 		{
-			methodTable.AddEntries(deviceContext, CONTEXT_ENTRIES);
+			methodTable.AddEntries(deviceContext, CONTEXT_ENTRIES, MAX_CONTEXT_ENTRIES);
 		}
 
 		SafeRelease(swapChain);

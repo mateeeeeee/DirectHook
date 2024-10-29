@@ -140,7 +140,7 @@ namespace directhook::d3d12
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 		IDXGISwapChain* swapChain = nullptr;
-		if (factory->CreateSwapChain(commandQueue, &swapChainDesc, &swapChain) < 0)
+		if (factory->CreateSwapChain(commandQueue, &swapChainDesc, &swapChain) != S_OK)
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
@@ -159,22 +159,22 @@ namespace directhook::d3d12
         IDXGISwapChain1* swapChain1 = nullptr;
         swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1));
 
-        if (swapChain3)
-        {
-            methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES);
-        }
-        else if (swapChain2)
-        {
-            methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES);
-        }
-        else if (swapChain1)
-        {
-            methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES);
-        }
-        else
-        {
-            methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
-        }
+		if (swapChain3)
+		{
+			methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
+		}
+		else if (swapChain2)
+		{
+			methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
+		}
+		else if (swapChain1)
+		{
+			methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
+		}
+		else
+		{
+			methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
+		}
 
         SafeRelease(device);
         SafeRelease(commandQueue);

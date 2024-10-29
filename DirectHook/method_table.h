@@ -10,13 +10,22 @@ namespace directhook
 		MethodTable() {}
 
 		template<typename DirectInterfaceT>
-		void AddEntries(DirectInterfaceT* d3dInterface, uint32 vtableEntriesCount)
+		void AddEntries(DirectInterfaceT* d3dInterface, uint32 interfaceVTableEntriesCount, uint32 maxInterfaceVTableEntriesCount = -1)
 		{
-			methods.reserve(methods.size() + vtableEntriesCount);
+			if (maxInterfaceVTableEntriesCount == uint32(-1))
+			{
+				maxInterfaceVTableEntriesCount = interfaceVTableEntriesCount;
+			}
+
+			methods.reserve(methods.size() + maxInterfaceVTableEntriesCount);
 			void** vTableBase = *reinterpret_cast<void***>(d3dInterface);
-			for (uint32 i = 0; i < vtableEntriesCount; ++i)
+			for (uint32 i = 0; i < interfaceVTableEntriesCount; ++i)
 			{
 				methods.push_back(vTableBase[i]);
+			}
+			for (uint32 i = 0; i < max(maxInterfaceVTableEntriesCount - interfaceVTableEntriesCount, 0); ++i)
+			{
+				methods.push_back(nullptr);
 			}
 		}
 

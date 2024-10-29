@@ -54,6 +54,14 @@ namespace directhook::d3d12
 		Device_GetAdapterLuid,
 		Device_LastEntry = Device_GetAdapterLuid,
 
+		//Device1_CreatePipelineLibrary,
+		//Device1_SetEventOnMultipleFenceCompletion,
+		//Device1_SetResidencyPriority,
+		//Device1_LastEntry = Device1_SetResidencyPriority,
+		//
+		//Device2_CreatePipelineState,
+		//Device2_LastEntry = Device2_CreatePipelineState,
+
 		Queue_FirstEntry,
 		Queue_QueryInterface = Queue_FirstEntry,
 		Queue_AddRef,
@@ -210,4 +218,5 @@ namespace directhook::d3d12
     static constexpr int SWAPCHAIN1_ENTRIES = ENTRY_COUNT_(SwapChain, 1);
     static constexpr int SWAPCHAIN2_ENTRIES = ENTRY_COUNT_(SwapChain, 2);
     static constexpr int SWAPCHAIN3_ENTRIES = ENTRY_COUNT_(SwapChain, 3);
+    static constexpr int MAX_SWAPCHAIN_ENTRIES = SWAPCHAIN3_ENTRIES;
 }

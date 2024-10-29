@@ -183,5 +183,4 @@ namespace directhook::d3d12
     using PFN_DXGISwapChain3_GetCurrentBackBufferIndex = UINT(STDMETHODCALLTYPE*)(IDXGISwapChain3*);
     using PFN_DXGISwapChain3_ResizeBuffers1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, UINT, UINT, UINT, DXGI_FORMAT, UINT, const UINT*, IUnknown* const*);
     using PFN_DXGISwapChain3_SetColorSpace1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE);
-
 }
