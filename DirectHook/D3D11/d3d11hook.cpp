@@ -1,5 +1,5 @@
-#include <dxgi.h>
-#include <d3d11_1.h>
+#include <dxgi1_4.h>
+#include <d3d11_4.h>
 #include "d3d11hook.h"
 #include "../method_table.h"
 
@@ -18,6 +18,13 @@ namespace directhook::d3d11
 		ID3D11Device**,
 		D3D_FEATURE_LEVEL*,
 		ID3D11DeviceContext**);
+
+	template<typename ComT>
+	void SafeRelease(ComT* ptr)
+	{
+		if (ptr) ptr->Release();
+		ptr = nullptr;
+	}
 
 	Status Initialize(MethodTable& methodTable)
 	{
@@ -90,18 +97,39 @@ namespace directhook::d3d11
 			return Status::Error_GfxApiInitFailed;
 		}
 
-		methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
-		methodTable.AddEntries(device, DEVICE_ENTRIES);
-		methodTable.AddEntries(deviceContext, CONTEXT_ENTRIES);
+        IDXGISwapChain3* swapChain3 = nullptr;
+        swapChain->QueryInterface(IID_PPV_ARGS(&swapChain3));
+        IDXGISwapChain2* swapChain2 = nullptr;
+        swapChain->QueryInterface(IID_PPV_ARGS(&swapChain2));
+		IDXGISwapChain1* swapChain1 = nullptr;
+        swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1));
 
-		swapChain->Release();
-		swapChain = nullptr;
+		if (swapChain3)
+		{
+            methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES);
+		}
+        else if (swapChain2)
+        {
+            methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES);
+        }
+		else if (swapChain1)
+        {
+            methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES);
+        }
+		else
+		{
+            methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
+		}
 
-		device->Release();
-		device = nullptr;
+        methodTable.AddEntries(device, DEVICE_ENTRIES);
+        methodTable.AddEntries(deviceContext, CONTEXT_ENTRIES);
 
-		deviceContext->Release();
-		deviceContext = nullptr;
+		SafeRelease(swapChain);
+		SafeRelease(swapChain1);
+		SafeRelease(swapChain2);
+		SafeRelease(swapChain3);
+		SafeRelease(device);
+		SafeRelease(deviceContext);
 
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
