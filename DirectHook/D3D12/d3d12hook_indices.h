@@ -1,6 +1,7 @@
 #pragma once
 
 #define ENTRY_COUNT(Class) (Class##_LastEntry - Class##_FirstEntry + 1)
+#define ENTRY_COUNT_(Class, x)	(Class##x##_LastEntry - Class##_FirstEntry + 1)
 
 namespace directhook::d3d12
 {
@@ -169,12 +170,44 @@ namespace directhook::d3d12
 		SwapChain_GetContainingOutput,
 		SwapChain_GetFrameStatistics,
 		SwapChain_GetLastPresentCount,
-		SwapChain_LastEntry = SwapChain_GetLastPresentCount
+		SwapChain_LastEntry = SwapChain_GetLastPresentCount,
+
+        SwapChain1_GetBackgroundColor,
+        SwapChain1_GetCoreWindow,
+        SwapChain1_GetDesc1,
+        SwapChain1_GetFullscreenDesc,
+        SwapChain1_GetHwnd,
+        SwapChain1_GetRestrictToOutput,
+        SwapChain1_GetRotation,
+        SwapChain1_IsTemporaryMonoSupported,
+        SwapChain1_Present1,
+        SwapChain1_SetBackgroundColor,
+        SwapChain1_SetRotation,
+        SwapChain1_LastEntry = SwapChain1_SetRotation,
+
+        SwapChain2_GetFrameLatencyWaitableObject,
+        SwapChain2_GetMatrixTransform,
+        SwapChain2_GetMaximumFrameLatency,
+        SwapChain2_GetSourceSize,
+        SwapChain2_SetMatrixTransform,
+        SwapChain2_SetMaximumFrameLatency,
+        SwapChain2_SetSourceSize,
+        SwapChain2_LastEntry = SwapChain2_SetSourceSize,
+
+        SwapChain3_CheckColorSpaceSupport,
+        SwapChain3_GetCurrentBackBufferIndex,
+        SwapChain3_ResizeBuffers1,
+        SwapChain3_SetColorSpace1,
+        SwapChain3_LastEntry = SwapChain3_SetColorSpace1,
 	};
 
 	static constexpr int DEVICE_ENTRIES = ENTRY_COUNT(Device);
 	static constexpr int QUEUE_ENTRIES  = ENTRY_COUNT(Queue);
 	static constexpr int ALLOCATOR_ENTRIES  = ENTRY_COUNT(Allocator);
 	static constexpr int LIST_ENTRIES  = ENTRY_COUNT(List);
+
 	static constexpr int SWAPCHAIN_ENTRIES  = ENTRY_COUNT(SwapChain);
+    static constexpr int SWAPCHAIN1_ENTRIES = ENTRY_COUNT_(SwapChain, 1);
+    static constexpr int SWAPCHAIN2_ENTRIES = ENTRY_COUNT_(SwapChain, 2);
+    static constexpr int SWAPCHAIN3_ENTRIES = ENTRY_COUNT_(SwapChain, 3);
 }

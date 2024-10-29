@@ -1,6 +1,6 @@
 #pragma once
 #include <d3d12.h>
-#include <dxgi.h>
+#include <dxgi1_4.h>
 
 namespace directhook::d3d12
 {
@@ -158,4 +158,30 @@ namespace directhook::d3d12
 	using PFN_IDXGISwapChain_GetContainingOutput = HRESULT(*)(IDXGISwapChain*, IDXGIOutput**);
 	using PFN_IDXGISwapChain_GetFrameStatistics = HRESULT(*)(IDXGISwapChain*, DXGI_FRAME_STATISTICS*);
 	using PFN_IDXGISwapChain_GetLastPresentCount = HRESULT(*)(IDXGISwapChain*, UINT*);
+
+    using PFN_DXGISwapChain1_GetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_RGBA*);
+    using PFN_DXGISwapChain1_GetCoreWindow = HWND(STDMETHODCALLTYPE*)(IDXGISwapChain1*);
+    using PFN_DXGISwapChain1_GetDesc1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_SWAP_CHAIN_DESC1*);
+    using PFN_DXGISwapChain1_GetFullscreenDesc = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_SWAP_CHAIN_FULLSCREEN_DESC*);
+    using PFN_DXGISwapChain1_GetHwnd = HWND(STDMETHODCALLTYPE*)(IDXGISwapChain1*);
+    using PFN_DXGISwapChain1_GetRestrictToOutput = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, IDXGIOutput**);
+    using PFN_DXGISwapChain1_GetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION*);
+    using PFN_DXGISwapChain1_IsTemporaryMonoSupported = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, BOOL*);
+    using PFN_DXGISwapChain1_Present1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, UINT, const DXGI_PRESENT_PARAMETERS*);
+    using PFN_DXGISwapChain1_SetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, const DXGI_RGBA*);
+    using PFN_DXGISwapChain1_SetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION*);
+
+    using PFN_DXGISwapChain2_GetFrameLatencyWaitableObject = HANDLE(STDMETHODCALLTYPE*)(IDXGISwapChain2*);
+    using PFN_DXGISwapChain2_GetMatrixTransform = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, DXGI_MATRIX_3X2_F*);
+    using PFN_DXGISwapChain2_GetMaximumFrameLatency = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT*);
+    using PFN_DXGISwapChain2_GetSourceSize = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT*, UINT*);
+    using PFN_DXGISwapChain2_SetMatrixTransform = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, const DXGI_MATRIX_3X2_F*);
+    using PFN_DXGISwapChain2_SetMaximumFrameLatency = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT);
+    using PFN_DXGISwapChain2_SetSourceSize = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT, UINT);
+
+    using PFN_DXGISwapChain3_CheckColorSpaceSupport = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE, UINT*);
+    using PFN_DXGISwapChain3_GetCurrentBackBufferIndex = UINT(STDMETHODCALLTYPE*)(IDXGISwapChain3*);
+    using PFN_DXGISwapChain3_ResizeBuffers1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, UINT, UINT, UINT, DXGI_FORMAT, UINT, const UINT*, IUnknown* const*);
+    using PFN_DXGISwapChain3_SetColorSpace1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE);
+
 }

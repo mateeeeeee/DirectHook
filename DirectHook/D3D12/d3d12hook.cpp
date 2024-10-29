@@ -5,6 +5,12 @@
 
 namespace directhook::d3d12
 {
+    template<typename ComT>
+    void SafeRelease(ComT* ptr)
+    {
+        if (ptr) ptr->Release();
+        ptr = nullptr;
+    }
 
 	using PFN_CreateDXGIFactory = HRESULT(STDMETHODCALLTYPE*)(REFIID, void**);
 	using PFN_CreateD3D12Device = HRESULT(STDMETHODCALLTYPE*)(IUnknown*, D3D_FEATURE_LEVEL, REFIID, void**);
@@ -145,22 +151,39 @@ namespace directhook::d3d12
 		methodTable.AddEntries(commandQueue, QUEUE_ENTRIES);
 		methodTable.AddEntries(commandAllocator, ALLOCATOR_ENTRIES);
 		methodTable.AddEntries(commandList, LIST_ENTRIES);
-		methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
 
-		device->Release();
-		device = nullptr;
+        IDXGISwapChain3* swapChain3 = nullptr;
+        swapChain->QueryInterface(IID_PPV_ARGS(&swapChain3));
+        IDXGISwapChain2* swapChain2 = nullptr;
+        swapChain->QueryInterface(IID_PPV_ARGS(&swapChain2));
+        IDXGISwapChain1* swapChain1 = nullptr;
+        swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1));
 
-		commandQueue->Release();
-		commandQueue = nullptr;
+        if (swapChain3)
+        {
+            methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES);
+        }
+        else if (swapChain2)
+        {
+            methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES);
+        }
+        else if (swapChain1)
+        {
+            methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES);
+        }
+        else
+        {
+            methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
+        }
 
-		commandAllocator->Release();
-		commandAllocator = nullptr;
-
-		commandList->Release();
-		commandList = nullptr;
-
-		swapChain->Release();
-		swapChain = nullptr;
+        SafeRelease(device);
+        SafeRelease(commandQueue);
+        SafeRelease(commandAllocator);
+        SafeRelease(commandList);
+        SafeRelease(swapChain);
+        SafeRelease(swapChain1);
+        SafeRelease(swapChain2);
+        SafeRelease(swapChain3);
 
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
