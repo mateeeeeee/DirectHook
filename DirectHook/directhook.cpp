@@ -1,5 +1,5 @@
 #include <vector>
-#include "MinHook.h"
+#include "MinHook/include/MinHook.h"
 
 #include "directhook.h"
 #include "method_table.h"

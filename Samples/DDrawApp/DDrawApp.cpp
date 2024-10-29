@@ -39,38 +39,52 @@ IDirectDrawClipper* Clipper = NULL;
 #define ERROR_UNLOCK_BACK_SURFACE 13
 #define ERROR_BLIT_PRIMARY_SURFACE 14
 
-void Draw(unsigned char* pixels, const int pitch)
+void DrawTriangle(unsigned char* pixels, const int pitch)
 {
-	const int c_x = Width / 2;
-	const int c_y = Height / 2;
+    const int c_x = Width / 2;							
+    const int top_y = Height / 4;						
+    const int bottom_y = Height / 2 + Height / 4;		
+    const int triangleBaseWidth = Width / 2;			
 
-	const int radius = min(c_x, c_y);
-	const int radius2 = radius * radius;
+    int i = 0;
 
-	int i = 0;
+    for (int y = 0; y < Height; y++)
+    {
+        for (int x = 0; x < Width; x++)
+        {
+            if (y >= top_y && y <= bottom_y) 
+            {
+                int rowWidth = triangleBaseWidth * (y - top_y) / (bottom_y - top_y);
 
-	for (int y = 0; y < Height; y++)
-	{
-		for (int x = 0; x < Width; x++)
-		{
-			if ((x - c_x) * (x - c_x) + (y - c_y) * (y - c_y) <= radius2)
-			{
-				pixels[i++] = 64;
-				pixels[i++] = 64;
-				pixels[i++] = 64;
-				pixels[i++] = 0;
-			}
-			else
-			{
-				pixels[i++] = 0;
-				pixels[i++] = 0;
-				pixels[i++] = 0;
-				pixels[i++] = 0;
-			}
-		}
+                int leftX = c_x - rowWidth / 2;
+                int rightX = c_x + rowWidth / 2;
 
-		i = pitch * (y + 1);
-	}
+                if (x >= leftX && x <= rightX)  
+                {
+                    pixels[i++] = 0;    // Blue
+                    pixels[i++] = 0;    // Green
+                    pixels[i++] = 255;  // Red
+                    pixels[i++] = 0;    // Alpha
+                }
+                else
+                {
+                    pixels[i++] = 0;
+                    pixels[i++] = 0;
+                    pixels[i++] = 0;
+                    pixels[i++] = 0;
+                }
+            }
+            else
+            {
+                pixels[i++] = 0;
+                pixels[i++] = 0;
+                pixels[i++] = 0;
+                pixels[i++] = 0;
+            }
+        }
+
+        i = pitch * (y + 1); 
+    }
 }
 
 int SizeSurface()
@@ -108,7 +122,7 @@ int Render(HWND hWnd)
 
 	if (Back->Lock(NULL, &desc, DDLOCK_WAIT | DDLOCK_WRITEONLY, NULL) != DD_OK) { return ERROR_LOCK_BACK_SURFACE; }
 
-	Draw((unsigned char*)desc.lpSurface, desc.lPitch);
+	DrawTriangle((unsigned char*)desc.lpSurface, desc.lPitch);
 
 	if (Back->Unlock(NULL) != DD_OK) { return ERROR_UNLOCK_BACK_SURFACE; }
 
