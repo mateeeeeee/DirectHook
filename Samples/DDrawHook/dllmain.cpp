@@ -10,7 +10,7 @@ HRESULT STDMETHODCALLTYPE MyCreateSurface(IDirectDraw7* Instance, LPDDSURFACEDES
 	static bool called = false;
 	if (!called)
 	{
-		MessageBoxA(0, "Called CreateSurface!", "DirectHook", MB_OK);
+		MessageBoxA(0, "Called MyCreateSurface!", "DirectHook", MB_OK);
 		called = true;
 	}
 	return ddrawCreateSurface(Instance, unnamedParam1, unnamedParam2, unnamedParam3);
