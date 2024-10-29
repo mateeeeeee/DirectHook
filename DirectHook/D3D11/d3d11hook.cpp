@@ -103,7 +103,6 @@ namespace directhook::d3d11
         swapChain->QueryInterface(IID_PPV_ARGS(&swapChain2));
 		IDXGISwapChain1* swapChain1 = nullptr;
         swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1));
-
 		if (swapChain3)
 		{
             methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES);
@@ -121,7 +120,41 @@ namespace directhook::d3d11
             methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
 		}
 
-        methodTable.AddEntries(device, DEVICE_ENTRIES);
+		ID3D11Device* device1 = nullptr;
+		device->QueryInterface(IID_PPV_ARGS(&device1));
+		ID3D11Device* device2 = nullptr;
+		device->QueryInterface(IID_PPV_ARGS(&device2));
+		ID3D11Device* device3 = nullptr;
+		device->QueryInterface(IID_PPV_ARGS(&device3));
+		ID3D11Device* device4 = nullptr;
+		device->QueryInterface(IID_PPV_ARGS(&device4));
+		ID3D11Device* device5 = nullptr;
+		device->QueryInterface(IID_PPV_ARGS(&device5));
+		if (device5)
+		{
+			methodTable.AddEntries(device5, DEVICE5_ENTRIES);
+		}
+		else if (device4)
+		{
+			methodTable.AddEntries(device4, DEVICE4_ENTRIES);
+		}
+		else if (device3)
+		{
+			methodTable.AddEntries(device3, DEVICE3_ENTRIES);
+		}
+		else if (device2)
+		{
+			methodTable.AddEntries(device2, DEVICE2_ENTRIES);
+		}
+		else if (device1)
+		{
+			methodTable.AddEntries(device1, DEVICE1_ENTRIES);
+		}
+		else
+		{
+			methodTable.AddEntries(device, DEVICE_ENTRIES);
+		}
+
         methodTable.AddEntries(deviceContext, CONTEXT_ENTRIES);
 
 		SafeRelease(swapChain);
@@ -129,6 +162,11 @@ namespace directhook::d3d11
 		SafeRelease(swapChain2);
 		SafeRelease(swapChain3);
 		SafeRelease(device);
+		SafeRelease(device1);
+		SafeRelease(device2);
+		SafeRelease(device3);
+		SafeRelease(device4);
+		SafeRelease(device5);
 		SafeRelease(deviceContext);
 
 		::DestroyWindow(window);

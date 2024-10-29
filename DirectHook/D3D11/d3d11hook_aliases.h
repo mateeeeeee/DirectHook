@@ -91,6 +91,36 @@ namespace directhook::d3d11
 	using PFN_D3D11Device_SetExceptionMode = void(STDMETHODCALLTYPE*)(ID3D11Device*, UINT);
 	using PFN_D3D11Device_GetExceptionMode = UINT(STDMETHODCALLTYPE*)(ID3D11Device*);
 
+	using PFN_D3D11Device1_CreateBlendState1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, const D3D11_BLEND_DESC1*, ID3D11BlendState1**);
+	using PFN_D3D11Device1_CreateDeferredContext1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, UINT, ID3D11DeviceContext1**);
+	using PFN_D3D11Device1_CreateDeviceContextState = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, UINT, const D3D_FEATURE_LEVEL*, UINT, UINT, D3D_FEATURE_LEVEL*, UINT*, ID3DDeviceContextState**);
+	using PFN_D3D11Device1_CreateRasterizerState1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, const D3D11_RASTERIZER_DESC1*, ID3D11RasterizerState1**);
+	using PFN_D3D11Device1_GetImmediateContext1 = void (STDMETHODCALLTYPE*)(ID3D11Device1*, ID3D11DeviceContext1**);
+	using PFN_D3D11Device1_OpenSharedResource1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, HANDLE, REFIID, void**);
+	using PFN_D3D11Device1_OpenSharedResourceByName = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, LPCWSTR, DWORD, REFIID, void**);
+
+	using PFN_D3D11Device2_CheckMultisampleQualityLevels1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device2*, DXGI_FORMAT, UINT, UINT*);
+	using PFN_D3D11Device2_CreateDeferredContext2 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device2*, UINT, ID3D11DeviceContext2**);
+	using PFN_D3D11Device2_GetImmediateContext2 = void (STDMETHODCALLTYPE*)(ID3D11Device2*, ID3D11DeviceContext2**);
+	using PFN_D3D11Device2_GetResourceTiling = void (STDMETHODCALLTYPE*)(ID3D11Device2*, ID3D11Resource*, UINT*, D3D11_PACKED_MIP_DESC*, D3D11_TILE_SHAPE*, UINT*, UINT*);
+
+	using PFN_D3D11Device3_CreateDeferredContext3 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device3*, UINT, ID3D11DeviceContext3**);
+	using PFN_D3D11Device3_CreateQuery1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device3*, const D3D11_QUERY_DESC1*, ID3D11Query1**);
+	using PFN_D3D11Device3_CreateRasterizerState2 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device3*, const D3D11_RASTERIZER_DESC2*, ID3D11RasterizerState2**);
+	using PFN_D3D11Device3_CreateRenderTargetView1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device3*, ID3D11Resource*, const D3D11_RENDER_TARGET_VIEW_DESC1*, ID3D11RenderTargetView1**);
+	using PFN_D3D11Device3_CreateShaderResourceView1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device3*, ID3D11Resource*, const D3D11_SHADER_RESOURCE_VIEW_DESC1*, ID3D11ShaderResourceView1**);
+	using PFN_D3D11Device3_CreateTexture2D1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device3*, const D3D11_TEXTURE2D_DESC1*, const D3D11_SUBRESOURCE_DATA*, ID3D11Texture2D1**);
+	using PFN_D3D11Device3_CreateTexture3D1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device3*, const D3D11_TEXTURE3D_DESC1*, const D3D11_SUBRESOURCE_DATA*, ID3D11Texture3D1**);
+	using PFN_D3D11Device3_CreateUnorderedAccessView1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device3*, ID3D11Resource*, const D3D11_UNORDERED_ACCESS_VIEW_DESC1*, ID3D11UnorderedAccessView1**);
+	using PFN_D3D11Device3_GetImmediateContext3 = void (STDMETHODCALLTYPE*)(ID3D11Device3*, ID3D11DeviceContext3**);
+	using PFN_D3D11Device3_ReadFromSubresource = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device3*, void*, UINT, UINT, ID3D11Resource*, UINT, const D3D11_BOX*);
+	using PFN_D3D11Device3_WriteToSubresource = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device3*, ID3D11Resource*, UINT, const D3D11_BOX*, const void*, UINT, UINT);
+
+	using PFN_D3D11Device4_RegisterDeviceRemovedEvent = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device4*, HANDLE, DWORD*);
+	using PFN_D3D11Device4_UnregisterDeviceRemoved = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device4*, DWORD);
+
+	using PFN_D3D11Device5_CreateFence = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device5*, UINT64, D3D11_FENCE_FLAG, REFIID, void**);
+	using PFN_D3D11Device5_OpenSharedFence = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device5*, HANDLE, REFIID, void**);
 
 	using PFN_D3D11DeviceContext_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, REFIID, void**);
 	using PFN_D3D11DeviceContext_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D11DeviceContext*);

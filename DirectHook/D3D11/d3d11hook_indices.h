@@ -103,6 +103,42 @@ namespace directhook::d3d11
 		Device_GetExceptionMode,
 		Device_LastEntry = Device_GetExceptionMode,
 
+		Device1_CreateBlendState1,
+		Device1_CreateDeferredContext1,
+		Device1_CreateDeviceContextState,
+		Device1_CreateRasterizerState1,
+		Device1_GetImmediateContext1,
+		Device1_OpenSharedResource1,
+		Device1_OpenSharedResourceByName,
+		Device1_LastEntry = Device1_OpenSharedResourceByName,
+
+		Device2_CheckMultisampleQualityLevels1,
+		Device2_CreateDeferredContext2,
+		Device2_GetImmediateContext2,
+		Device2_GetResourceTiling,
+		Device2_LastEntry = Device2_GetResourceTiling,
+
+		Device3_CreateDeferredContext3,
+		Device3_CreateQuery1,
+		Device3_CreateRasterizerState2,
+		Device3_CreateRenderTargetView1,
+		Device3_CreateShaderResourceView1,
+		Device3_CreateTexture2D1,
+		Device3_CreateTexture3D1,
+		Device3_CreateUnorderedAccessView1,
+		Device3_GetImmediateContext3,
+		Device3_ReadFromSubresource,
+		Device3_WriteToSubresource,
+		Device3_LastEntry = Device3_WriteToSubresource,
+
+		Device4_RegisterDeviceRemovedEvent,
+		Device4_UnregisterDeviceRemoved,
+		Device4_LastEntry = Device4_UnregisterDeviceRemoved,
+
+		Device5_CreateFence,
+		Device5_OpenSharedFence,
+		Device5_LastEntry = Device5_OpenSharedFence,
+
 		Context_FirstEntry,
 		Context_QueryInterface = Context_FirstEntry,
 		Context_AddRef,
@@ -257,5 +293,11 @@ namespace directhook::d3d11
 	static constexpr int SWAPCHAIN3_ENTRIES = ENTRY_COUNT_(SwapChain, 3);
 
 	static constexpr int DEVICE_ENTRIES = ENTRY_COUNT(Device);
+	static constexpr int DEVICE1_ENTRIES = ENTRY_COUNT_(Device, 1);
+	static constexpr int DEVICE2_ENTRIES = ENTRY_COUNT_(Device, 2);
+	static constexpr int DEVICE3_ENTRIES = ENTRY_COUNT_(Device, 3);
+	static constexpr int DEVICE4_ENTRIES = ENTRY_COUNT_(Device, 4);
+	static constexpr int DEVICE5_ENTRIES = ENTRY_COUNT_(Device, 5);
+
 	static constexpr int CONTEXT_ENTRIES = ENTRY_COUNT(Context);
 }
