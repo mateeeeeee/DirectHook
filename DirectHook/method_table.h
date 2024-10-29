@@ -20,9 +20,16 @@ namespace directhook
 			}
 		}
 
+		void AddEntry(void* entry)
+		{
+			methods.push_back(entry);
+		}
+
+		uint32 GetSize() const { return (uint32)methods.size(); }
+
 		void* operator[](uint32 i) const
 		{
-			return (void*)methods[i];
+			return methods[i];
 		}
 
 	private:

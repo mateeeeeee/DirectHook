@@ -155,7 +155,35 @@ namespace directhook::d3d11
 			methodTable.AddEntries(device, DEVICE_ENTRIES);
 		}
 
-        methodTable.AddEntries(deviceContext, CONTEXT_ENTRIES);
+		ID3D11DeviceContext1* deviceContext1 = nullptr;
+		deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext1));
+		ID3D11DeviceContext2* deviceContext2 = nullptr;
+		deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext2));
+		ID3D11DeviceContext3* deviceContext3 = nullptr;
+		deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext3));
+		ID3D11DeviceContext4* deviceContext4 = nullptr;
+		deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext4));
+
+		if (deviceContext4)
+		{
+			methodTable.AddEntries(deviceContext4, CONTEXT4_ENTRIES);
+		}
+		else if (deviceContext3)
+		{
+			methodTable.AddEntries(deviceContext3, CONTEXT3_ENTRIES);
+		}
+		else if (deviceContext2)
+		{
+			methodTable.AddEntries(deviceContext2, CONTEXT2_ENTRIES);
+		}
+		else if (deviceContext1)
+		{
+			methodTable.AddEntries(deviceContext1, CONTEXT1_ENTRIES);
+		}
+		else
+		{
+			methodTable.AddEntries(deviceContext, CONTEXT_ENTRIES);
+		}
 
 		SafeRelease(swapChain);
 		SafeRelease(swapChain1);
@@ -168,6 +196,10 @@ namespace directhook::d3d11
 		SafeRelease(device4);
 		SafeRelease(device5);
 		SafeRelease(deviceContext);
+		SafeRelease(deviceContext1);
+		SafeRelease(deviceContext2);
+		SafeRelease(deviceContext3);
+		SafeRelease(deviceContext4);
 
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);

@@ -284,7 +284,49 @@ namespace directhook::d3d11
 		Context_SetMarkerInt,
 		Context_BeginEventInt,
 		Context_EndEvent,
-		Context_LastEntry = Context_EndEvent
+		Context_LastEntry = Context_EndEvent,
+
+		Context1_CopySubresourceRegion1,
+		Context1_UpdateSubresource1,
+		Context1_DiscardResource,
+		Context1_DiscardView,
+		Context1_VSSetConstantBuffers1,
+		Context1_HSSetConstantBuffers1,
+		Context1_DSSetConstantBuffers1,
+		Context1_GSSetConstantBuffers1,
+		Context1_PSSetConstantBuffers1,
+		Context1_CSSetConstantBuffers1,
+		Context1_VSGetConstantBuffers1,
+		Context1_HSGetConstantBuffers1,
+		Context1_DSGetConstantBuffers1,
+		Context1_GSGetConstantBuffers1,
+		Context1_PSGetConstantBuffers1,
+		Context1_CSGetConstantBuffers1,
+		Context1_SwapDeviceContextState,
+		Context1_ClearView,
+		Context1_DiscardView1,
+		Context1_LastEntry = Context1_DiscardView1,
+
+		Context2_UpdateTileMappings,
+		Context2_CopyTileMappings,
+		Context2_CopyTiles,
+		Context2_UpdateTiles,
+		Context2_ResizeTilePool,
+		Context2_TiledResourceBarrier,
+		Context2_IsAnnotationEnabled,
+		Context2_SetMarkerInt,
+		Context2_BeginEventInt,
+		Context2_EndEvent,
+		Context2_LastEntry = Context2_EndEvent,
+
+		Context3_Flush1,
+		Context3_GetHardwareProtectionState,
+		Context3_SetHardwareProtectionState,
+		Context3_LastEntry = Context3_SetHardwareProtectionState,
+
+		Context4_Signal,
+		Context4_Wait,
+		Context4_LastEntry = Context4_Wait
 	};
 
 	static constexpr int SWAPCHAIN_ENTRIES = ENTRY_COUNT(SwapChain);
@@ -300,4 +342,9 @@ namespace directhook::d3d11
 	static constexpr int DEVICE5_ENTRIES = ENTRY_COUNT_(Device, 5);
 
 	static constexpr int CONTEXT_ENTRIES = ENTRY_COUNT(Context);
+	static constexpr int CONTEXT1_ENTRIES = ENTRY_COUNT_(Context, 1);
+	static constexpr int CONTEXT2_ENTRIES = ENTRY_COUNT_(Context, 2);
+	static constexpr int CONTEXT3_ENTRIES = ENTRY_COUNT_(Context, 3);
+	static constexpr int CONTEXT4_ENTRIES = ENTRY_COUNT_(Context, 4);
+
 }

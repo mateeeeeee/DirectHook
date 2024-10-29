@@ -267,4 +267,42 @@ namespace directhook::d3d11
 	using PFN_D3D11DeviceContext_SetMarkerInt = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, LPCWSTR, INT);
 	using PFN_D3D11DeviceContext_BeginEventInt = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, LPCWSTR, INT);
 	using PFN_D3D11DeviceContext_EndEvent = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*);
+
+	using PFN_D3D11DeviceContext1_CopySubresourceRegion1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, ID3D11Resource*, UINT, UINT, UINT, UINT, ID3D11Resource*, UINT, const D3D11_BOX*, UINT);
+	using PFN_D3D11DeviceContext1_UpdateSubresource1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, ID3D11Resource*, UINT, const D3D11_BOX*, const void*, UINT, UINT, UINT);
+	using PFN_D3D11DeviceContext1_DiscardResource = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, ID3D11Resource*);
+	using PFN_D3D11DeviceContext1_DiscardView = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, ID3D11View*);
+	using PFN_D3D11DeviceContext1_VSSetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
+	using PFN_D3D11DeviceContext1_HSSetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
+	using PFN_D3D11DeviceContext1_DSSetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
+	using PFN_D3D11DeviceContext1_GSSetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
+	using PFN_D3D11DeviceContext1_PSSetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
+	using PFN_D3D11DeviceContext1_CSSetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
+	using PFN_D3D11DeviceContext1_VSGetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
+	using PFN_D3D11DeviceContext1_HSGetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
+	using PFN_D3D11DeviceContext1_DSGetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
+	using PFN_D3D11DeviceContext1_GSGetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
+	using PFN_D3D11DeviceContext1_PSGetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
+	using PFN_D3D11DeviceContext1_CSGetConstantBuffers1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
+	using PFN_D3D11DeviceContext1_SwapDeviceContextState = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, ID3DDeviceContextState*, ID3DDeviceContextState**);
+	using PFN_D3D11DeviceContext1_ClearView = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, ID3D11View*, const FLOAT[4], const D3D11_RECT*, UINT);
+	using PFN_D3D11DeviceContext1_DiscardView1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, ID3D11View*, const D3D11_RECT*, UINT);
+
+	using PFN_D3D11DeviceContext2_UpdateTileMappings = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext2*, ID3D11Resource*, UINT, const D3D11_TILED_RESOURCE_COORDINATE*, const D3D11_TILE_REGION_SIZE*, ID3D11Buffer*, UINT, const UINT*, const UINT*, const UINT*, UINT);
+	using PFN_D3D11DeviceContext2_CopyTileMappings = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext2*, ID3D11Resource*, const D3D11_TILED_RESOURCE_COORDINATE*, ID3D11Resource*, const D3D11_TILED_RESOURCE_COORDINATE*, const D3D11_TILE_REGION_SIZE*, UINT);
+	using PFN_D3D11DeviceContext2_CopyTiles = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext2*, ID3D11Resource*, const D3D11_TILED_RESOURCE_COORDINATE*, const D3D11_TILE_REGION_SIZE*, ID3D11Buffer*, UINT64, UINT);
+	using PFN_D3D11DeviceContext2_UpdateTiles = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext2*, ID3D11Resource*, UINT, const D3D11_TILED_RESOURCE_COORDINATE*, const D3D11_TILE_REGION_SIZE*, ID3D11Buffer*, UINT, const UINT*, const UINT*, const UINT*, UINT);
+	using PFN_D3D11DeviceContext2_ResizeTilePool = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext2*, ID3D11Buffer*, UINT);
+	using PFN_D3D11DeviceContext2_TiledResourceBarrier = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext2*, ID3D11Resource*, ID3D11Resource*);
+	using PFN_D3D11DeviceContext2_IsAnnotationEnabled = BOOL(STDMETHODCALLTYPE*)(ID3D11DeviceContext2*);
+	using PFN_D3D11DeviceContext2_SetMarkerInt = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext2*, LPCWSTR, INT);
+	using PFN_D3D11DeviceContext2_BeginEventInt = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext2*, LPCWSTR, INT);
+	using PFN_D3D11DeviceContext2_EndEvent = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext2*);
+
+	using PFN_D3D11DeviceContext3_Flush1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext3*, D3D11_CONTEXT_TYPE, HANDLE);
+	using PFN_D3D11DeviceContext3_GetHardwareProtectionState = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext3*, BOOL*);
+	using PFN_D3D11DeviceContext3_SetHardwareProtectionState = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext3*, BOOL);
+
+	using PFN_D3D11DeviceContext4_Signal = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext4*, ID3D11Fence*, UINT64);
+	using PFN_D3D11DeviceContext4_Wait = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext4*, ID3D11Fence*, UINT64);
 }
