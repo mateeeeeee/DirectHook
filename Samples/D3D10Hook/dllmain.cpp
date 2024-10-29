@@ -31,11 +31,11 @@ int D3D10HookThread()
 {
 	if (Status dh = Initialize(); dh == Status::Success)
 	{
-		GetOriginal(d3d10::Device_Draw, d3d10Draw);
+		SaveOriginal(d3d10::Device_Draw, d3d10Draw);
 		Hook(d3d10::Device_Draw, d3d10Draw, MyDraw);
 
-		GetOriginal(d3d10::SwapChain_Present, dxgiPresent);
-		Hook(d3d10::SwapChain_Present, dxgiPresent, &MyPresent);
+		SaveOriginal(d3d10::SwapChain_Present, dxgiPresent);
+		Hook(d3d10::SwapChain_Present, dxgiPresent, MyPresent);
 	}
 	return 0;
 }

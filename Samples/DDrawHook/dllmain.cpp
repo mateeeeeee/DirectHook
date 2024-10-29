@@ -5,7 +5,7 @@ using namespace directhook;
 static ddraw::PFN_DDrawDevice_CreateSurface		ddrawCreateSurface = nullptr;
 static ddraw::PFN_DDrawSurface_Blt				ddrawBlt = nullptr;
 
-void STDMETHODCALLTYPE MyCreateSurface(IDirectDraw7* Instance, LPDDSURFACEDESC2 unnamedParam1, LPDIRECTDRAWSURFACE7* unnamedParam2, IUnknown* unnamedParam3)
+HRESULT STDMETHODCALLTYPE MyCreateSurface(IDirectDraw7* Instance, LPDDSURFACEDESC2 unnamedParam1, LPDIRECTDRAWSURFACE7* unnamedParam2, IUnknown* unnamedParam3)
 {
 	static bool called = false;
 	if (!called)
@@ -13,7 +13,7 @@ void STDMETHODCALLTYPE MyCreateSurface(IDirectDraw7* Instance, LPDDSURFACEDESC2 
 		MessageBoxA(0, "Called CreateSurface!", "DirectHook", MB_OK);
 		called = true;
 	}
-	ddrawCreateSurface(Instance, unnamedParam1, unnamedParam2, unnamedParam3);
+	return ddrawCreateSurface(Instance, unnamedParam1, unnamedParam2, unnamedParam3);
 }
 
 HRESULT STDMETHODCALLTYPE MyBlt(
@@ -34,10 +34,10 @@ int DDrawHookThread()
 {
 	if (Status dh = Initialize(); dh == Status::Success)
 	{
-		GetOriginal(ddraw::Device_CreateSurface, ddrawCreateSurface);
+		SaveOriginal(ddraw::Device_CreateSurface, ddrawCreateSurface);
 		Hook(ddraw::Device_CreateSurface, ddrawCreateSurface, MyCreateSurface);
 
-		GetOriginal(ddraw::Surface_Blt, ddrawBlt);
+		SaveOriginal(ddraw::Surface_Blt, ddrawBlt);
 		Hook(ddraw::Surface_Blt, ddrawBlt, MyBlt);
 	}
 	return 0;

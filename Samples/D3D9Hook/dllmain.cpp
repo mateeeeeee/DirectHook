@@ -6,7 +6,7 @@ using namespace directhook;
 static d3d9::PFN_D3D9Device_DrawPrimitive	d3d9DrawPrimitive = nullptr;
 static d3d9::PFN_D3D9Device_Present			d3d9Present = nullptr;
 
-void STDMETHODCALLTYPE MyDrawPrimitive(IDirect3DDevice9* Device, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
+HRESULT STDMETHODCALLTYPE MyDrawPrimitive(IDirect3DDevice9* Device, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
 {
 	static bool called = false;
 	if (!called)
@@ -14,7 +14,7 @@ void STDMETHODCALLTYPE MyDrawPrimitive(IDirect3DDevice9* Device, D3DPRIMITIVETYP
 		MessageBoxA(0, "Called MyDrawPrimitive!", "DirectHook", MB_OK);
 		called = true;
 	}
-	d3d9DrawPrimitive(Device, PrimitiveType, StartVertex, PrimitiveCount);
+	return d3d9DrawPrimitive(Device, PrimitiveType, StartVertex, PrimitiveCount);
 }
 
 HRESULT STDMETHODCALLTYPE MyPresent(
@@ -38,10 +38,10 @@ int D3D9HookThread()
 {
 	if (Status dh = Initialize(); dh == Status::Success)
 	{
-		GetOriginal(d3d9::Device_DrawPrimitive, d3d9DrawPrimitive);
+		SaveOriginal(d3d9::Device_DrawPrimitive, d3d9DrawPrimitive);
 		Hook(d3d9::Device_DrawPrimitive, d3d9DrawPrimitive, MyDrawPrimitive);
 
-		GetOriginal(d3d9::Device_Present, d3d9Present);
+		SaveOriginal(d3d9::Device_Present, d3d9Present);
 		Hook(d3d9::Device_Present, d3d9Present, MyPresent);
 	}
 	return 0;

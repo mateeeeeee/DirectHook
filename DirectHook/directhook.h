@@ -80,13 +80,13 @@ namespace directhook
 	void* GetOriginal(uint16 index);
 
 	template<typename FuncT>
-	Status Hook(uint16 index, FuncT& original, void* function)
+	Status Hook(uint16 index, FuncT*& original, FuncT& function)
 	{
-		return Hook(index, (void**)&original, function);
+		return Hook(index, (void**)&original, (void*)function);
 	}
 
 	template<typename FuncT>
-	void GetOriginal(uint16 index, FuncT& F)
+	void SaveOriginal(uint16 index, FuncT& F)
 	{
 		F = (FuncT)GetOriginal(index);
 	}

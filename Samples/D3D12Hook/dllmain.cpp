@@ -39,10 +39,10 @@ int D3D12HookThread()
 {
 	if (Status dh = Initialize(); dh == Status::Success)
 	{
-		GetOriginal(d3d12::List_DrawInstanced, d3d12Draw);
+		SaveOriginal(d3d12::List_DrawInstanced, d3d12Draw);
 		Hook(d3d12::List_DrawInstanced, d3d12Draw, MyDraw);
 
-		GetOriginal(d3d12::SwapChain_Present, dxgiPresent);
+		SaveOriginal(d3d12::SwapChain_Present, dxgiPresent);
 		Hook(d3d12::SwapChain_Present, dxgiPresent, MyPresent);
 	}
 	return 0;
