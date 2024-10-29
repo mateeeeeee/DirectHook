@@ -9,14 +9,6 @@
 #define DH_USE_DDRAW  0
 #endif
 
-#ifndef DH_USE_D3D7
-#define DH_USE_D3D7  0
-#endif
-
-#ifndef DH_USE_D3D8
-#define DH_USE_D3D8  0
-#endif
-
 #ifndef DH_USE_D3D9
 #define DH_USE_D3D9  0
 #endif
@@ -43,6 +35,11 @@
 #include "D3D9/d3d9hook_indices.h"
 #endif
 
+#if DH_USE_D3D10
+#include "D3D10/d3d10hook_aliases.h"
+#include "D3D10/d3d10hook_indices.h"
+#endif
+
 #if DH_USE_D3D11
 #include "D3D11/d3d11hook_aliases.h"
 #include "D3D11/d3d11hook_indices.h"
@@ -64,26 +61,26 @@ namespace directhook
 	using int32		= std::int32_t;
 	using int64		= std::int64_t;
 
-	enum class DHStatus : uint8
+	enum class Status : uint8
 	{
 		Success,
-		Error_MHInitFailed,
-		Error_APIInitFailed,
-		Error_AlreadyInitialized,
-		Error_MHHookingFailed,
-		Error_MHEnableHookFailed,
-		Error_NoAPI,
+		Error_MinHookInitFailed,
+		Error_GfxApiInitFailed,
+		Error_DHAlreadyInitialized,
+		Error_MinHookFailed,
+		Error_MinHookEnableFailed,
+		Error_NoGfxApi,
 	};
 
-	DHStatus Initialize();
+	Status Initialize();
 	void Shutdown();
 
-	DHStatus Hook(uint16 index, void** original, void* function);
-	DHStatus Unhook(uint16 index);
+	Status Hook(uint16 index, void** original, void* function);
+	Status Unhook(uint16 index);
 	void* GetOriginal(uint16 index);
 
 	template<typename FuncT>
-	DHStatus Hook(uint16 index, FuncT& original, void* function)
+	Status Hook(uint16 index, FuncT& original, void* function)
 	{
 		return Hook(index, (void**)&original, function);
 	}

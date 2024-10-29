@@ -7,7 +7,7 @@ namespace directhook::d3d9
 {
 	using PFN_Direct3DCreate9 = IDirect3D9*(*)(UINT);
 
-	DHStatus Initialize(MethodTable& methodTable)
+	Status Initialize(MethodTable& methodTable)
 	{
 		WNDCLASSEX windowClass;
 		windowClass.cbSize = sizeof(WNDCLASSEX);
@@ -26,12 +26,12 @@ namespace directhook::d3d9
 		::RegisterClassEx(&windowClass);
 		HWND window = ::CreateWindow(windowClass.lpszClassName, L"Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, windowClass.hInstance, nullptr);
 
-		HMODULE libD3D9 = ::GetModuleHandleA("d3d9.dll");
+		HMODULE libD3D9 = ::GetModuleHandle(L"d3d9.dll");
 		if (libD3D9 == nullptr)
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		PFN_Direct3DCreate9 Direct3DCreate9 = (PFN_Direct3DCreate9)::GetProcAddress(libD3D9, "Direct3DCreate9");
@@ -39,7 +39,7 @@ namespace directhook::d3d9
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		LPDIRECT3D9 direct3D9 = Direct3DCreate9(D3D_SDK_VERSION);
@@ -47,7 +47,7 @@ namespace directhook::d3d9
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		D3DPRESENT_PARAMETERS params;
@@ -72,9 +72,9 @@ namespace directhook::d3d9
 			direct3D9->Release();
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
-		methodTable.AddVTableEntries(device, DEVICE_ENTRIES);
+		methodTable.AddEntries(device, DEVICE_ENTRIES);
 
 		device->Release();
 		device = nullptr;
@@ -85,7 +85,7 @@ namespace directhook::d3d9
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 
-		return DHStatus::Success;
+		return Status::Success;
 	}
 
 }

@@ -37,7 +37,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 
 int D3D12HookThread()
 {
-	if (DHStatus dh = Initialize(); dh == DHStatus::Success)
+	if (Status dh = Initialize(); dh == Status::Success)
 	{
 		GetOriginal(d3d12::List_DrawInstanced, d3d12Draw);
 		Hook(d3d12::List_DrawInstanced, d3d12Draw, MyDraw);

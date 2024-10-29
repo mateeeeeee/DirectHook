@@ -31,7 +31,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 
 int D3D11HookThread()
 {
-	if (DHStatus dh = Initialize(); dh == DHStatus::Success)
+	if (Status dh = Initialize(); dh == Status::Success)
 	{
 		GetOriginal(d3d11::Context_Draw, d3d11Draw);
 		Hook(d3d11::Context_Draw, d3d11Draw, MyDraw);

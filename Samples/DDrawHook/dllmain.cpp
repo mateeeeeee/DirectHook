@@ -32,7 +32,7 @@ HRESULT STDMETHODCALLTYPE MyBlt(
 
 int DDrawHookThread()
 {
-	if (DHStatus dh = Initialize(); dh == DHStatus::Success)
+	if (Status dh = Initialize(); dh == Status::Success)
 	{
 		GetOriginal(ddraw::Device_CreateSurface, ddrawCreateSurface);
 		Hook(ddraw::Device_CreateSurface, ddrawCreateSurface, MyCreateSurface);

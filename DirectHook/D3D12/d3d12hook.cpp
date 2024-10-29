@@ -9,7 +9,7 @@ namespace directhook::d3d12
 	using PFN_CreateDXGIFactory = HRESULT(STDMETHODCALLTYPE*)(REFIID, void**);
 	using PFN_CreateD3D12Device = HRESULT(STDMETHODCALLTYPE*)(IUnknown*, D3D_FEATURE_LEVEL, REFIID, void**);
 
-	DHStatus Initialize(MethodTable& methodTable)
+	Status Initialize(MethodTable& methodTable)
 	{
 		WNDCLASSEX windowClass;
 		windowClass.cbSize = sizeof(WNDCLASSEX);
@@ -28,13 +28,13 @@ namespace directhook::d3d12
 		::RegisterClassEx(&windowClass);
 		HWND window = ::CreateWindow(windowClass.lpszClassName, L"Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, windowClass.hInstance, nullptr);
 
-		HMODULE libDXGI = ::GetModuleHandleA("dxgi.dll");
-		HMODULE libD3D12 = ::GetModuleHandleA("d3d12.dll");
+		HMODULE libDXGI = ::GetModuleHandle(L"dxgi.dll");
+		HMODULE libD3D12 = ::GetModuleHandle(L"d3d12.dll");
 		if (libDXGI == nullptr || libD3D12 == nullptr)
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		PFN_CreateDXGIFactory CreateDXGIFactory = (PFN_CreateDXGIFactory)::GetProcAddress(libDXGI, "CreateDXGIFactory");
@@ -42,7 +42,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		IDXGIFactory* factory = nullptr;
@@ -50,7 +50,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		IDXGIAdapter* adapter = nullptr;
@@ -58,7 +58,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		PFN_CreateD3D12Device D3D12CreateDevice = (PFN_CreateD3D12Device)::GetProcAddress(libD3D12, "D3D12CreateDevice");
@@ -66,7 +66,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		ID3D12Device* device = nullptr;
@@ -74,7 +74,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		D3D12_COMMAND_QUEUE_DESC queueDesc{};
@@ -88,7 +88,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		ID3D12CommandAllocator* commandAllocator = nullptr;
@@ -96,7 +96,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		ID3D12GraphicsCommandList* commandList = nullptr;
@@ -104,7 +104,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
 		DXGI_RATIONAL refreshRate{};
@@ -138,14 +138,14 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DHStatus::Error_APIInitFailed;
+			return Status::Error_GfxApiInitFailed;
 		}
 
-		methodTable.AddVTableEntries(device, DEVICE_ENTRIES);
-		methodTable.AddVTableEntries(commandQueue, QUEUE_ENTRIES);
-		methodTable.AddVTableEntries(commandAllocator, ALLOCATOR_ENTRIES);
-		methodTable.AddVTableEntries(commandList, LIST_ENTRIES);
-		methodTable.AddVTableEntries(swapChain, SWAPCHAIN_ENTRIES);
+		methodTable.AddEntries(device, DEVICE_ENTRIES);
+		methodTable.AddEntries(commandQueue, QUEUE_ENTRIES);
+		methodTable.AddEntries(commandAllocator, ALLOCATOR_ENTRIES);
+		methodTable.AddEntries(commandList, LIST_ENTRIES);
+		methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
 
 		device->Release();
 		device = nullptr;
@@ -165,7 +165,7 @@ namespace directhook::d3d12
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 
-		return DHStatus::Success;
+		return Status::Success;
 	}
 
 }

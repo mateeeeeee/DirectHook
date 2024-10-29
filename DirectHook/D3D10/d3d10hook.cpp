@@ -1,23 +1,22 @@
 #include <dxgi.h>
-#include <d3d11_1.h>
-#include "d3d11hook.h"
+#include <d3d10.h>
+#include "d3d10hook.h"
 #include "../method_table.h"
 
-namespace directhook::d3d11
+namespace directhook::d3d10
 {
-	using PFN_D3D11CreateDeviceAndSwapChain = HRESULT(STDMETHODCALLTYPE*)(
+	using PFN_CreateDXGIFactory = HRESULT(STDMETHODCALLTYPE*)(REFIID, void**);
+
+	using PFN_D3D10CreateDeviceAndSwapChain = HRESULT(*)(
 		IDXGIAdapter*,
-		D3D_DRIVER_TYPE,
+		D3D10_DRIVER_TYPE,
 		HMODULE,
 		UINT,
-		const D3D_FEATURE_LEVEL*,
 		UINT,
-		UINT,
-		const DXGI_SWAP_CHAIN_DESC*,
-		IDXGISwapChain**,
-		ID3D11Device**,
-		D3D_FEATURE_LEVEL*,
-		ID3D11DeviceContext**);
+		DXGI_SWAP_CHAIN_DESC*,
+		IDXGISwapChain** ,
+		ID3D10Device**
+	);
 
 	Status Initialize(MethodTable& methodTable)
 	{
@@ -38,16 +37,41 @@ namespace directhook::d3d11
 		::RegisterClassEx(&windowClass);
 		HWND window = ::CreateWindow(windowClass.lpszClassName, L"Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, windowClass.hInstance, nullptr);
 
-		HMODULE libD3D11 = ::GetModuleHandle(L"d3d11.dll");
-		if (libD3D11 == nullptr)
+		HMODULE libDXGI  = ::GetModuleHandle(L"dxgi.dll");
+		HMODULE libD3D10 = ::GetModuleHandle(L"d3d10.dll");
+		if (!libDXGI || !libD3D10)
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return Status::Error_GfxApiInitFailed;
 		}
 
-		PFN_D3D11CreateDeviceAndSwapChain D3D11CreateDeviceAndSwapChain = (PFN_D3D11CreateDeviceAndSwapChain)::GetProcAddress(libD3D11, "D3D11CreateDeviceAndSwapChain");
-		if (D3D11CreateDeviceAndSwapChain == nullptr)
+		PFN_CreateDXGIFactory CreateDXGIFactory = (PFN_CreateDXGIFactory)::GetProcAddress(libDXGI, "CreateDXGIFactory");
+		if (!CreateDXGIFactory)
+		{
+			::DestroyWindow(window);
+			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
+			return Status::Error_GfxApiInitFailed;
+		}
+
+		IDXGIFactory* factory = nullptr;
+		if (CreateDXGIFactory(IID_PPV_ARGS(&factory)) != S_OK)
+		{
+			::DestroyWindow(window);
+			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
+			return Status::Error_GfxApiInitFailed;
+		}
+
+		IDXGIAdapter* adapter = nullptr;
+		if (factory->EnumAdapters(0, &adapter) == DXGI_ERROR_NOT_FOUND)
+		{
+			::DestroyWindow(window);
+			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
+			return Status::Error_GfxApiInitFailed;
+		}
+
+		PFN_D3D10CreateDeviceAndSwapChain D3D10CreateDeviceAndSwapChain = (PFN_D3D10CreateDeviceAndSwapChain)::GetProcAddress(libD3D10, "D3D10CreateDeviceAndSwapChain");
+		if (!D3D10CreateDeviceAndSwapChain)
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
@@ -80,28 +104,24 @@ namespace directhook::d3d11
 		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-		IDXGISwapChain* swapChain = nullptr;
-		ID3D11Device* device = nullptr;
-		ID3D11DeviceContext* deviceContext = nullptr;
-		if (D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, nullptr, &deviceContext) < 0)
+		IDXGISwapChain* swapChain;
+		ID3D10Device* device;
+
+		if (D3D10CreateDeviceAndSwapChain(adapter, D3D10_DRIVER_TYPE_HARDWARE, NULL, 0, D3D10_SDK_VERSION, &swapChainDesc, &swapChain, &device) != S_OK)
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return Status::Error_GfxApiInitFailed;
 		}
 
-		methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
-		methodTable.AddEntries(device, DEVICE_ENTRIES);
-		methodTable.AddEntries(deviceContext, CONTEXT_ENTRIES);
+		methodTable.AddEntries(swapChain, 18);
+		methodTable.AddEntries(device, 98);
 
 		swapChain->Release();
 		swapChain = nullptr;
 
 		device->Release();
 		device = nullptr;
-
-		deviceContext->Release();
-		deviceContext = nullptr;
 
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);

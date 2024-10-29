@@ -36,7 +36,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(
 
 int D3D9HookThread()
 {
-	if (DHStatus dh = Initialize(); dh == DHStatus::Success)
+	if (Status dh = Initialize(); dh == Status::Success)
 	{
 		GetOriginal(d3d9::Device_DrawPrimitive, d3d9DrawPrimitive);
 		Hook(d3d9::Device_DrawPrimitive, d3d9DrawPrimitive, MyDrawPrimitive);

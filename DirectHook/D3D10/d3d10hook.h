@@ -5,7 +5,7 @@ namespace directhook
 {
 	class MethodTable;
 
-	namespace d3d12
+	namespace d3d10
 	{
 		Status Initialize(MethodTable& methodTable);
 	}
