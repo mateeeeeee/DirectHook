@@ -132,6 +132,12 @@
   <ItemGroup>
     <ClInclude Include="d3dx10.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\D3D10Hook\D3D10Hook.vcxproj">
+      <Project>{7f206f72-7b65-42f6-8ce4-c5cc2ad50ae2}</Project>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

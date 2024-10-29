@@ -30,37 +30,42 @@ namespace directhook
 
 	Status Initialize()
 	{
+		Status status = Status::Error_NoGfxApi;
 #if DH_USE_D3D9
-		Status status = d3d9::Initialize(gMethodTable);
+		status = d3d9::Initialize(gMethodTable);
 		if (status != Status::Success)
 		{
 			return status;
 		}
 #elif DH_USE_D3D10
-		Status status = d3d10::Initialize(gMethodTable);
+		status = d3d10::Initialize(gMethodTable);
 		if (status != Status::Success)
 		{
 			return status;
 		}
 #elif DH_USE_D3D11
-		Status status = d3d11::Initialize(gMethodTable);
+		status = d3d11::Initialize(gMethodTable);
 		if (status != Status::Success)
 		{
 			return status;
 		}
 #elif DH_USE_D3D12
-		Status status = d3d12::Initialize(gMethodTable);
+		status = d3d12::Initialize(gMethodTable);
 		if (status != Status::Success)
 		{
 			return status;
 		}
 #elif DH_USE_DDRAW
-		Status status = ddraw::Initialize(gMethodTable);
+		status = ddraw::Initialize(gMethodTable);
 		if (status != Status::Success)
 		{
 			return status;
 		}
 #endif
+		if (status == Status::Error_NoGfxApi)
+		{
+			return status;
+		}
 		
 		MH_STATUS mhStatus = MH_Initialize();
 		if (mhStatus != MH_OK)

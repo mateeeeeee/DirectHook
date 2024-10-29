@@ -53,14 +53,12 @@ struct vertex
 	vertex(vec3 pos, vec4 color) : pos(pos), color(color) {}
 };
 
-// Vertex layout
 D3D10_INPUT_ELEMENT_DESC layout[] =
 {
 	{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D10_INPUT_PER_VERTEX_DATA, 0},
 	{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0}
 };
 
-// Message handler
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
@@ -80,7 +78,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	// Register window class
 	WNDCLASS wc;
 	ZeroMemory(&wc, sizeof(wc));
 	wc.hInstance = hInstance;
@@ -89,12 +86,10 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	wc.lpszClassName = L"D3DWindow";
 	RegisterClass(&wc);
 
-	// Create window
 	RECT rect;
 	GetWindowRect(GetDesktopWindow(), &rect);
 	HWND hWnd = CreateWindow(L"D3DWindow", L"Direct3D 10 Triangle", WS_POPUPWINDOW | WS_CAPTION | WS_VISIBLE, rect.right / 2 - WIDTH / 2, rect.bottom / 2 - HEIGHT / 2, WIDTH, HEIGHT, NULL, NULL, hInstance, NULL);
 
-	// Create Direct3D device and swap chain (double buffered)
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 	swapChainDesc.BufferCount = 2;
@@ -112,8 +107,6 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	IDXGISwapChain* swapChain;
 	ID3D10Device* d3dDevice;
 	D3D10CreateDeviceAndSwapChain(NULL, D3D10_DRIVER_TYPE_HARDWARE, NULL, 0, D3D10_SDK_VERSION, &swapChainDesc, &swapChain, &d3dDevice);
-
-	// Create primary render target
 	ID3D10Texture2D* backBuffer;
 	ID3D10RenderTargetView* renderTargetView;
 	swapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (LPVOID*)&backBuffer);
@@ -121,7 +114,6 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	backBuffer->Release();
 	d3dDevice->OMSetRenderTargets(1, &renderTargetView, NULL);
 
-	// Set viewport
 	D3D10_VIEWPORT viewport;
 	viewport.Width = WIDTH;
 	viewport.Height = HEIGHT;
@@ -131,7 +123,6 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	viewport.TopLeftY = 0;
 	d3dDevice->RSSetViewports(1, &viewport);
 
-	// Load shaders
 	ID3D10Blob* vertexBlob, * pixelBlob;
 	ID3D10VertexShader* vertexShader;
 	ID3D10PixelShader* pixelShader;
@@ -144,12 +135,10 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	d3dDevice->CreatePixelShader((DWORD*)pixelBlob->GetBufferPointer(), pixelBlob->GetBufferSize(), &pixelShader);
 	d3dDevice->PSSetShader(pixelShader);
 
-	// Set vertex input layout
 	ID3D10InputLayout* vertexLayout;
 	d3dDevice->CreateInputLayout(layout, 2, vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), &vertexLayout);
 	d3dDevice->IASetInputLayout(vertexLayout);
 
-	// Create vertex buffer
 	ID3D10Buffer* vertexBuffer;
 	D3D10_BUFFER_DESC bufferDesc;
 	bufferDesc.Usage = D3D10_USAGE_DYNAMIC;
@@ -163,7 +152,6 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	UINT offset = 0;
 	d3dDevice->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 
-	// Fill vertex buffer
 	vertex* vertices;
 	vertexBuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&vertices);
 	vertices[0] = vertex(vec3(-0.5, -0.5, 0), vec4(1, 0, 0, 1));
@@ -171,7 +159,6 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	vertices[2] = vertex(vec3(0.5, -0.5, 0), vec4(0, 0, 1, 1));
 	vertexBuffer->Unmap();
 
-	// Set up rasterizer
 	D3D10_RASTERIZER_DESC rasterizerDesc;
 	rasterizerDesc.CullMode = D3D10_CULL_NONE;
 	rasterizerDesc.FillMode = D3D10_FILL_SOLID;
@@ -188,9 +175,9 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	d3dDevice->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
 	d3dDevice->RSSetState(rasterizerState);
 
-	// Input assembly
 	d3dDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
+	LoadLibrary(L"D3D10Hook.dll");
 	while (true)
 	{
 		// Handle messages

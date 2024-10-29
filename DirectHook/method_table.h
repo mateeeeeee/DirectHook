@@ -9,8 +9,8 @@ namespace directhook
 	public:
 		MethodTable() {}
 
-		template<typename D3DInterfaceT>
-		void AddEntries(D3DInterfaceT* d3dInterface, uint32 vtableEntriesCount)
+		template<typename DirectInterfaceT>
+		void AddEntries(DirectInterfaceT* d3dInterface, uint32 vtableEntriesCount)
 		{
 			methods.reserve(methods.size() + vtableEntriesCount);
 			void** vTableBase = *reinterpret_cast<void***>(d3dInterface);
