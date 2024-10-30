@@ -4,15 +4,14 @@ DirectHook is a library designed for intercepting and modifying DirectX API func
 Supported APIs: D3D9, D3D10, D3D11, D3D12, DirectDraw 7.
 
 ## TODO
- - Add support for newer interfaces of DirectX classes which provide more methods that can be hooked (e.g. `IDXGISwapChain1` vs `IDXGISwapChain`)
  - Consider adding support for non-DirectX graphics APIs such as OpenGL and Vulkan
 
-## Example
-For each supported API, the Samples folder includes a simple DLL that hooks a few of the API functions, along with an application whose calls are intercepted by the DLL.
+## Samples
+"For each supported API, the Samples folder includes a basic DLL that hooks into several API functions, as well as an application whose calls are intercepted by this DLL. 
+The samples also demonstrate how to use DirectHook to implement an ImGui hook for supported APIs.
 
-Also each of the supported APIs provides two utility headers for easier use, one for **hook indices** and the other one for **API typedefs/aliases**.  
-
-Indices are provided as enum members, while typedefs are provided as using aliases.
+Each of the supported APIs provides two utility headers for easier use, one for **hook indices** and the other one for **API typedefs/aliases**.  
+Indices are provided as enum members, while typedefs are provided as using aliases. 
 ### D3D11
 
 In case of D3D11, hook indices look like this:
@@ -52,7 +51,7 @@ namespace directhook::d3d11
 	//...
 }
 ```
-If you want to write a simple DLL hooking `Present` call, you can use `d3d11::SwapChain_Present` for index when calling `Hook` function and `d3d11::PFN_DXGISwapChain_Present` for declaring function pointer variable. 
+If you want to write a simple DLL hooking `Present` call, you can use `d3d11::SwapChain_Present` for index when calling `Hook` function and `d3d11::PFN_DXGISwapChain_Present` for declaring function pointer variable. You can check the D3D11Hook sample project to see it being used for ImGui hooking.
 ```cpp
 #include "directhook.h"
 
@@ -75,7 +74,6 @@ int D3D11HookThread()
 {
 	if (Status dh = Initialize(); dh == Status::Success)
 	{
-		SaveOriginal(d3d11::SwapChain_Present, dxgiPresent); //Hook will save an original in dxgiPresent too so not strictly necessary
 		Hook(d3d11::SwapChain_Present, dxgiPresent, MyPresent);
 	}
 	return 0;
