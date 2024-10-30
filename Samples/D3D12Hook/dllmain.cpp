@@ -7,7 +7,6 @@ using namespace directhook;
 
 #pragma comment(lib, "dxgi.lib")
 
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 struct ImGuiD3D12Context
 {
@@ -27,6 +26,8 @@ static d3d12::PFN_IDXGISwapChain_Present DxgiPresent = nullptr;
 static d3d12::PFN_D3D12CommandQueue_ExecuteCommandLists D3D12ExecuteCmdLists = nullptr;
 static WNDPROC Win32WndProc = nullptr;
 static ImGuiD3D12Context Context;
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK MyWindowProc(
 	_In_ HWND   hwnd,
