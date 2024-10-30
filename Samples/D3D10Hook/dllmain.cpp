@@ -3,7 +3,7 @@
 using namespace directhook;
 
 static d3d10::PFN_D3D10Device_Draw		  d3d10Draw = nullptr;
-static d3d10::PFN_DXGISwapChain_Present   dxgiPresent = nullptr;
+static d3d10::PFN_DXGISwapChain_Present   DxgiPresent = nullptr;
 
 void STDMETHODCALLTYPE MyDraw(ID3D10Device* Device, UINT VertexCount, UINT StartVertexLocation)
 {
@@ -24,7 +24,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 		MessageBoxA(0, "Called MyPresent!", "DirectHook", MB_OK);
 		called = true;
 	}
-	return dxgiPresent(SwapChain, SyncInterval, Flags);
+	return DxgiPresent(SwapChain, SyncInterval, Flags);
 }
 
 int D3D10HookThread()
@@ -34,8 +34,8 @@ int D3D10HookThread()
 		SaveOriginal(d3d10::Device_Draw, d3d10Draw);
 		Hook(d3d10::Device_Draw, d3d10Draw, MyDraw);
 
-		SaveOriginal(d3d10::SwapChain_Present, dxgiPresent);
-		Hook(d3d10::SwapChain_Present, dxgiPresent, MyPresent);
+		SaveOriginal(d3d10::SwapChain_Present, DxgiPresent);
+		Hook(d3d10::SwapChain_Present, DxgiPresent, MyPresent);
 	}
 	return 0;
 }

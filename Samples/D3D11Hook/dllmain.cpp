@@ -3,7 +3,7 @@
 using namespace directhook;
 
 static d3d11::PFN_D3D11DeviceContext_Draw d3d11Draw = nullptr;
-static d3d11::PFN_DXGISwapChain_Present   dxgiPresent = nullptr;
+static d3d11::PFN_DXGISwapChain_Present   DxgiPresent = nullptr;
 
 void STDMETHODCALLTYPE MyDraw(
 	ID3D11DeviceContext* DeviceContext,
@@ -26,7 +26,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 		MessageBoxA(0, "Called MyPresent!", "DirectHook", MB_OK);
 		called = true;
 	}
-	return dxgiPresent(SwapChain, SyncInterval, Flags);
+	return DxgiPresent(SwapChain, SyncInterval, Flags);
 }
 
 int D3D11HookThread()
@@ -36,8 +36,8 @@ int D3D11HookThread()
 		SaveOriginal(d3d11::Context_Draw, d3d11Draw);
 		Hook(d3d11::Context_Draw, d3d11Draw, MyDraw);
 
-		SaveOriginal(d3d11::SwapChain_Present, dxgiPresent);
-		Hook(d3d11::SwapChain_Present, dxgiPresent, MyPresent);
+		SaveOriginal(d3d11::SwapChain_Present, DxgiPresent);
+		Hook(d3d11::SwapChain_Present, DxgiPresent, MyPresent);
 	}
 	return 0;
 }
