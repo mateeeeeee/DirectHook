@@ -4,7 +4,7 @@
 
 using namespace directhook;
 
-static d3d10::PFN_D3D10Device_Draw		  d3d10Draw = nullptr;
+static d3d10::PFN_D3D10Device_Draw		  D3D10Draw = nullptr;
 static d3d10::PFN_DXGISwapChain_Present   DxgiPresent = nullptr;
 static WNDPROC Win32WndProc = nullptr;
 
@@ -28,7 +28,6 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 	static bool initialized = false;
 	if (!initialized)
 	{
-		ImGui::CreateContext();
 
 		DXGI_SWAP_CHAIN_DESC swapchainDesc{};
 		if (FAILED(SwapChain->GetDesc(&swapchainDesc)))
@@ -42,7 +41,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 		{
 			return DxgiPresent(SwapChain, SyncInterval, Flags);
 		}
-
+		ImGui::CreateContext();
 		ImGui_ImplWin32_Init(swapchainDesc.OutputWindow);
 		ImGui_ImplDX10_Init(device);
 
@@ -70,14 +69,14 @@ void STDMETHODCALLTYPE MyDraw(ID3D10Device* Device, UINT VertexCount, UINT Start
 		MessageBoxA(0, "Called MyDraw!", "DirectHook", MB_OK);
 		called = true;
 	}
-	d3d10Draw(Device, VertexCount, StartVertexLocation);
+	D3D10Draw(Device, VertexCount, StartVertexLocation);
 }
 
 int D3D10HookThread()
 {
 	if (Status dh = Initialize(); dh == Status::Success)
 	{
-		Hook(d3d10::Device_Draw, d3d10Draw, MyDraw);
+		Hook(d3d10::Device_Draw, D3D10Draw, MyDraw);
 		Hook(d3d10::SwapChain_Present, DxgiPresent, MyPresent);
 	}
 	return 0;

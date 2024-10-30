@@ -30,8 +30,6 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 	static bool initialized = false;
 	if (!initialized)
 	{
-		ImGui::CreateContext();
-
 		DXGI_SWAP_CHAIN_DESC swapchainDesc{};
 		if (FAILED(SwapChain->GetDesc(&swapchainDesc)))
 		{
@@ -47,6 +45,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 		ID3D11DeviceContext* context = nullptr;
 		device->GetImmediateContext(&context);
 
+		ImGui::CreateContext();
 		ImGui_ImplWin32_Init(swapchainDesc.OutputWindow);
 		ImGui_ImplDX11_Init(device, context);
 

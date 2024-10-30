@@ -7,7 +7,6 @@ using namespace directhook;
 
 #pragma comment(lib, "dxgi.lib")
 
-
 struct ImGuiD3D12Context
 {
 	ID3D12DescriptorHeap* FontDescriptorHeap = nullptr;

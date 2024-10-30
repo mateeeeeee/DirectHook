@@ -1,20 +1,26 @@
-
 #include "directhook.h"
+#include "ImGui/imgui_impl_dx9.h"
+#include "ImGui/imgui_impl_win32.h"
 
 using namespace directhook;
 
-static d3d9::PFN_D3D9Device_DrawPrimitive	d3d9DrawPrimitive = nullptr;
-static d3d9::PFN_D3D9Device_Present			d3d9Present = nullptr;
+static d3d9::PFN_D3D9Device_DrawPrimitive	D3D9DrawPrimitive = nullptr;
+static d3d9::PFN_D3D9Device_Present			D3D9Present = nullptr;
+static WNDPROC Win32WndProc = nullptr;
 
-HRESULT STDMETHODCALLTYPE MyDrawPrimitive(IDirect3DDevice9* Device, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK MyWindowProc(
+	_In_ HWND   hwnd,
+	_In_ UINT   uMsg,
+	_In_ WPARAM wParam,
+	_In_ LPARAM lParam
+)
 {
-	static bool called = false;
-	if (!called)
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam) > 0)
 	{
-		MessageBoxA(0, "Called MyDrawPrimitive!", "DirectHook", MB_OK);
-		called = true;
+		return 1L;
 	}
-	return d3d9DrawPrimitive(Device, PrimitiveType, StartVertex, PrimitiveCount);
+	return ::CallWindowProcA(Win32WndProc, hwnd, uMsg, wParam, lParam);
 }
 
 HRESULT STDMETHODCALLTYPE MyPresent(
@@ -25,24 +31,52 @@ HRESULT STDMETHODCALLTYPE MyPresent(
 	const RGNDATA* pDirtyRegion
 )
 {
+	static bool initialized = false;
+	if (!initialized)
+	{
+		D3DDEVICE_CREATION_PARAMETERS creationParams;
+		Device->GetCreationParameters(&creationParams);
+
+		Win32WndProc = (WNDPROC)::SetWindowLongPtr(creationParams.hFocusWindow, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(MyWindowProc));
+
+		ImGui::CreateContext();
+		ImGui_ImplWin32_Init(creationParams.hFocusWindow);
+		ImGui_ImplDX9_Init(Device);
+
+		initialized = true;
+	}
+
+	ImGui_ImplDX9_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::ShowDemoWindow();
+
+	ImGui::EndFrame();
+	ImGui::Render();
+	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
+	return D3D9Present(Device, pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
+}
+
+
+HRESULT STDMETHODCALLTYPE MyDrawPrimitive(IDirect3DDevice9* Device, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
+{
 	static bool called = false;
 	if (!called)
 	{
-		MessageBoxA(0, "Called MyPresent!", "DirectHook", MB_OK);
+		MessageBoxA(0, "Called MyDrawPrimitive!", "DirectHook", MB_OK);
 		called = true;
 	}
-	return d3d9Present(Device, pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
+	return D3D9DrawPrimitive(Device, PrimitiveType, StartVertex, PrimitiveCount);
 }
 
 int D3D9HookThread()
 {
 	if (Status dh = Initialize(); dh == Status::Success)
 	{
-		SaveOriginal(d3d9::Device_DrawPrimitive, d3d9DrawPrimitive);
-		Hook(d3d9::Device_DrawPrimitive, d3d9DrawPrimitive, MyDrawPrimitive);
-
-		SaveOriginal(d3d9::Device_Present, d3d9Present);
-		Hook(d3d9::Device_Present, d3d9Present, MyPresent);
+		Hook(d3d9::Device_DrawPrimitive, D3D9DrawPrimitive, MyDrawPrimitive);
+		Hook(d3d9::Device_Present, D3D9Present, MyPresent);
 	}
 	return 0;
 }
