@@ -25,18 +25,8 @@ struct ImGuiD3D12Context
 static d3d12::PFN_D3D12CommandList_DrawInstanced D3D12Draw = nullptr;
 static d3d12::PFN_IDXGISwapChain_Present DxgiPresent = nullptr;
 static d3d12::PFN_D3D12CommandQueue_ExecuteCommandLists D3D12ExecuteCmdLists = nullptr;
-static WNDPROC win32WndProc = nullptr;
+static WNDPROC Win32WndProc = nullptr;
 static ImGuiD3D12Context Context;
-
-//static ID3D12GraphicsCommandList* ImGuiCmdList = nullptr;
-//static ID3D12DescriptorHeap*	ImguiDescriptorHeap = nullptr;
-//static ID3D12DescriptorHeap*	ImguiRTVDescriptorHeap = nullptr;
-//static ID3D12CommandQueue*		ImguiQueue = nullptr;
-//
-//static ID3D12Resource* BackbufferResources[3] = { nullptr };
-//static D3D12_CPU_DESCRIPTOR_HANDLE BackbufferDescriptor[3] = { 0 };
-//static ID3D12CommandAllocator* ImguiAllocators[3] = { nullptr };
-
 
 LRESULT CALLBACK MyWindowProc(
 	_In_ HWND   hwnd,
@@ -49,7 +39,7 @@ LRESULT CALLBACK MyWindowProc(
 	{
 		return 1L;
 	}
-	return ::CallWindowProcA(win32WndProc, hwnd, uMsg, wParam, lParam);
+	return ::CallWindowProcA(Win32WndProc, hwnd, uMsg, wParam, lParam);
 }
 
 void STDMETHODCALLTYPE MyExecuteCmdLists(ID3D12CommandQueue* Queue, UINT CmdListCount, ID3D12CommandList* const* CmdLists)
@@ -71,7 +61,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 		{
 			return DxgiPresent(SwapChain, SyncInterval, Flags);
 		}
-		win32WndProc = (WNDPROC)::SetWindowLongPtr(swapchainDesc.OutputWindow, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(MyWindowProc));
+		Win32WndProc = (WNDPROC)::SetWindowLongPtr(swapchainDesc.OutputWindow, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(MyWindowProc));
 
 		ID3D12Device* device = nullptr;
 		if (FAILED(SwapChain->GetDevice(IID_PPV_ARGS(&device))))
