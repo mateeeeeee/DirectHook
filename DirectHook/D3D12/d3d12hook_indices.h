@@ -5,7 +5,7 @@
 
 namespace directhook::d3d12
 {
-	enum 
+	enum
 	{
 		Device_FirstEntry,
 		Device_QueryInterface = Device_FirstEntry,
@@ -58,7 +58,7 @@ namespace directhook::d3d12
 		Device1_SetEventOnMultipleFenceCompletion,
 		Device1_SetResidencyPriority,
 		Device1_LastEntry = Device1_SetResidencyPriority,
-		
+
 		Device2_CreatePipelineState,
 		Device2_LastEntry = Device2_CreatePipelineState,
 
@@ -83,7 +83,31 @@ namespace directhook::d3d12
 		Device5_CreateStateObject,
 		Device5_GetRaytracingAccelerationStructurePrebuildInfo,
 		Device5_CheckDriverMatchingIdentifier,
-		Device5_LastEntry,
+		Device5_LastEntry = Device5_CheckDriverMatchingIdentifier,
+
+		Device6_SetBackgroundProcessingMode,
+		Device6_LastEntry = Device6_SetBackgroundProcessingMode,
+
+		Device7_AddToStateObject,
+		Device7_CreateProtectedResourceSession1,
+		Device7_LastEntry = Device7_CreateProtectedResourceSession1,
+
+		Device8_GetResourceAllocationInfo2,
+		Device8_CreateCommittedResource2,
+		Device8_CreatePlacedResource1,
+		Device8_CreateSamplerFeedbackUnorderedAccessView,
+		Device8_GetCopyableFootprints1,
+		Device8_LastEntry = Device8_GetCopyableFootprints1,
+
+		Device9_CreateShaderCacheSession,
+		Device9_ShaderCacheControl,
+		Device9_CreateCommandQueue1,
+		Device9_LastEntry = Device9_CreateCommandQueue1,
+
+		Device10_CreateCommittedResource3,
+		Device10_CreatePlacedResource2,
+		Device10_CreateReservedResource2,
+		Device10_LastEntry = Device10_CreateReservedResource2,
 
 		Queue_FirstEntry,
 		Queue_QueryInterface = Queue_FirstEntry,
@@ -238,7 +262,12 @@ namespace directhook::d3d12
 	static constexpr int DEVICE3_ENTRIES = ENTRY_COUNT_(Device, 3);
 	static constexpr int DEVICE4_ENTRIES = ENTRY_COUNT_(Device, 4);
 	static constexpr int DEVICE5_ENTRIES = ENTRY_COUNT_(Device, 5);
-	static constexpr int MAX_DEVICE_ENTRIES = DEVICE5_ENTRIES;
+	static constexpr int DEVICE6_ENTRIES = ENTRY_COUNT_(Device, 6);
+	static constexpr int DEVICE7_ENTRIES = ENTRY_COUNT_(Device, 7);
+	static constexpr int DEVICE8_ENTRIES = ENTRY_COUNT_(Device, 8);
+	static constexpr int DEVICE9_ENTRIES = ENTRY_COUNT_(Device, 9);
+	static constexpr int DEVICE10_ENTRIES = ENTRY_COUNT_(Device, 10);
+	static constexpr int MAX_DEVICE_ENTRIES = DEVICE10_ENTRIES;
 
 	static constexpr int QUEUE_ENTRIES  = ENTRY_COUNT(Queue);
 	static constexpr int ALLOCATOR_ENTRIES  = ENTRY_COUNT(Allocator);

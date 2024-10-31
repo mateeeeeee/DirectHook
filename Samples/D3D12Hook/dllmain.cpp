@@ -79,14 +79,23 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 			return DxgiPresent(SwapChain, SyncInterval, Flags);
 		}
 
-		Context.BufferIndex = 0;
+		IDXGISwapChain3* SwapChain3 = nullptr;
+		if (FAILED(SwapChain->QueryInterface(&SwapChain3)))
+		{
+			return DxgiPresent(SwapChain, SyncInterval, Flags);
+		}
+		//UINT PresentCount = 0;
+		//if (FAILED(SwapChain->GetLastPresentCount(&PresentCount)))
+		//{
+		//	return DxgiPresent(SwapChain, SyncInterval, Flags);
+		//}
+		Context.BufferIndex = SwapChain3->GetCurrentBackBufferIndex();
 		Context.BufferCount = swapchainDesc.BufferCount;
 
 		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
 		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 		rtvHeapDesc.NumDescriptors = Context.BufferCount;
 		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		rtvHeapDesc.NodeMask = 1;
 
 		if (device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&Context.RTVDescriptorHeap)) != S_OK)
 		{
@@ -125,11 +134,9 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 		ImGui::CreateContext();
 		ImGui_ImplWin32_Init(swapchainDesc.OutputWindow);
 		ImGui_ImplDX12_Init(device, swapchainDesc.BufferCount, swapchainDesc.BufferDesc.Format, Context.FontDescriptorHeap, cpuHandle, gpuHandle);
-		ImGui_ImplDX12_CreateDeviceObjects();
 
 		initialized = true;
 	}
-
 	if (!Context.CommandQueue)
 	{
 		return DxgiPresent(SwapChain, SyncInterval, Flags);
@@ -141,9 +148,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 
 	ImGui::ShowDemoWindow();
 
-	ImGui::EndFrame();
-
-	Context.CommandAllocators[Context.BufferIndex]->Reset();
+	ImGui::Render();
 
 	D3D12_RESOURCE_BARRIER Barrier;
 	Barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
@@ -152,19 +157,19 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 	Barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 	Barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
 	Barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-
-	Context.CommandList->Reset(Context.CommandAllocators[Context.BufferIndex], nullptr);
-	Context.CommandList->ResourceBarrier(1, &Barrier);
 	Context.CommandList->OMSetRenderTargets(1, &Context.BackBufferDescriptors[Context.BufferIndex], FALSE, nullptr);
-	Context.CommandList->SetDescriptorHeaps(1, &Context.FontDescriptorHeap);
 
-	ImGui::Render();
+	Context.CommandList->SetDescriptorHeaps(1, &Context.FontDescriptorHeap);
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), Context.CommandList);
+
 	Barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	Barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 	Context.CommandList->ResourceBarrier(1, &Barrier);
+
 	Context.CommandList->Close();
 	Context.CommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList* const*>(&Context.CommandList));
+	Context.CommandAllocators[Context.BufferIndex]->Reset();
+	Context.CommandList->Reset(Context.CommandAllocators[Context.BufferIndex], nullptr);
 
 	Context.BufferIndex = (Context.BufferIndex + 1) % Context.BufferCount;
 	return DxgiPresent(SwapChain, SyncInterval, Flags);

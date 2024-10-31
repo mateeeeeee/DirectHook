@@ -147,41 +147,81 @@ namespace directhook::d3d12
 			return Status::Error_GfxApiInitFailed;
 		}
 
-		ID3D12Device5* device5 = nullptr;
-		ID3D12Device4* device4 = nullptr;
-		ID3D12Device3* device3 = nullptr;
-		ID3D12Device2* device2 = nullptr;
-		ID3D12Device1* device1 = nullptr;
-		if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device5)); hr == S_OK && device5)
+		bool deviceEntriesAdded = false;
+#if defined(__ID3D12Device10_INTERFACE_DEFINED__)
+		ID3D12Device10* device10 = nullptr;
+		if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device10)); hr == S_OK && device10)
 		{
-			methodTable.AddEntries(device5, DEVICE5_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device5);
+			methodTable.AddEntries(device10, DEVICE10_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device10);
+			deviceEntriesAdded = true;
 		}
-		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device4)); hr == S_OK && device4)
+#endif
+#if defined(__ID3D12Device9_INTERFACE_DEFINED__)
+		ID3D12Device9* device9 = nullptr;
+		if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device9)); !deviceEntriesAdded && hr == S_OK && device9)
 		{
-			methodTable.AddEntries(device4, DEVICE4_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device4);
+			methodTable.AddEntries(device9, DEVICE9_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device9);
+			deviceEntriesAdded = true;
 		}
-		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device3)); hr == S_OK && device3)
+#endif
+		if (!deviceEntriesAdded)
 		{
-			methodTable.AddEntries(device3, DEVICE3_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device3);
+			ID3D12Device8* device8 = nullptr;
+			ID3D12Device7* device7 = nullptr;
+			ID3D12Device6* device6 = nullptr;
+			ID3D12Device5* device5 = nullptr;
+			ID3D12Device4* device4 = nullptr;
+			ID3D12Device3* device3 = nullptr;
+			ID3D12Device2* device2 = nullptr;
+			ID3D12Device1* device1 = nullptr;
+			if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device8)); hr == S_OK && device8)
+			{
+				methodTable.AddEntries(device8, DEVICE8_ENTRIES, MAX_DEVICE_ENTRIES);
+				SafeRelease(device8);
+			}
+			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device7)); hr == S_OK && device7)
+			{
+				methodTable.AddEntries(device7, DEVICE7_ENTRIES, MAX_DEVICE_ENTRIES);
+				SafeRelease(device7);
+			}
+			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device6)); hr == S_OK && device6)
+			{
+				methodTable.AddEntries(device6, DEVICE6_ENTRIES, MAX_DEVICE_ENTRIES);
+				SafeRelease(device6);
+			}
+			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device5)); hr == S_OK && device5)
+			{
+				methodTable.AddEntries(device5, DEVICE5_ENTRIES, MAX_DEVICE_ENTRIES);
+				SafeRelease(device5);
+			}
+			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device4)); hr == S_OK && device4)
+			{
+				methodTable.AddEntries(device4, DEVICE4_ENTRIES, MAX_DEVICE_ENTRIES);
+				SafeRelease(device4);
+			}
+			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device3)); hr == S_OK && device3)
+			{
+				methodTable.AddEntries(device3, DEVICE3_ENTRIES, MAX_DEVICE_ENTRIES);
+				SafeRelease(device3);
+			}
+			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device2)); hr == S_OK && device2)
+			{
+				methodTable.AddEntries(device2, DEVICE2_ENTRIES, MAX_DEVICE_ENTRIES);
+				SafeRelease(device2);
+			}
+			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device1)); hr == S_OK && device1)
+			{
+				methodTable.AddEntries(device1, DEVICE1_ENTRIES, MAX_DEVICE_ENTRIES);
+				SafeRelease(device1);
+			}
+			else
+			{
+				methodTable.AddEntries(device, DEVICE_ENTRIES);
+			}
 		}
-		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device2)); hr == S_OK && device2)
-		{
-			methodTable.AddEntries(device2, DEVICE2_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device2);
-		}
-		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device1)); hr == S_OK && device1)
-		{
-			methodTable.AddEntries(device1, DEVICE1_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device1);
-		}
-		else
-		{
-			methodTable.AddEntries(device, DEVICE_ENTRIES);
-		}
-
+		
 		methodTable.AddEntries(commandQueue, QUEUE_ENTRIES);
 		methodTable.AddEntries(commandAllocator, ALLOCATOR_ENTRIES);
 		methodTable.AddEntries(commandList, LIST_ENTRIES);
