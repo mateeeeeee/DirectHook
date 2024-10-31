@@ -84,11 +84,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 		{
 			return DxgiPresent(SwapChain, SyncInterval, Flags);
 		}
-		//UINT PresentCount = 0;
-		//if (FAILED(SwapChain->GetLastPresentCount(&PresentCount)))
-		//{
-		//	return DxgiPresent(SwapChain, SyncInterval, Flags);
-		//}
+
 		Context.BufferIndex = SwapChain3->GetCurrentBackBufferIndex();
 		Context.BufferCount = swapchainDesc.BufferCount;
 
@@ -175,7 +171,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 	return DxgiPresent(SwapChain, SyncInterval, Flags);
 }
 
-void STDMETHODCALLTYPE MyDraw(ID3D12CommandList* CmdList, UINT VertexCountPerInstance,
+void STDMETHODCALLTYPE MyDraw(ID3D12GraphicsCommandList* CmdList, UINT VertexCountPerInstance,
 	UINT InstanceCount, UINT StartVertexLocation, UINT StartInstanceLocation)
 {
 	static bool called = false;

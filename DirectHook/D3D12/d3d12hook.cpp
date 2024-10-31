@@ -150,7 +150,7 @@ namespace directhook::d3d12
 		bool deviceEntriesAdded = false;
 #if defined(__ID3D12Device10_INTERFACE_DEFINED__)
 		ID3D12Device10* device10 = nullptr;
-		if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device10)); hr == S_OK && device10)
+		if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device10))))
 		{
 			methodTable.AddEntries(device10, DEVICE10_ENTRIES, MAX_DEVICE_ENTRIES);
 			SafeRelease(device10);
@@ -159,7 +159,7 @@ namespace directhook::d3d12
 #endif
 #if defined(__ID3D12Device9_INTERFACE_DEFINED__)
 		ID3D12Device9* device9 = nullptr;
-		if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device9)); !deviceEntriesAdded && hr == S_OK && device9)
+		if (!deviceEntriesAdded && SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device9))))
 		{
 			methodTable.AddEntries(device9, DEVICE9_ENTRIES, MAX_DEVICE_ENTRIES);
 			SafeRelease(device9);
@@ -176,42 +176,42 @@ namespace directhook::d3d12
 			ID3D12Device3* device3 = nullptr;
 			ID3D12Device2* device2 = nullptr;
 			ID3D12Device1* device1 = nullptr;
-			if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device8)); hr == S_OK && device8)
+			if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device8))))
 			{
 				methodTable.AddEntries(device8, DEVICE8_ENTRIES, MAX_DEVICE_ENTRIES);
 				SafeRelease(device8);
 			}
-			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device7)); hr == S_OK && device7)
+			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device7))))
 			{
 				methodTable.AddEntries(device7, DEVICE7_ENTRIES, MAX_DEVICE_ENTRIES);
 				SafeRelease(device7);
 			}
-			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device6)); hr == S_OK && device6)
+			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device6))))
 			{
 				methodTable.AddEntries(device6, DEVICE6_ENTRIES, MAX_DEVICE_ENTRIES);
 				SafeRelease(device6);
 			}
-			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device5)); hr == S_OK && device5)
+			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device5))))
 			{
 				methodTable.AddEntries(device5, DEVICE5_ENTRIES, MAX_DEVICE_ENTRIES);
 				SafeRelease(device5);
 			}
-			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device4)); hr == S_OK && device4)
+			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device4))))
 			{
 				methodTable.AddEntries(device4, DEVICE4_ENTRIES, MAX_DEVICE_ENTRIES);
 				SafeRelease(device4);
 			}
-			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device3)); hr == S_OK && device3)
+			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device3))))
 			{
 				methodTable.AddEntries(device3, DEVICE3_ENTRIES, MAX_DEVICE_ENTRIES);
 				SafeRelease(device3);
 			}
-			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device2)); hr == S_OK && device2)
+			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device2))))
 			{
 				methodTable.AddEntries(device2, DEVICE2_ENTRIES, MAX_DEVICE_ENTRIES);
 				SafeRelease(device2);
 			}
-			else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device1)); hr == S_OK && device1)
+			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device1))))
 			{
 				methodTable.AddEntries(device1, DEVICE1_ENTRIES, MAX_DEVICE_ENTRIES);
 				SafeRelease(device1);
@@ -224,22 +224,68 @@ namespace directhook::d3d12
 		
 		methodTable.AddEntries(commandQueue, QUEUE_ENTRIES);
 		methodTable.AddEntries(commandAllocator, ALLOCATOR_ENTRIES);
-		methodTable.AddEntries(commandList, LIST_ENTRIES);
+
+		bool listEntriesAdded = false;
+#if defined(__ID3D12GraphicsCommandList7_INTERFACE_DEFINED__)
+		ID3D12GraphicsCommandList7* commandList7 = nullptr;
+		if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList7))))
+		{
+			methodTable.AddEntries(commandList7, LIST7_ENTRIES, MAX_LIST_ENTRIES);
+			SafeRelease(commandList7);
+			listEntriesAdded = true;
+		}
+#endif
+#if defined(__ID3D12GraphicsCommandList6_INTERFACE_DEFINED__)
+		ID3D12GraphicsCommandList6* commandList6 = nullptr;
+		if (!listEntriesAdded && SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList6))))
+		{
+			methodTable.AddEntries(commandList6, LIST6_ENTRIES, MAX_LIST_ENTRIES);
+			SafeRelease(commandList6);
+			listEntriesAdded = true;
+		}
+#endif
+		if (!listEntriesAdded)
+		{
+			ID3D12GraphicsCommandList1* commandList1 = nullptr;
+			ID3D12GraphicsCommandList2* commandList2 = nullptr;
+			ID3D12GraphicsCommandList3* commandList3 = nullptr;
+			ID3D12GraphicsCommandList4* commandList4 = nullptr;
+			ID3D12GraphicsCommandList5* commandList5 = nullptr;
+			if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList3))))
+			{
+				methodTable.AddEntries(commandList2, LIST3_ENTRIES, MAX_LIST_ENTRIES);
+				SafeRelease(commandList3);
+			}
+			else if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList2))))
+			{
+				methodTable.AddEntries(commandList2, LIST2_ENTRIES, MAX_LIST_ENTRIES);
+				SafeRelease(commandList2);
+			}
+			else if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList1))))
+			{
+				methodTable.AddEntries(commandList1, LIST1_ENTRIES, MAX_LIST_ENTRIES);
+				SafeRelease(commandList1);
+			}
+			else
+			{
+				methodTable.AddEntries(commandList, LIST_ENTRIES);
+			}
+		}
 
         IDXGISwapChain3* swapChain3 = nullptr;
 		IDXGISwapChain2* swapChain2 = nullptr;
 		IDXGISwapChain1* swapChain1 = nullptr;
-		if (HRESULT hr = swapChain->QueryInterface(IID_PPV_ARGS(&swapChain3)); hr == S_OK && swapChain3)
+		if (SUCCEEDED(swapChain->QueryInterface(IID_PPV_ARGS(&swapChain3))))
 		{
 			methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 			SafeRelease(swapChain3);
 		}
-		else if (HRESULT hr = swapChain->QueryInterface(IID_PPV_ARGS(&swapChain2)); hr == S_OK && swapChain2)
+		else if (SUCCEEDED(swapChain->QueryInterface(IID_PPV_ARGS(&swapChain2))))
 		{
 			methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 			SafeRelease(swapChain2);
 		}
-		else if (HRESULT hr = swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1)); hr == S_OK && swapChain1)
+		else if (SUCCEEDED(swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1))))
 		{
 			methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 			SafeRelease(swapChain1);

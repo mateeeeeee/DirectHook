@@ -206,6 +206,41 @@ namespace directhook::d3d12
 		List_ExecuteIndirect,
 		List_LastEntry = List_ExecuteIndirect,
 
+		List1_AtomicCopyBufferUINT,
+		List1_AtomicCopyBufferUINT64,
+		List1_OMSetDepthBounds,
+		List1_SetSamplePositions,
+		List1_ResolveSubresourceRegion,
+		List1_SetViewInstanceMask,
+		List1_LastEntry = List1_SetViewInstanceMask,
+
+		List2_WriteBufferImmediate,
+		List2_LastEntry = List2_WriteBufferImmediate,
+
+		List3_SetProtectedResourceSession,
+		List3_LastEntry = List3_SetProtectedResourceSession,
+
+		List4_BeginRenderPass,
+		List4_EndRenderPass,
+		List4_InitializeMetaCommand,
+		List4_ExecuteMetaCommand,
+		List4_BuildRaytracingAccelerationStructure,
+		List4_EmitRaytracingAccelerationStructurePostbuildInfo,
+		List4_CopyRaytracingAccelerationStructure,
+		List4_SetPipelineState1,
+		List4_DispatchRays,
+		List4_LastEntry = List4_DispatchRays,
+
+		List5_RSSetShadingRate,
+		List5_RSSetShadingRateImage,
+		List5_LastEntry = List5_RSSetShadingRateImage,
+
+		List6_DispatchMesh,
+		List6_LastEntry = List6_DispatchMesh,
+
+		List7_Barrier,
+		List7_LastEntry = List7_Barrier,
+
 		SwapChain_FirstEntry,
 		SwapChain_QueryInterface = SwapChain_FirstEntry,
 		SwapChain_AddRef,
@@ -271,7 +306,16 @@ namespace directhook::d3d12
 
 	static constexpr int QUEUE_ENTRIES  = ENTRY_COUNT(Queue);
 	static constexpr int ALLOCATOR_ENTRIES  = ENTRY_COUNT(Allocator);
+
 	static constexpr int LIST_ENTRIES  = ENTRY_COUNT(List);
+	static constexpr int LIST1_ENTRIES = ENTRY_COUNT_(List, 1);
+	static constexpr int LIST2_ENTRIES = ENTRY_COUNT_(List, 2);
+	static constexpr int LIST3_ENTRIES = ENTRY_COUNT_(List, 3);
+	static constexpr int LIST4_ENTRIES = ENTRY_COUNT_(List, 4);
+	static constexpr int LIST5_ENTRIES = ENTRY_COUNT_(List, 5);
+	static constexpr int LIST6_ENTRIES = ENTRY_COUNT_(List, 6);
+	static constexpr int LIST7_ENTRIES = ENTRY_COUNT_(List, 7);
+	static constexpr int MAX_LIST_ENTRIES = LIST7_ENTRIES;
 
 	static constexpr int SWAPCHAIN_ENTRIES  = ENTRY_COUNT(SwapChain);
     static constexpr int SWAPCHAIN1_ENTRIES = ENTRY_COUNT_(SwapChain, 1);

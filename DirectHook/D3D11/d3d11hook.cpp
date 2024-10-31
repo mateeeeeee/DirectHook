@@ -100,17 +100,17 @@ namespace directhook::d3d11
         IDXGISwapChain3* swapChain3 = nullptr;
 		IDXGISwapChain2* swapChain2 = nullptr;
 		IDXGISwapChain1* swapChain1 = nullptr;
-		if (HRESULT hr = swapChain->QueryInterface(IID_PPV_ARGS(&swapChain3)); hr == S_OK && swapChain3)
+		if (SUCCEEDED(swapChain->QueryInterface(IID_PPV_ARGS(&swapChain3))))
 		{
 			methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 			SafeRelease(swapChain3);
 		}
-		else if (HRESULT hr = swapChain->QueryInterface(IID_PPV_ARGS(&swapChain2)); hr == S_OK && swapChain2)
+		else if (SUCCEEDED(swapChain->QueryInterface(IID_PPV_ARGS(&swapChain2))))
 		{
 			methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 			SafeRelease(swapChain2);
 		}
-		else if (HRESULT hr = swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1)); hr == S_OK && swapChain1)
+		else if (SUCCEEDED(swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1))))
 		{
 			methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 			SafeRelease(swapChain1);
@@ -125,29 +125,29 @@ namespace directhook::d3d11
 		ID3D11Device* device3 = nullptr;
 		ID3D11Device* device4 = nullptr;
 		ID3D11Device* device5 = nullptr;
-		if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device5)); hr == S_OK && device5)
+		if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device5))))
 		{
 			methodTable.AddEntries(device5, DEVICE5_ENTRIES, MAX_DEVICE_ENTRIES);
 			SafeRelease(device5);
 		}
-		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device4)); hr == S_OK && device4)
+		else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device4))))
 		{
 			methodTable.AddEntries(device4, DEVICE4_ENTRIES, MAX_DEVICE_ENTRIES);
 			SafeRelease(device4);
 
 		}
-		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device3)); hr == S_OK && device3)
+		else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device3))))
 		{
 			methodTable.AddEntries(device3, DEVICE3_ENTRIES, MAX_DEVICE_ENTRIES);
 			SafeRelease(device3);
 
 		}
-		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device2)); hr == S_OK && device2)
+		else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device2))))
 		{
 			methodTable.AddEntries(device2, DEVICE2_ENTRIES, MAX_DEVICE_ENTRIES);
 			SafeRelease(device2);
 		}
-		else if (HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&device1)); hr == S_OK && device1)
+		else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device1))))
 		{
 			methodTable.AddEntries(device1, DEVICE1_ENTRIES, MAX_DEVICE_ENTRIES);
 			SafeRelease(device1);
@@ -161,22 +161,22 @@ namespace directhook::d3d11
 		ID3D11DeviceContext2* deviceContext2 = nullptr;
 		ID3D11DeviceContext3* deviceContext3 = nullptr;
 		ID3D11DeviceContext4* deviceContext4 = nullptr;
-		if (HRESULT hr = deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext4)); hr == S_OK && deviceContext4)
+		if (SUCCEEDED(deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext4))))
 		{
 			methodTable.AddEntries(deviceContext4, CONTEXT4_ENTRIES, MAX_CONTEXT_ENTRIES);
 			SafeRelease(deviceContext4);
 		}
-		else if (HRESULT hr = deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext3)); hr == S_OK && deviceContext3)
+		else if (SUCCEEDED(deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext3))))
 		{
 			methodTable.AddEntries(deviceContext3, CONTEXT3_ENTRIES, MAX_CONTEXT_ENTRIES);
 			SafeRelease(deviceContext3);
 		}
-		else if (HRESULT hr = deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext2)); hr == S_OK && deviceContext2)
+		else if (SUCCEEDED(deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext2))))
 		{
 			methodTable.AddEntries(deviceContext2, CONTEXT2_ENTRIES, MAX_CONTEXT_ENTRIES);
 			SafeRelease(deviceContext2);
 		}
-		else if (HRESULT hr = deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext1)); hr == S_OK && deviceContext1)
+		else if (SUCCEEDED(deviceContext->QueryInterface(IID_PPV_ARGS(&deviceContext1))))
 		{
 			methodTable.AddEntries(deviceContext1, CONTEXT1_ENTRIES, MAX_CONTEXT_ENTRIES);
 			SafeRelease(deviceContext1);
