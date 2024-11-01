@@ -107,4 +107,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID)
 	- In Visual Studio: Project -> Properties -> C/C++ -> Preprocessor -> Preprocessor Definitions 
 	- In CMake: `target_compile_definitions(MyDLL PRIVATE DH_USE_*)`
 	- Or simply add the define you need at top of directhook.h
+	
+## Screenshots
+
+### Talos Principle D3D11
+![](Screenshots/talos.png "Talos Principle injected with sample D3D11Hook.dll") 
 
