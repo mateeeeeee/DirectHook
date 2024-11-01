@@ -110,7 +110,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID)
 	
 ## Screenshots
 
-### THE Talos Principle
-The Talos Principle (D3D11) injected with simple D3D11Hook.dll
+### The Talos Principle
+The Talos Principle (D3D11) injected with D3D11Hook.dll
 ![](Screenshots/talos2.png "The Talos Principle injected with D3D11Hook.dll") 
 
