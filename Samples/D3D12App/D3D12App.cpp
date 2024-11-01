@@ -143,8 +143,6 @@ int WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE /*hPrevInstance*/, _In_ 
 	result = dxgiFactory->CreateSwapChain(commandQueue, &sd, &swapChain);
 	dxgiFactory->Release();
 
-	//usually the dll would be injected, not loaded by the app, this is just for demonstration
-
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc;
 	ZeroMemory(&heapDesc, sizeof(heapDesc));
 	heapDesc.NumDescriptors = BackBufferCount;
@@ -307,7 +305,7 @@ int WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE /*hPrevInstance*/, _In_ 
 		commandLists[i]->Close();
 	}
 
-	LoadLibrary(L"D3D12Hook.dll");
+	//LoadLibrary(L"D3D12Hook.dll");
 
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));

@@ -177,7 +177,7 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	d3dDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-	LoadLibrary(L"D3D10Hook.dll");
+	//LoadLibrary(L"D3D10Hook.dll");
 	while (true)
 	{
 		// Handle messages

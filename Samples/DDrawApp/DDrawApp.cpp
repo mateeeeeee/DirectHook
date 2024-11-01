@@ -227,7 +227,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (Main->SetClipper(Clipper) != DD_OK) { Release(hInstance, hwnd); return ERROR_SET_DIRECT_DRAW_PRIMARY_SURFACE_CLIPPER; }
 	}
 
-	LoadLibrary(L"DDrawHook.dll");
+	//LoadLibrary(L"DDrawHook.dll");
 
 	while (Execute)
 	{

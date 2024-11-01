@@ -211,8 +211,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nShowCmd)
 
 	InitD3D();
 
-	//usually the dll would be injected, not loaded by the app, this is just for demonstration
-	LoadLibrary(L"D3D11Hook.dll");
+	//LoadLibrary(L"D3D11Hook.dll");
 
 	MSG msg{};
 	while (msg.message != WM_QUIT) 

@@ -120,8 +120,7 @@ INT WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 
 	if (SUCCEEDED(InitD3D(hWnd)))
 	{
-		//usually the dll would be injected, not loaded by the app, this is just for demonstration
-		LoadLibrary(L"D3D9Hook.dll");
+		//LoadLibrary(L"D3D9Hook.dll");
 
 		if (SUCCEEDED(InitVB()))
 		{

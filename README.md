@@ -7,12 +7,18 @@ Supported APIs: D3D9, D3D10, D3D11, D3D12, DirectDraw 7.
  - Consider adding support for non-DirectX graphics APIs such as OpenGL and Vulkan
 
 ## Samples
-"For each supported API, the Samples folder includes a basic DLL that hooks into several API functions, as well as an application whose calls are intercepted by this DLL. 
+"For each supported API, the Samples folder includes a basic DLL that hooks into several API functions, as well as an application whose calls are intercepted by this DLL.
 The samples also demonstrate how to use DirectHook to implement an ImGui hook for supported APIs.
+To test them, you can use either provided DLLInjector project and pass as command line arguments the name of the target process and path to dll:
+```
+DLLInjector.exe D3D11App.exe D3D11Hook.dll
+```
+Or you can add call to LoadLibrary to the application source code.
 
-Each of the supported APIs provides two utility headers for easier use, one for **hook indices** and the other one for **API typedefs/aliases**.  
+Each of the supported APIs provides two utility headers for easier use, one for **hook indices** and the other one for **API typedefs/aliases**.
 Indices are provided as enum members, while typedefs are provided as using aliases. 
-### D3D11
+
+### D3D11 Example
 
 In case of D3D11, hook indices look like this:
 ```cpp
