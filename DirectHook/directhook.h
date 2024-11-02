@@ -52,16 +52,16 @@
 
 namespace directhook
 {
-	using uint8		= std::uint8_t;
-	using uint16	= std::uint16_t;
-	using uint32	= std::uint32_t;
-	using uint64	= std::uint64_t;
-	using int8		= std::int8_t;
-	using int16		= std::int16_t;
-	using int32		= std::int32_t;
-	using int64		= std::int64_t;
+	using Uint8		= std::uint8_t;
+	using Uint16	= std::uint16_t;
+	using Uint32	= std::uint32_t;
+	using Uint64	= std::uint64_t;
+	using Sint8		= std::int8_t;
+	using Sint16	= std::int16_t;
+	using Sint32	= std::int32_t;
+	using Sint64	= std::int64_t;
 
-	enum class Status : uint8
+	enum class Status : Uint8
 	{
 		Success,
 		Error_MinHookInitFailed,
@@ -75,18 +75,18 @@ namespace directhook
 	Status Initialize();
 	void Shutdown();
 
-	Status Hook(uint16 index, void** original, void* function);
-	Status Unhook(uint16 index);
-	void* GetOriginal(uint16 index);
+	Status Hook(Uint16 index, void** original, void* function);
+	Status Unhook(Uint16 index);
+	void* GetOriginal(Uint16 index);
 
 	template<typename FuncT>
-	Status Hook(uint16 index, FuncT*& original, FuncT& function)
+	Status Hook(Uint16 index, FuncT*& original, FuncT& function)
 	{
 		return Hook(index, (void**)&original, (void*)function);
 	}
 
 	template<typename FuncT>
-	void SaveOriginal(uint16 index, FuncT& F)
+	void SaveOriginal(Uint16 index, FuncT& F)
 	{
 		F = (FuncT)GetOriginal(index);
 	}

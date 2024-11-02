@@ -10,20 +10,20 @@ namespace directhook
 		MethodTable() {}
 
 		template<typename DirectInterfaceT>
-		void AddEntries(DirectInterfaceT* d3dInterface, uint32 interfaceVTableEntriesCount, uint32 maxInterfaceVTableEntriesCount = -1)
+		void AddEntries(DirectInterfaceT* d3dInterface, Uint32 interfaceVTableEntriesCount, Uint32 maxInterfaceVTableEntriesCount = -1)
 		{
-			if (maxInterfaceVTableEntriesCount == uint32(-1))
+			if (maxInterfaceVTableEntriesCount == Uint32(-1))
 			{
 				maxInterfaceVTableEntriesCount = interfaceVTableEntriesCount;
 			}
 
 			methods.reserve(methods.size() + maxInterfaceVTableEntriesCount);
 			void** vTableBase = *reinterpret_cast<void***>(d3dInterface);
-			for (uint32 i = 0; i < interfaceVTableEntriesCount; ++i)
+			for (Uint32 i = 0; i < interfaceVTableEntriesCount; ++i)
 			{
 				methods.push_back(vTableBase[i]);
 			}
-			for (uint32 i = 0; i < max(maxInterfaceVTableEntriesCount - interfaceVTableEntriesCount, 0); ++i)
+			for (Uint32 i = 0; i < max(maxInterfaceVTableEntriesCount - interfaceVTableEntriesCount, 0); ++i)
 			{
 				methods.push_back(nullptr);
 			}
@@ -34,9 +34,9 @@ namespace directhook
 			methods.push_back(entry);
 		}
 
-		uint32 GetSize() const { return (uint32)methods.size(); }
+		Uint32 GetSize() const { return (Uint32)methods.size(); }
 
-		void* operator[](uint32 i) const
+		void* operator[](Uint32 i) const
 		{
 			return methods[i];
 		}
