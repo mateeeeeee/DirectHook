@@ -98,3 +98,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID) {
    - **In Visual Studio**: Go to `Project -> Properties -> C/C++ -> Preprocessor -> Preprocessor Definitions` and add the desired macro.
    - **In CMake**: Use `target_compile_definitions(MyDLL PRIVATE DH_USE_*)`.
    - **Direct Declaration**: Alternatively, add the macro at the top of `directhook.h`.
+  
+## Screenshots
+The Talos Principle
+![](Screenshots/talos2.png "The Talos Principle injected with D3D11Hook.dll") 
+
