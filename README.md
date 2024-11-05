@@ -44,11 +44,11 @@ The following example demonstrates how to use DirectHook to intercept the `Prese
 ```cpp
 namespace directhook::d3d11
 {
-enum {
-   // Other indices...
-   SwapChain_Present = 8, // Index for Present call
-   // Other indices...
-};
+    enum {
+       // Other indices...
+       SwapChain_Present = 8, // Index for Present call
+       // Other indices...
+    };
 }
 ```
 2. **Function Typedefs**: Aliases to simplify function pointer declarations:
@@ -67,27 +67,27 @@ using namespace directhook;
 static d3d11::PFN_DXGISwapChain_Present dxgiPresent = nullptr;
 
 HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags) {
-static bool called = false;
-if (!called) {
-   MessageBoxA(0, "Called MyPresent!", "DirectHook", MB_OK);
-   called = true;
-}
-return dxgiPresent(SwapChain, SyncInterval, Flags);
+    static bool called = false;
+    if (!called) {
+       MessageBoxA(0, "Called MyPresent!", "DirectHook", MB_OK);
+       called = true;
+    }
+    return dxgiPresent(SwapChain, SyncInterval, Flags);
 }
 
 int D3D11HookThread() {
-if (Status dh = Initialize(); dh == Status::Success) {
-   Hook(d3d11::SwapChain_Present, dxgiPresent, MyPresent);
-}
-return 0;
+    if (Status dh = Initialize(); dh == Status::Success) {
+       Hook(d3d11::SwapChain_Present, dxgiPresent, MyPresent);
+    }
+    return 0;
 }
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID) {
-DisableThreadLibraryCalls(hInstance);
-if (fdwReason == DLL_PROCESS_ATTACH) {
-   CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)D3D11HookThread, NULL, 0, NULL);
-}
-return TRUE;
+    DisableThreadLibraryCalls(hInstance);
+    if (fdwReason == DLL_PROCESS_ATTACH) {
+       CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)D3D11HookThread, NULL, 0, NULL);
+    }
+    return TRUE;
 }
 ```
 ## Usage Guide
