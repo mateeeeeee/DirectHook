@@ -190,8 +190,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 	Barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 	Context.CommandList->ResourceBarrier(1, &Barrier);
 
-	HRESULT hr = Context.CommandList->Close();
-	if (hr != S_OK) __debugbreak();
+	Context.CommandList->Close();
 	Context.CommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList* const*>(&Context.CommandList));
 	Context.CommandAllocators[Context.BufferIndex]->Reset();
 	Context.CommandList->Reset(Context.CommandAllocators[Context.BufferIndex], nullptr);
