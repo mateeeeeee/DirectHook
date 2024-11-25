@@ -1,3 +1,5 @@
+#include <windows.h>
+#include <VersionHelpers.h>
 #include <vector>
 #include "directhook.h"
 #include "ImGui/imgui_impl_dx12.h"
@@ -6,6 +8,25 @@
 using namespace directhook;
 
 #pragma comment(lib, "dxgi.lib")
+
+//Used for detecting version of windows (10 or 11). I cannot believe there is no a nicer way to do it.
+static BOOL GetOSVersion(OSVERSIONINFOEXW& osInfo) 
+{
+    memset(&osInfo, 0, sizeof(OSVERSIONINFOEXW));
+    osInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
+
+    typedef LONG(WINAPI* RtlGetVersionPtr)(OSVERSIONINFOEXW*);
+    HMODULE hMod = GetModuleHandleW(L"ntdll.dll");
+    if (hMod) 
+	{
+        RtlGetVersionPtr rtlGetVersion = (RtlGetVersionPtr)GetProcAddress(hMod, "RtlGetVersion");
+        if (rtlGetVersion) 
+		{
+            return rtlGetVersion(&osInfo) == 0;
+        }
+    }
+    return false;
+}
 
 struct ImGuiD3D12Context
 {
@@ -42,15 +63,6 @@ LRESULT CALLBACK MyWindowProc(
 	return ::CallWindowProcA(Win32WndProc, hwnd, uMsg, wParam, lParam);
 }
 
-void STDMETHODCALLTYPE MyExecuteCmdLists(ID3D12CommandQueue* Queue, UINT CmdListCount, ID3D12CommandList* const* CmdLists)
-{
-	if (!Context.CommandQueue)
-	{
-		Context.CommandQueue = Queue;
-	}
-	D3D12ExecuteCmdLists(Queue, CmdListCount, CmdLists);
-}
-
 HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags)
 {
 	static bool initialized = false;
@@ -68,6 +80,23 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 		{
 			return DxgiPresent(SwapChain, SyncInterval, Flags);
 		}
+
+        if (!Context.CommandQueue)
+        {
+            OSVERSIONINFOEX versioninfo;
+            versioninfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+            if (GetOSVersion(versioninfo))
+            {
+                if (versioninfo.dwBuildNumber >= 21996) //Windows 11 
+                {
+                    Context.CommandQueue = *reinterpret_cast<ID3D12CommandQueue**>((uintptr_t)SwapChain + 0x168);
+                }
+                else 
+                {
+                    Context.CommandQueue = *reinterpret_cast<ID3D12CommandQueue**>((uintptr_t)SwapChain + 0x118);
+                }
+            }
+        }
 
 		D3D12_DESCRIPTOR_HEAP_DESC fontHeapDesc{};
 		fontHeapDesc.NumDescriptors = 1;
@@ -187,7 +216,6 @@ int D3D12HookThread()
 {
 	if (Status dh = Initialize(); dh == Status::Success)
 	{
-		Hook(d3d12::Queue_ExecuteCommandLists, D3D12ExecuteCmdLists, MyExecuteCmdLists);
 		Hook(d3d12::SwapChain_Present, DxgiPresent, MyPresent);
 		Hook(d3d12::List_DrawInstanced, D3D12Draw, MyDraw);
 	}
