@@ -148,8 +148,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 			}
 		}
 
-		if (FAILED(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, Context.CommandAllocators[0], nullptr, IID_PPV_ARGS(&Context.CommandList))) 
-			|| FAILED(Context.CommandList->Close()))
+		if (FAILED(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, Context.CommandAllocators[0], nullptr, IID_PPV_ARGS(&Context.CommandList))))
 		{
 			return DxgiPresent(SwapChain, SyncInterval, Flags);
 		}
@@ -191,7 +190,8 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 	Barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 	Context.CommandList->ResourceBarrier(1, &Barrier);
 
-	Context.CommandList->Close();
+	HRESULT hr = Context.CommandList->Close();
+	if (hr != S_OK) __debugbreak();
 	Context.CommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList* const*>(&Context.CommandList));
 	Context.CommandAllocators[Context.BufferIndex]->Reset();
 	Context.CommandList->Reset(Context.CommandAllocators[Context.BufferIndex], nullptr);
