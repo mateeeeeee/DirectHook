@@ -5,7 +5,7 @@ using namespace directhook;
 static ddraw::PFN_DDrawDevice_CreateSurface		ddrawCreateSurface = nullptr;
 static ddraw::PFN_DDrawSurface_Blt				ddrawBlt = nullptr;
 
-HRESULT STDMETHODCALLTYPE MyCreateSurface(IDirectDraw7* Instance, LPDDSURFACEDESC2 unnamedParam1, LPDIRECTDRAWSURFACE7* unnamedParam2, IUnknown* unnamedParam3)
+static HRESULT STDMETHODCALLTYPE MyCreateSurface(IDirectDraw7* Instance, LPDDSURFACEDESC2 unnamedParam1, LPDIRECTDRAWSURFACE7* unnamedParam2, IUnknown* unnamedParam3)
 {
 	static BOOL called = FALSE;
 	if (!called)
@@ -15,11 +15,7 @@ HRESULT STDMETHODCALLTYPE MyCreateSurface(IDirectDraw7* Instance, LPDDSURFACEDES
 	}
 	return ddrawCreateSurface(Instance, unnamedParam1, unnamedParam2, unnamedParam3);
 }
-
-HRESULT STDMETHODCALLTYPE MyBlt(
-	IDirectDrawSurface7* Surface, LPCRECT unnamedParam1, IDirectDrawSurface7* unnamedParam2, LPCRECT unnamedParam3,
-	DWORD unnamedParam4, LPDDBLTFX unnamedParam5
-)
+static HRESULT STDMETHODCALLTYPE MyBlt(IDirectDrawSurface7* Surface, LPCRECT unnamedParam1, IDirectDrawSurface7* unnamedParam2, LPCRECT unnamedParam3, DWORD unnamedParam4, LPDDBLTFX unnamedParam5)
 {
 	static BOOL called = FALSE;
 	if (!called)

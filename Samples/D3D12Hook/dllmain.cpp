@@ -24,12 +24,18 @@ struct ImGuiD3D12Context
 
 static d3d12::PFN_D3D12CommandList_DrawInstanced D3D12Draw = nullptr;
 static d3d12::PFN_IDXGISwapChain_Present DxgiPresent = nullptr;
-static d3d12::PFN_D3D12CommandQueue_ExecuteCommandLists D3D12ExecuteCmdLists = nullptr;
 static WNDPROC Win32WndProc = nullptr;
 static ImGuiD3D12Context Context;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
+static LRESULT CALLBACK MyWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam) > 0)
+	{
+		return 1L;
+	}
+	return ::CallWindowProcA(Win32WndProc, hwnd, uMsg, wParam, lParam);
+}
 
 static BOOL GetCommandQueueOffset(UINT& offset)
 {
@@ -57,22 +63,7 @@ static BOOL GetCommandQueueOffset(UINT& offset)
 	}
 	return FALSE;
 }
-
-LRESULT CALLBACK MyWindowProc(
-	_In_ HWND   hwnd,
-	_In_ UINT   uMsg,
-	_In_ WPARAM wParam,
-	_In_ LPARAM lParam
-)
-{
-	if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam) > 0)
-	{
-		return 1L;
-	}
-	return ::CallWindowProcA(Win32WndProc, hwnd, uMsg, wParam, lParam);
-}
-
-HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags)
+static HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags)
 {
 	static BOOL initialized = FALSE;
 	if (!initialized)
@@ -199,9 +190,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 	Context.BufferIndex = (Context.BufferIndex + 1) % Context.BufferCount;
 	return DxgiPresent(SwapChain, SyncInterval, Flags);
 }
-
-void STDMETHODCALLTYPE MyDraw(ID3D12GraphicsCommandList* CmdList, UINT VertexCountPerInstance,
-	UINT InstanceCount, UINT StartVertexLocation, UINT StartInstanceLocation)
+static void STDMETHODCALLTYPE MyDraw(ID3D12GraphicsCommandList* CmdList, UINT VertexCountPerInstance, UINT InstanceCount, UINT StartVertexLocation, UINT StartInstanceLocation)
 {
 	static BOOL called = FALSE;
 	if (!called)

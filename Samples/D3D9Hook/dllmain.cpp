@@ -9,12 +9,7 @@ static d3d9::PFN_D3D9Device_Present			D3D9Present = nullptr;
 static WNDPROC Win32WndProc = nullptr;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK MyWindowProc(
-	_In_ HWND   hwnd,
-	_In_ UINT   uMsg,
-	_In_ WPARAM wParam,
-	_In_ LPARAM lParam
-)
+static LRESULT CALLBACK MyWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam) > 0)
 	{
@@ -23,13 +18,7 @@ LRESULT CALLBACK MyWindowProc(
 	return ::CallWindowProcA(Win32WndProc, hwnd, uMsg, wParam, lParam);
 }
 
-HRESULT STDMETHODCALLTYPE MyPresent(
-	IDirect3DDevice9* Device,
-	const RECT* pSourceRect,
-	const RECT* pDestRect,
-	HWND          hDestWindowOverride,
-	const RGNDATA* pDirtyRegion
-)
+static HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* Device, const RECT* pSourceRect, const RECT* pDestRect, HWND hDestWindowOverride, const RGNDATA* pDirtyRegion)
 {
 	static BOOL initialized = FALSE;
 	if (!initialized)
@@ -58,9 +47,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(
 
 	return D3D9Present(Device, pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
 }
-
-
-HRESULT STDMETHODCALLTYPE MyDrawPrimitive(IDirect3DDevice9* Device, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
+static HRESULT STDMETHODCALLTYPE MyDrawPrimitive(IDirect3DDevice9* Device, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
 {
 	static BOOL called = FALSE;
 	if (!called)

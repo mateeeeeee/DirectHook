@@ -104,4 +104,4 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID) {
 ![](Screenshots/talos.png "The Talos Principle injected with D3D11Hook.dll") 
 
 ### S.T.A.L.K.E.R. 2: Heart of Chornobyl (D3D12 UE 5.1)
-![](Screenshots/stalker2.png "The Talos Principle injected with D3D12Hook.dll") 
+![](Screenshots/stalker2.png "The S.T.A.L.K.E.R. 2: Heart of Chornobyl injected with D3D12Hook.dll") 

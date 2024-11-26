@@ -9,12 +9,7 @@ static d3d10::PFN_DXGISwapChain_Present   DxgiPresent = nullptr;
 static WNDPROC Win32WndProc = nullptr;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK MyWindowProc(
-	_In_ HWND   hwnd,
-	_In_ UINT   uMsg,
-	_In_ WPARAM wParam,
-	_In_ LPARAM lParam
-)
+static LRESULT CALLBACK MyWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam) > 0)
 	{
@@ -23,7 +18,7 @@ LRESULT CALLBACK MyWindowProc(
 	return ::CallWindowProcA(Win32WndProc, hwnd, uMsg, wParam, lParam);
 }
 
-HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags)
+static HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags)
 {
 	static BOOL initialized = FALSE;
 	if (!initialized)
@@ -60,8 +55,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 
 	return DxgiPresent(SwapChain, SyncInterval, Flags);
 }
-
-void STDMETHODCALLTYPE MyDraw(ID3D10Device* Device, UINT VertexCount, UINT StartVertexLocation)
+static void STDMETHODCALLTYPE MyDraw(ID3D10Device* Device, UINT VertexCount, UINT StartVertexLocation)
 {
 	static BOOL called = FALSE;
 	if (!called)
