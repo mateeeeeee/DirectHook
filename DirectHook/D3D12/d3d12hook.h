@@ -7,6 +7,6 @@ namespace directhook
 
 	namespace d3d12
 	{
-		Status Initialize(MethodTable& methodTable);
+		DH_Status Initialize(MethodTable& methodTable);
 	}
 }

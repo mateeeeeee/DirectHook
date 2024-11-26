@@ -27,7 +27,7 @@ LRESULT CALLBACK MyWindowProc(
 
 HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags)
 {
-	static bool initialized = false;
+	static BOOL initialized = FALSE;
 	if (!initialized)
 	{
 		DXGI_SWAP_CHAIN_DESC swapchainDesc{};
@@ -48,8 +48,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 		ImGui::CreateContext();
 		ImGui_ImplWin32_Init(swapchainDesc.OutputWindow);
 		ImGui_ImplDX11_Init(device, context);
-
-		initialized = true;
+		initialized = TRUE;
 	}
 
 	ImGui_ImplDX11_NewFrame();
@@ -70,18 +69,18 @@ void STDMETHODCALLTYPE MyDraw(
 	ID3D11DeviceContext* DeviceContext,
 	UINT VertexCount, UINT StartVertexLocation)
 {
-	static bool called = false;
+	static BOOL called = FALSE;
 	if (!called)
 	{
 		MessageBoxA(0, "Called MyDraw!", "DirectHook", MB_OK);
-		called = true;
+		called = TRUE;
 	}
 	D3D11Draw(DeviceContext, VertexCount, StartVertexLocation);
 }
 
 int D3D11HookThread()
 {
-	if (Status dh = Initialize(); dh == Status::Success)
+	if (DH_Status dh = DH_Initialize(); dh == DH_Status::Success)
 	{
 		Hook(d3d11::Context_Draw, D3D11Draw, MyDraw);
 		Hook(d3d11::SwapChain_Present, DxgiPresent, MyPresent);

@@ -7,6 +7,6 @@ namespace directhook
 
 	namespace d3d10
 	{
-		Status Initialize(MethodTable& methodTable);
+		DH_Status Initialize(MethodTable& methodTable);
 	}
 }

@@ -7,6 +7,6 @@ namespace directhook
 
 	namespace ddraw
 	{
-		Status Initialize(MethodTable& methodTable);
+		DH_Status Initialize(MethodTable& methodTable);
 	}
 }

@@ -9,42 +9,6 @@ using namespace directhook;
 
 #pragma comment(lib, "dxgi.lib")
 
-static BOOL GetCommandQueueOffset(UINT& offset)
-{
-	OSVERSIONINFOEXW osInfo{};
-    osInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
-    typedef LONG(WINAPI* RtlGetVersionPtr)(OSVERSIONINFOEXW*);
-    HMODULE hMod = GetModuleHandleW(L"ntdll.dll");
-    if (hMod) 
-	{
-        RtlGetVersionPtr rtlGetVersion = (RtlGetVersionPtr)GetProcAddress(hMod, "RtlGetVersion");
-        if (rtlGetVersion) 
-		{
-			if (rtlGetVersion(&osInfo) == 0)
-			{
-				if (osInfo.dwBuildNumber >= 26100) //Windows 11 22H4
-				{
-					offset = 0x138;
-				}
-				else if (osInfo.dwBuildNumber >= 21996) //Windows 11 
-				{
-					offset = 0x168;
-				}
-				else //Windows 10
-				{
-					offset = 0x118;
-				}
-				return TRUE;
-			}
-			else
-			{
-				return FALSE;
-			}
-        }
-    }
-    return FALSE;
-}
-
 struct ImGuiD3D12Context
 {
 	ID3D12DescriptorHeap* FontDescriptorHeap = nullptr;
@@ -66,6 +30,34 @@ static ImGuiD3D12Context Context;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+
+static BOOL GetCommandQueueOffset(UINT& offset)
+{
+	OSVERSIONINFOEXW osInfo{};
+	osInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
+	typedef LONG(WINAPI* RtlGetVersionPtr)(OSVERSIONINFOEXW*);
+	HMODULE hMod = GetModuleHandleW(L"ntdll.dll");
+	if (hMod)
+	{
+		RtlGetVersionPtr rtlGetVersion = (RtlGetVersionPtr)GetProcAddress(hMod, "RtlGetVersion");
+		if (rtlGetVersion != nullptr)
+		{
+			if (rtlGetVersion(&osInfo) == 0)
+			{
+				if (osInfo.dwBuildNumber >= 26100) offset = 0x138;
+				else if (osInfo.dwBuildNumber >= 21996) offset = 0x168;
+				else offset = 0x118;
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+	}
+	return FALSE;
+}
+
 LRESULT CALLBACK MyWindowProc(
 	_In_ HWND   hwnd,
 	_In_ UINT   uMsg,
@@ -82,7 +74,7 @@ LRESULT CALLBACK MyWindowProc(
 
 HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags)
 {
-	static BOOL initialized = false;
+	static BOOL initialized = FALSE;
 	if (!initialized)
 	{
 		DXGI_SWAP_CHAIN_DESC swapchainDesc{};
@@ -168,7 +160,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 		ImGui_ImplWin32_Init(swapchainDesc.OutputWindow);
 		ImGui_ImplDX12_Init(device, swapchainDesc.BufferCount, swapchainDesc.BufferDesc.Format, Context.FontDescriptorHeap, cpuHandle, gpuHandle);
 
-		initialized = true;
+		initialized = TRUE;
 	}
 	if (!Context.CommandQueue)
 	{
@@ -222,7 +214,7 @@ void STDMETHODCALLTYPE MyDraw(ID3D12GraphicsCommandList* CmdList, UINT VertexCou
 
 int D3D12HookThread()
 {
-	if (Status dh = Initialize(); dh == Status::Success)
+	if (DH_Status dh = DH_Initialize(); dh == DH_Status::Success)
 	{
 		Hook(d3d12::SwapChain_Present, DxgiPresent, MyPresent);
 		Hook(d3d12::List_DrawInstanced, D3D12Draw, MyDraw);

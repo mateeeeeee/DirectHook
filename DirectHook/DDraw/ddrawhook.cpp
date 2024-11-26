@@ -11,7 +11,7 @@ namespace directhook::ddraw
 	#define WINDOW_CLASS_NAME L"DirectDraw"
 	#define WINDOW_TITLE_NAME L"DirectDraw"
 
-	Status Initialize(MethodTable& methodTable)
+	DH_Status Initialize(MethodTable& methodTable)
 	{
 		WNDCLASS wc{};
 		wc.lpfnWndProc = DefWindowProc;
@@ -19,7 +19,7 @@ namespace directhook::ddraw
 		wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 		wc.lpszClassName = WINDOW_CLASS_NAME;
 
-		if (!RegisterClass(&wc)) { return Status::Error_GfxApiInitFailed; }
+		if (!RegisterClass(&wc)) { return DH_Status::Error_GfxApiInitFailed; }
 
 		HWND hwnd = CreateWindow(
 			wc.lpszClassName,
@@ -29,7 +29,7 @@ namespace directhook::ddraw
 
 		if (hwnd == nullptr) 
 		{ 
-			UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance); return Status::Error_GfxApiInitFailed; 
+			UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance); return DH_Status::Error_GfxApiInitFailed; 
 		}
 
 		IDirectDraw7* Instance = NULL;
@@ -37,7 +37,7 @@ namespace directhook::ddraw
 		{
 			DestroyWindow(hwnd);
 			UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 		Instance->SetCooperativeLevel(hwnd, DDSCL_NORMAL);
 
@@ -55,7 +55,7 @@ namespace directhook::ddraw
 			Instance->Release();
 			DestroyWindow(hwnd);
 			UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		IDirectDrawClipper* Clipper = NULL;
@@ -65,14 +65,14 @@ namespace directhook::ddraw
 			Main->Release();
 			DestroyWindow(hwnd);
 			UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		methodTable.AddEntries(Instance, DEVICE_ENTRIES);
 		methodTable.AddEntries(Main, SURFACE_ENTRIES);
 		methodTable.AddEntries(Clipper, CLIPPER_ENTRIES);
 
-		return Status::Success;
+		return DH_Status::Success;
 	}
 
 }

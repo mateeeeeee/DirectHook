@@ -31,7 +31,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(
 	const RGNDATA* pDirtyRegion
 )
 {
-	static bool initialized = false;
+	static BOOL initialized = FALSE;
 	if (!initialized)
 	{
 		D3DDEVICE_CREATION_PARAMETERS creationParams;
@@ -62,18 +62,18 @@ HRESULT STDMETHODCALLTYPE MyPresent(
 
 HRESULT STDMETHODCALLTYPE MyDrawPrimitive(IDirect3DDevice9* Device, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
 {
-	static bool called = false;
+	static BOOL called = FALSE;
 	if (!called)
 	{
 		MessageBoxA(0, "Called MyDrawPrimitive!", "DirectHook", MB_OK);
-		called = true;
+		called = TRUE;
 	}
 	return D3D9DrawPrimitive(Device, PrimitiveType, StartVertex, PrimitiveCount);
 }
 
 int D3D9HookThread()
 {
-	if (Status dh = Initialize(); dh == Status::Success)
+	if (DH_Status dh = DH_Initialize(); dh == DH_Status::Success)
 	{
 		Hook(d3d9::Device_DrawPrimitive, D3D9DrawPrimitive, MyDrawPrimitive);
 		Hook(d3d9::Device_Present, D3D9Present, MyPresent);

@@ -15,7 +15,7 @@ DirectHook currently supports the following DirectX APIs:
 The **Samples** folder provides basic DLLs for each supported API, demonstrating DirectHook’s capabilities to intercept API function calls. Each sample includes:
 
 - **Function Hooking**: Basic hooks for common DirectX functions.
-- **ImGui Integration**: Samples show how to use DirectHook to implement an ImGui overlay, enabling custom in-game interfaces.
+- **ImGui Integration**: Samples show how to use DirectHook to implement an ImGui overlay, enabling custom in-game interfaces. 
 
 #### Sample Usage
 To test a sample, you have two options:
@@ -67,16 +67,16 @@ using namespace directhook;
 static d3d11::PFN_DXGISwapChain_Present dxgiPresent = nullptr;
 
 HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags) {
-    static bool called = false;
+    static BOOL called = FALSE;
     if (!called) {
        MessageBoxA(0, "Called MyPresent!", "DirectHook", MB_OK);
-       called = true;
+       called = TRUE;
     }
     return dxgiPresent(SwapChain, SyncInterval, Flags);
 }
 
 int D3D11HookThread() {
-    if (Status dh = Initialize(); dh == Status::Success) {
+    if (DH_Status dh = DH_Initialize(); dh == Status::Success) {
        Hook(d3d11::SwapChain_Present, dxgiPresent, MyPresent);
     }
     return 0;
@@ -100,6 +100,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID) {
    - **Direct Declaration**: Alternatively, add the macro at the top of `directhook.h`.
   
 ## Screenshots
-The Talos Principle
-![](Screenshots/talos2.png "The Talos Principle injected with D3D11Hook.dll") 
+### The Talos Principle (D3D11)
+![](Screenshots/talos.png "The Talos Principle injected with D3D11Hook.dll") 
 
+### S.T.A.L.K.E.R. 2: Heart of Chornobyl (D3D12 UE 5.1)
+![](Screenshots/stalker2.png "The Talos Principle injected with D3D12Hook.dll") 

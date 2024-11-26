@@ -15,7 +15,7 @@ namespace directhook::d3d12
 	using PFN_CreateDXGIFactory = HRESULT(STDMETHODCALLTYPE*)(REFIID, void**);
 	using PFN_CreateD3D12Device = HRESULT(STDMETHODCALLTYPE*)(IUnknown*, D3D_FEATURE_LEVEL, REFIID, void**);
 
-	Status Initialize(MethodTable& methodTable)
+	DH_Status Initialize(MethodTable& methodTable)
 	{
 		WNDCLASSEX windowClass;
 		windowClass.cbSize = sizeof(WNDCLASSEX);
@@ -40,7 +40,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		PFN_CreateDXGIFactory CreateDXGIFactory = (PFN_CreateDXGIFactory)::GetProcAddress(libDXGI, "CreateDXGIFactory");
@@ -48,7 +48,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		IDXGIFactory* factory = nullptr;
@@ -56,7 +56,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		IDXGIAdapter* adapter = nullptr;
@@ -64,7 +64,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		PFN_CreateD3D12Device D3D12CreateDevice = (PFN_CreateD3D12Device)::GetProcAddress(libD3D12, "D3D12CreateDevice");
@@ -72,7 +72,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		ID3D12Device* device = nullptr;
@@ -80,7 +80,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		D3D12_COMMAND_QUEUE_DESC queueDesc{};
@@ -94,7 +94,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		ID3D12CommandAllocator* commandAllocator = nullptr;
@@ -102,7 +102,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		ID3D12GraphicsCommandList* commandList = nullptr;
@@ -110,7 +110,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		DXGI_RATIONAL refreshRate{};
@@ -144,7 +144,7 @@ namespace directhook::d3d12
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		bool deviceEntriesAdded = false;
@@ -304,7 +304,7 @@ namespace directhook::d3d12
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 
-		return Status::Success;
+		return DH_Status::Success;
 	}
 
 }

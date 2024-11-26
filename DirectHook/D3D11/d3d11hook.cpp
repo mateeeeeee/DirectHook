@@ -26,7 +26,7 @@ namespace directhook::d3d11
 		ptr = nullptr;
 	}
 
-	Status Initialize(MethodTable& methodTable)
+	DH_Status Initialize(MethodTable& methodTable)
 	{
 		WNDCLASSEX windowClass;
 		windowClass.cbSize = sizeof(WNDCLASSEX);
@@ -50,7 +50,7 @@ namespace directhook::d3d11
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		PFN_D3D11CreateDeviceAndSwapChain D3D11CreateDeviceAndSwapChain = (PFN_D3D11CreateDeviceAndSwapChain)::GetProcAddress(libD3D11, "D3D11CreateDeviceAndSwapChain");
@@ -58,7 +58,7 @@ namespace directhook::d3d11
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		DXGI_RATIONAL refreshRate{};
@@ -94,7 +94,7 @@ namespace directhook::d3d11
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
         IDXGISwapChain3* swapChain3 = nullptr;
@@ -193,7 +193,7 @@ namespace directhook::d3d11
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 
-		return Status::Success;
+		return DH_Status::Success;
 	}
 
 }

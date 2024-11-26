@@ -18,7 +18,7 @@ namespace directhook::d3d10
 		ID3D10Device**
 	);
 
-	Status Initialize(MethodTable& methodTable)
+	DH_Status Initialize(MethodTable& methodTable)
 	{
 		WNDCLASSEX windowClass;
 		windowClass.cbSize = sizeof(WNDCLASSEX);
@@ -43,7 +43,7 @@ namespace directhook::d3d10
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		PFN_CreateDXGIFactory CreateDXGIFactory = (PFN_CreateDXGIFactory)::GetProcAddress(libDXGI, "CreateDXGIFactory");
@@ -51,7 +51,7 @@ namespace directhook::d3d10
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		IDXGIFactory* factory = nullptr;
@@ -59,7 +59,7 @@ namespace directhook::d3d10
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		IDXGIAdapter* adapter = nullptr;
@@ -67,7 +67,7 @@ namespace directhook::d3d10
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		PFN_D3D10CreateDeviceAndSwapChain D3D10CreateDeviceAndSwapChain = (PFN_D3D10CreateDeviceAndSwapChain)::GetProcAddress(libD3D10, "D3D10CreateDeviceAndSwapChain");
@@ -75,7 +75,7 @@ namespace directhook::d3d10
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		DXGI_RATIONAL refreshRate{};
@@ -111,7 +111,7 @@ namespace directhook::d3d10
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		methodTable.AddEntries(swapChain, 18);
@@ -126,7 +126,7 @@ namespace directhook::d3d10
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 
-		return Status::Success;
+		return DH_Status::Success;
 	}
 
 }

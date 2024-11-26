@@ -7,7 +7,7 @@ namespace directhook::d3d9
 {
 	using PFN_Direct3DCreate9 = IDirect3D9*(*)(UINT);
 
-	Status Initialize(MethodTable& methodTable)
+	DH_Status Initialize(MethodTable& methodTable)
 	{
 		WNDCLASSEX windowClass;
 		windowClass.cbSize = sizeof(WNDCLASSEX);
@@ -31,7 +31,7 @@ namespace directhook::d3d9
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		PFN_Direct3DCreate9 Direct3DCreate9 = (PFN_Direct3DCreate9)::GetProcAddress(libD3D9, "Direct3DCreate9");
@@ -39,7 +39,7 @@ namespace directhook::d3d9
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		LPDIRECT3D9 direct3D9 = Direct3DCreate9(D3D_SDK_VERSION);
@@ -47,7 +47,7 @@ namespace directhook::d3d9
 		{
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 
 		D3DPRESENT_PARAMETERS params;
@@ -72,7 +72,7 @@ namespace directhook::d3d9
 			direct3D9->Release();
 			::DestroyWindow(window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return Status::Error_GfxApiInitFailed;
+			return DH_Status::Error_GfxApiInitFailed;
 		}
 		methodTable.AddEntries(device, DEVICE_ENTRIES);
 
@@ -85,7 +85,7 @@ namespace directhook::d3d9
 		::DestroyWindow(window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 
-		return Status::Success;
+		return DH_Status::Success;
 	}
 
 }
