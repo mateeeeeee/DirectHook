@@ -305,7 +305,7 @@ int WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE /*hPrevInstance*/, _In_ 
 		commandLists[i]->Close();
 	}
 
-	LoadLibrary(L"D3D12Hook.dll");
+	//LoadLibrary(L"D3D12Hook.dll");
 
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));

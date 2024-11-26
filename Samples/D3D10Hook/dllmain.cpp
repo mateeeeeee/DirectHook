@@ -72,7 +72,7 @@ void STDMETHODCALLTYPE MyDraw(ID3D10Device* Device, UINT VertexCount, UINT Start
 	D3D10Draw(Device, VertexCount, StartVertexLocation);
 }
 
-int D3D10HookThread()
+INT D3D10HookThread()
 {
 	if (DH_Status dh = DH_Initialize(); dh == DH_Status::Success)
 	{

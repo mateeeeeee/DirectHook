@@ -78,7 +78,7 @@ void STDMETHODCALLTYPE MyDraw(
 	D3D11Draw(DeviceContext, VertexCount, StartVertexLocation);
 }
 
-int D3D11HookThread()
+INT D3D11HookThread()
 {
 	if (DH_Status dh = DH_Initialize(); dh == DH_Status::Success)
 	{

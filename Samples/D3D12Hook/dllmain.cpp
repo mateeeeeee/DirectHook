@@ -212,7 +212,7 @@ void STDMETHODCALLTYPE MyDraw(ID3D12GraphicsCommandList* CmdList, UINT VertexCou
 	D3D12Draw(CmdList, VertexCountPerInstance, InstanceCount, StartVertexLocation, StartInstanceLocation);
 }
 
-int D3D12HookThread()
+INT D3D12HookThread()
 {
 	if (DH_Status dh = DH_Initialize(); dh == DH_Status::Success)
 	{

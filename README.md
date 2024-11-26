@@ -75,7 +75,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
     return dxgiPresent(SwapChain, SyncInterval, Flags);
 }
 
-int D3D11HookThread() {
+INT D3D11HookThread() {
     if (DH_Status dh = DH_Initialize(); dh == Status::Success) {
        Hook(d3d11::SwapChain_Present, dxgiPresent, MyPresent);
     }

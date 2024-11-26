@@ -30,14 +30,11 @@ HRESULT STDMETHODCALLTYPE MyBlt(
 	return ddrawBlt(Surface, unnamedParam1, unnamedParam2, unnamedParam3, unnamedParam4, unnamedParam5);
 }
 
-int DDrawHookThread()
+INT DDrawHookThread()
 {
 	if (DH_Status dh = DH_Initialize(); dh == DH_Status::Success)
 	{
-		SaveOriginal(ddraw::Device_CreateSurface, ddrawCreateSurface);
 		Hook(ddraw::Device_CreateSurface, ddrawCreateSurface, MyCreateSurface);
-
-		SaveOriginal(ddraw::Surface_Blt, ddrawBlt);
 		Hook(ddraw::Surface_Blt, ddrawBlt, MyBlt);
 	}
 	return 0;

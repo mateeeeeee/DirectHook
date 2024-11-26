@@ -43,7 +43,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(
 		ImGui_ImplWin32_Init(creationParams.hFocusWindow);
 		ImGui_ImplDX9_Init(Device);
 
-		initialized = true;
+		initialized = TRUE;
 	}
 
 	ImGui_ImplDX9_NewFrame();
@@ -71,7 +71,7 @@ HRESULT STDMETHODCALLTYPE MyDrawPrimitive(IDirect3DDevice9* Device, D3DPRIMITIVE
 	return D3D9DrawPrimitive(Device, PrimitiveType, StartVertex, PrimitiveCount);
 }
 
-int D3D9HookThread()
+INT D3D9HookThread()
 {
 	if (DH_Status dh = DH_Initialize(); dh == DH_Status::Success)
 	{
