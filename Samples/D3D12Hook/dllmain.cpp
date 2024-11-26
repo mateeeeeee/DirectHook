@@ -9,12 +9,10 @@ using namespace directhook;
 
 #pragma comment(lib, "dxgi.lib")
 
-//Used for detecting version of windows (10 or 11). I cannot believe there is no a nicer way to do it.
-static BOOL GetOSVersion(OSVERSIONINFOEXW& osInfo) 
+static BOOL GetCommandQueueOffset(UINT& offset)
 {
-    memset(&osInfo, 0, sizeof(OSVERSIONINFOEXW));
+	OSVERSIONINFOEXW osInfo{};
     osInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
-
     typedef LONG(WINAPI* RtlGetVersionPtr)(OSVERSIONINFOEXW*);
     HMODULE hMod = GetModuleHandleW(L"ntdll.dll");
     if (hMod) 
@@ -22,10 +20,29 @@ static BOOL GetOSVersion(OSVERSIONINFOEXW& osInfo)
         RtlGetVersionPtr rtlGetVersion = (RtlGetVersionPtr)GetProcAddress(hMod, "RtlGetVersion");
         if (rtlGetVersion) 
 		{
-            return rtlGetVersion(&osInfo) == 0;
+			if (rtlGetVersion(&osInfo) == 0)
+			{
+				if (osInfo.dwBuildNumber >= 26100) //Windows 11 22H4
+				{
+					offset = 0x138;
+				}
+				else if (osInfo.dwBuildNumber >= 21996) //Windows 11 
+				{
+					offset = 0x168;
+				}
+				else //Windows 10
+				{
+					offset = 0x118;
+				}
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
         }
     }
-    return false;
+    return FALSE;
 }
 
 struct ImGuiD3D12Context
@@ -65,7 +82,7 @@ LRESULT CALLBACK MyWindowProc(
 
 HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags)
 {
-	static bool initialized = false;
+	static BOOL initialized = false;
 	if (!initialized)
 	{
 		DXGI_SWAP_CHAIN_DESC swapchainDesc{};
@@ -83,18 +100,10 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 
         if (!Context.CommandQueue)
         {
-            OSVERSIONINFOEX versioninfo;
-            versioninfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-            if (GetOSVersion(versioninfo))
+			UINT queueOffset;
+            if (GetCommandQueueOffset(queueOffset))
             {
-                if (versioninfo.dwBuildNumber >= 21996) //Windows 11 
-                {
-                    Context.CommandQueue = *reinterpret_cast<ID3D12CommandQueue**>((uintptr_t)SwapChain + 0x168);
-                }
-                else 
-                {
-                    Context.CommandQueue = *reinterpret_cast<ID3D12CommandQueue**>((uintptr_t)SwapChain + 0x118);
-                }
+				Context.CommandQueue = *reinterpret_cast<ID3D12CommandQueue**>((uintptr_t)SwapChain + queueOffset);
             }
         }
 
@@ -202,11 +211,11 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval
 void STDMETHODCALLTYPE MyDraw(ID3D12GraphicsCommandList* CmdList, UINT VertexCountPerInstance,
 	UINT InstanceCount, UINT StartVertexLocation, UINT StartInstanceLocation)
 {
-	static bool called = false;
+	static BOOL called = FALSE;
 	if (!called)
 	{
 		MessageBoxA(0, "Called MyDraw!", "DirectHook", MB_OK);
-		called = true;
+		called = TRUE;
 	}
 	D3D12Draw(CmdList, VertexCountPerInstance, InstanceCount, StartVertexLocation, StartInstanceLocation);
 }
