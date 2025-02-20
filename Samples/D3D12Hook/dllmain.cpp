@@ -149,8 +149,15 @@ static HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncI
 		D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = Context.FontDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
 		ImGui::CreateContext();
 		ImGui_ImplWin32_Init(swapchainDesc.OutputWindow);
-		ImGui_ImplDX12_Init(device, swapchainDesc.BufferCount, swapchainDesc.BufferDesc.Format, Context.FontDescriptorHeap, cpuHandle, gpuHandle);
-
+		ImGui_ImplDX12_InitInfo init_info;
+		init_info.Device = device;
+		init_info.NumFramesInFlight = swapchainDesc.BufferCount;
+		init_info.RTVFormat = swapchainDesc.BufferDesc.Format;
+		init_info.SrvDescriptorHeap = Context.FontDescriptorHeap;
+		init_info.LegacySingleSrvCpuDescriptor = cpuHandle;
+		init_info.LegacySingleSrvGpuDescriptor = gpuHandle;
+		init_info.CommandQueue = Context.CommandQueue;
+		ImGui_ImplDX12_Init(&init_info);
 		initialized = TRUE;
 	}
 	if (!Context.CommandQueue)
