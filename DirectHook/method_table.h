@@ -9,21 +9,21 @@ namespace directhook
 	public:
 		MethodTable() {}
 
-		template<typename DirectInterfaceT>
-		void AddEntries(DirectInterfaceT* d3dInterface, Uint32 interfaceVTableEntriesCount, Uint32 maxInterfaceVTableEntriesCount = -1)
+		template<typename ObjectT>
+		void AddEntries(ObjectT* d3dObject, unsigned int interfaceVTableEntriesCount, unsigned int maxInterfaceVTableEntriesCount = -1)
 		{
-			if (maxInterfaceVTableEntriesCount == Uint32(-1))
+			if (maxInterfaceVTableEntriesCount == UINT_MAX)
 			{
 				maxInterfaceVTableEntriesCount = interfaceVTableEntriesCount;
 			}
 
 			methods.reserve(methods.size() + maxInterfaceVTableEntriesCount);
-			void** vTableBase = *reinterpret_cast<void***>(d3dInterface);
-			for (Uint32 i = 0; i < interfaceVTableEntriesCount; ++i)
+			void** vTableBase = *reinterpret_cast<void***>(d3dObject);
+			for (unsigned int i = 0; i < interfaceVTableEntriesCount; ++i)
 			{
 				methods.push_back(vTableBase[i]);
 			}
-			for (Uint32 i = 0; i < max(maxInterfaceVTableEntriesCount - interfaceVTableEntriesCount, 0); ++i)
+			for (unsigned int i = 0; i < max(maxInterfaceVTableEntriesCount - interfaceVTableEntriesCount, 0); ++i)
 			{
 				methods.push_back(nullptr);
 			}
@@ -34,9 +34,9 @@ namespace directhook
 			methods.push_back(entry);
 		}
 
-		Uint32 GetSize() const { return (Uint32)methods.size(); }
+		unsigned int GetSize() const { return (unsigned int)methods.size(); }
 
-		void* operator[](Uint32 i) const
+		void* operator[](unsigned int i) const
 		{
 			return methods[i];
 		}

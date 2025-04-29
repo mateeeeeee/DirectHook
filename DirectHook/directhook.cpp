@@ -84,7 +84,7 @@ namespace directhook
 		}
 	}
 
-	DH_Status Hook(Uint16 index, void** original, void* function)
+	DH_Status Hook(unsigned int index, void** original, void* function)
 	{
 		DH_ASSERT(original != nullptr && function != nullptr);
 
@@ -104,7 +104,7 @@ namespace directhook
 		return DH_Status::Error_NoGfxApi;
 	}
 
-	DH_Status Unhook(Uint16 index)
+	DH_Status Unhook(unsigned int index)
 	{
 		if (gInitialized)
 		{
@@ -118,7 +118,7 @@ namespace directhook
 		return DH_Status::Error_NoGfxApi;
 	}
 
-	void* GetOriginal(Uint16 index)
+	void* GetOriginal(unsigned int index)
 	{
 		return gMethodTable[index];
 	}

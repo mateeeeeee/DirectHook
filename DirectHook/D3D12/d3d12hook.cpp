@@ -5,8 +5,8 @@
 
 namespace directhook::d3d12
 {
-    template<typename ComT>
-    void SafeRelease(ComT* ptr)
+    template<typename ObjectT>
+    void SafeRelease(ObjectT* ptr)
     {
         if (ptr) ptr->Release();
         ptr = nullptr;

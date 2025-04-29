@@ -211,7 +211,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nShowCmd)
 
 	InitD3D();
 
-	//LoadLibrary(L"D3D11Hook.dll");
+	LoadLibrary(L"D3D11Hook.dll");
 
 	MSG msg{};
 	while (msg.message != WM_QUIT) 
