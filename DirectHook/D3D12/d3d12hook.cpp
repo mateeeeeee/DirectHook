@@ -299,9 +299,9 @@ namespace directhook::d3d12
 		ID3D12Resource1* resource1 = nullptr;
 		ID3D12Resource2* resource2 = nullptr;
 
-		D3D12_HEAP_PROPERTIES heapProps = {};
+		D3D12_HEAP_PROPERTIES heapProps{};
 		heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
-		D3D12_RESOURCE_DESC desc = {};
+		D3D12_RESOURCE_DESC desc{};
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 		desc.Width = 1024;
 		desc.Height = 1;
@@ -341,8 +341,35 @@ namespace directhook::d3d12
 			methodTable.AddEntries(resource, RESOURCE_ENTRIES, MAX_RESOURCE_ENTRIES);
 		}
 
-		SafeRelease(resource);
+		ID3D12Fence* fence = nullptr;
+		ID3D12Fence1* fence1 = nullptr;
+		UINT64 initialFenceValue = 0;
+		HRESULT hr = device->CreateFence(
+			initialFenceValue,
+			D3D12_FENCE_FLAG_NONE, 
+			IID_PPV_ARGS(&fence)
+		);
 
+		if (FAILED(hr)) 
+		{
+			::DestroyWindow(window);
+			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
+			return DH_Status::Error_GfxApiInitFailed;
+		}
+
+		hr = fence->QueryInterface(IID_PPV_ARGS(&fence1));
+		if (SUCCEEDED(hr)) 
+		{
+			methodTable.AddEntries(fence1, FENCE1_ENTRIES, MAX_FENCE_ENTRIES); 
+			SafeRelease(fence1);
+		}
+		else 
+		{
+			methodTable.AddEntries(fence, FENCE_ENTRIES, MAX_FENCE_ENTRIES);
+		}
+
+		SafeRelease(fence);
+		SafeRelease(resource);
         SafeRelease(device);
         SafeRelease(commandQueue);
         SafeRelease(commandAllocator);

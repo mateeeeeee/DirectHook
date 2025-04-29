@@ -98,6 +98,7 @@ namespace directhook::d3d12
 	using PFN_D3D12Device10_CreateReservedResource2 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*,ID3D12ProtectedResourceSession*, REFIID, void**);
 #endif
 
+
 	using PFN_D3D12CommandQueue_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, REFIID, void**);
 	using PFN_D3D12CommandQueue_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandQueue*);
 	using PFN_D3D12CommandQueue_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandQueue*);
@@ -118,6 +119,7 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandQueue_GetClockCalibration = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT64*, UINT64*);
 	using PFN_D3D12CommandQueue_GetDesc = D3D12_COMMAND_QUEUE_DESC(STDMETHODCALLTYPE*)(ID3D12CommandQueue*);
 
+
 	using PFN_D3D12CommandAllocator_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFIID, void**);
 	using PFN_D3D12CommandAllocator_AddRef = ULONG(*)(ID3D12CommandAllocator*);
 	using PFN_D3D12CommandAllocator_Release = ULONG(*)(ID3D12CommandAllocator*);
@@ -127,6 +129,7 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandAllocator_SetName = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, LPCWSTR);
 	using PFN_D3D12CommandAllocator_GetDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFIID, void**);
 	using PFN_D3D12CommandAllocator_Reset = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*);
+
 
 	using PFN_D3D12CommandList_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandList*, REFIID, void**);
 	using PFN_D3D12CommandList_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandList*);
@@ -221,6 +224,7 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandList7_Barrier = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList7*, UINT, const D3D12_BARRIER_GROUP*);
 #endif
 
+
 	using PFN_IDXGISwapChain_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFIID, void**);
 	using PFN_IDXGISwapChain_AddRef = ULONG(STDMETHODCALLTYPE*)(IDXGISwapChain*);
 	using PFN_IDXGISwapChain_Release = ULONG(STDMETHODCALLTYPE*)(IDXGISwapChain*);
@@ -265,6 +269,7 @@ namespace directhook::d3d12
     using PFN_DXGISwapChain3_ResizeBuffers1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, UINT, UINT, UINT, DXGI_FORMAT, UINT, const UINT*, IUnknown* const*);
     using PFN_DXGISwapChain3_SetColorSpace1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE);
 
+
 	using PFN_D3D12Resource_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12Resource*, REFIID, void**);
 	using PFN_D3D12Resource_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12Resource*);
 	using PFN_D3D12Resource_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12Resource*);
@@ -284,4 +289,19 @@ namespace directhook::d3d12
 	using PFN_D3D12Resource1_GetProtectedResourceSession = HRESULT(STDMETHODCALLTYPE*)(ID3D12Resource1*, REFIID, void**);
 
 	using PFN_D3D12Resource2_GetDesc1 = D3D12_RESOURCE_DESC1(STDMETHODCALLTYPE*)(ID3D12Resource2*);
+
+
+	using PFN_D3D12Fence_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12Fence*, REFIID, void**);
+	using PFN_D3D12Fence_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12Fence*);
+	using PFN_D3D12Fence_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12Fence*);
+	using PFN_D3D12Fence_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12Fence*, REFGUID, UINT*, void*);
+	using PFN_D3D12Fence_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12Fence*, REFGUID, UINT, const void*);
+	using PFN_D3D12Fence_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12Fence*, REFGUID, const IUnknown*);
+	using PFN_D3D12Fence_SetName = HRESULT(STDMETHODCALLTYPE*)(ID3D12Fence*, LPCWSTR);
+	using PFN_D3D12Fence_GetDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12Fence*, REFIID, void**);
+	using PFN_D3D12Fence_GetCompletedValue = UINT64(STDMETHODCALLTYPE*)(ID3D12Fence*);
+	using PFN_D3D12Fence_SetEventOnCompletion = HRESULT(STDMETHODCALLTYPE*)(ID3D12Fence*, UINT64, HANDLE);
+	using PFN_D3D12Fence_Signal = HRESULT(STDMETHODCALLTYPE*)(ID3D12Fence*, UINT64);
+
+	using PFN_D3D12Fence1_GetCreationFlags = D3D12_FENCE_FLAGS(STDMETHODCALLTYPE*)(ID3D12Fence1*);
 }

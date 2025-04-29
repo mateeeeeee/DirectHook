@@ -314,6 +314,22 @@ namespace directhook::d3d12
 		Resource2_GetDesc1,
 		Resource2_LastEntry = Resource2_GetDesc1,
 
+		Fence_FirstEntry,
+		Fence_QueryInterface = Fence_FirstEntry,
+		Fence_AddRef,
+		Fence_Release,
+		Fence_GetPrivateData,
+		Fence_SetPrivateData,
+		Fence_SetPrivateDataInterface,
+		Fence_SetName,
+		Fence_GetDevice,
+		Fence_GetCompletedValue,
+		Fence_SetEventOnCompletion,
+		Fence_Signal,
+		Fence_LastEntry = Fence_Signal,
+
+		Fence1_GetCreationFlags,
+		Fence1_LastEntry = Fence1_GetCreationFlags,
 	};
 
 	static constexpr int DEVICE_ENTRIES = ENTRY_COUNT(Device);
@@ -352,4 +368,8 @@ namespace directhook::d3d12
 	static constexpr int RESOURCE1_ENTRIES = ENTRY_COUNT_(Resource, 1);
 	static constexpr int RESOURCE2_ENTRIES = ENTRY_COUNT_(Resource, 2);
 	static constexpr int MAX_RESOURCE_ENTRIES = RESOURCE2_ENTRIES;
+
+	static constexpr int FENCE_ENTRIES = ENTRY_COUNT(Fence);
+	static constexpr int FENCE1_ENTRIES = ENTRY_COUNT_(Fence, 1);
+	static constexpr int MAX_FENCE_ENTRIES = FENCE1_ENTRIES;
 }
