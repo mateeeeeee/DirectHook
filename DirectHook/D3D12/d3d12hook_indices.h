@@ -289,6 +289,31 @@ namespace directhook::d3d12
         SwapChain3_ResizeBuffers1,
         SwapChain3_SetColorSpace1,
         SwapChain3_LastEntry = SwapChain3_SetColorSpace1,
+
+		Resource_FirstEntry,
+		Resource_QueryInterface = Resource_FirstEntry,
+		Resource_AddRef,
+		Resource_Release,
+		Resource_GetPrivateData,
+		Resource_SetPrivateData,
+		Resource_SetPrivateDataInterface,
+		Resource_SetName,
+		Resource_GetDevice,
+		Resource_Map,
+		Resource_Unmap,
+		Resource_GetDesc,
+		Resource_GetGPUVirtualAddress,
+		Resource_WriteToSubresource,
+		Resource_ReadFromSubresource,
+		Resource_GetHeapProperties,
+		Resource_LastEntry = Resource_GetHeapProperties,
+
+		Resource1_GetProtectedResourceSession,
+		Resource1_LastEntry = Resource1_GetProtectedResourceSession,
+
+		Resource2_GetDesc1,
+		Resource2_LastEntry = Resource2_GetDesc1,
+
 	};
 
 	static constexpr int DEVICE_ENTRIES = ENTRY_COUNT(Device);
@@ -322,4 +347,9 @@ namespace directhook::d3d12
     static constexpr int SWAPCHAIN2_ENTRIES = ENTRY_COUNT_(SwapChain, 2);
     static constexpr int SWAPCHAIN3_ENTRIES = ENTRY_COUNT_(SwapChain, 3);
     static constexpr int MAX_SWAPCHAIN_ENTRIES = SWAPCHAIN3_ENTRIES;
+
+	static constexpr int RESOURCE_ENTRIES  = ENTRY_COUNT(Resource);
+	static constexpr int RESOURCE1_ENTRIES = ENTRY_COUNT_(Resource, 1);
+	static constexpr int RESOURCE2_ENTRIES = ENTRY_COUNT_(Resource, 2);
+	static constexpr int MAX_RESOURCE_ENTRIES = RESOURCE2_ENTRIES;
 }

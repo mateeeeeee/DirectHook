@@ -295,6 +295,54 @@ namespace directhook::d3d12
 			methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 		}
 
+		ID3D12Resource* resource = nullptr;
+		ID3D12Resource1* resource1 = nullptr;
+		ID3D12Resource2* resource2 = nullptr;
+
+		D3D12_HEAP_PROPERTIES heapProps = {};
+		heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
+		D3D12_RESOURCE_DESC desc = {};
+		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+		desc.Width = 1024;
+		desc.Height = 1;
+		desc.DepthOrArraySize = 1;
+		desc.MipLevels = 1;
+		desc.SampleDesc.Count = 1;
+		desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+		desc.Format = DXGI_FORMAT_UNKNOWN;
+		desc.Alignment = 0;
+		desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+		if (FAILED(device->CreateCommittedResource(
+			&heapProps,
+			D3D12_HEAP_FLAG_NONE,
+			&desc,
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&resource))))
+		{
+			::DestroyWindow(window);
+			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
+			return DH_Status::Error_GfxApiInitFailed;
+		}
+
+		if (SUCCEEDED(resource->QueryInterface(IID_PPV_ARGS(&resource2))))
+		{
+			methodTable.AddEntries(resource2, RESOURCE2_ENTRIES, MAX_RESOURCE_ENTRIES);
+			SafeRelease(resource2);
+		}
+		else if (SUCCEEDED(resource->QueryInterface(IID_PPV_ARGS(&resource1))))
+		{
+			methodTable.AddEntries(resource1, RESOURCE1_ENTRIES, MAX_RESOURCE_ENTRIES);
+			SafeRelease(resource1);
+		}
+		else
+		{
+			methodTable.AddEntries(resource, RESOURCE_ENTRIES, MAX_RESOURCE_ENTRIES);
+		}
+
+		SafeRelease(resource);
+
         SafeRelease(device);
         SafeRelease(commandQueue);
         SafeRelease(commandAllocator);
