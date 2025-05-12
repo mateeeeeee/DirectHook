@@ -142,7 +142,7 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandList_GetType = D3D12_COMMAND_LIST_TYPE(STDMETHODCALLTYPE*)(ID3D12CommandList*);
 	using PFN_D3D12CommandList_Close = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
 	using PFN_D3D12CommandList_Reset = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12CommandAllocator*, ID3D12PipelineState*);
-	using PFN_D3D12CommandList_ClearState = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
+	using PFN_D3D12CommandList_ClearState = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12PipelineState*);
 	using PFN_D3D12CommandList_DrawInstanced = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, UINT, UINT, UINT);
 	using PFN_D3D12CommandList_DrawIndexedInstanced = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, UINT, UINT, INT, UINT);
 	using PFN_D3D12CommandList_Dispatch = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, UINT, UINT);
