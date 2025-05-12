@@ -1,5 +1,7 @@
 #pragma once
 #include <d3d11_4.h>
+#include <dxgi1_4.h>
+#include <dxgi1_5.h>
 
 namespace directhook::d3d11
 {
@@ -22,30 +24,30 @@ namespace directhook::d3d11
 	using PFN_DXGISwapChain_GetFrameStatistics = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, DXGI_FRAME_STATISTICS*);
 	using PFN_DXGISwapChain_GetLastPresentCount = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT*);
 
-    using PFN_DXGISwapChain1_GetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_RGBA*);
-    using PFN_DXGISwapChain1_GetCoreWindow = HWND(STDMETHODCALLTYPE*)(IDXGISwapChain1*);
-    using PFN_DXGISwapChain1_GetDesc1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_SWAP_CHAIN_DESC1*);
-    using PFN_DXGISwapChain1_GetFullscreenDesc = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_SWAP_CHAIN_FULLSCREEN_DESC*);
-    using PFN_DXGISwapChain1_GetHwnd = HWND(STDMETHODCALLTYPE*)(IDXGISwapChain1*);
-    using PFN_DXGISwapChain1_GetRestrictToOutput = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, IDXGIOutput**);
-    using PFN_DXGISwapChain1_GetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION*);
-    using PFN_DXGISwapChain1_IsTemporaryMonoSupported = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, BOOL*);
-    using PFN_DXGISwapChain1_Present1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, UINT, const DXGI_PRESENT_PARAMETERS*);
-    using PFN_DXGISwapChain1_SetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, const DXGI_RGBA*);
-    using PFN_DXGISwapChain1_SetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION*);
+	using PFN_DXGISwapChain1_GetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_RGBA*);
+	using PFN_DXGISwapChain1_GetCoreWindow = HWND(STDMETHODCALLTYPE*)(IDXGISwapChain1*);
+	using PFN_DXGISwapChain1_GetDesc1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_SWAP_CHAIN_DESC1*);
+	using PFN_DXGISwapChain1_GetFullscreenDesc = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_SWAP_CHAIN_FULLSCREEN_DESC*);
+	using PFN_DXGISwapChain1_GetHwnd = HWND(STDMETHODCALLTYPE*)(IDXGISwapChain1*);
+	using PFN_DXGISwapChain1_GetRestrictToOutput = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, IDXGIOutput**);
+	using PFN_DXGISwapChain1_GetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION*);
+	using PFN_DXGISwapChain1_IsTemporaryMonoSupported = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, BOOL*);
+	using PFN_DXGISwapChain1_Present1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, UINT, const DXGI_PRESENT_PARAMETERS*);
+	using PFN_DXGISwapChain1_SetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, const DXGI_RGBA*);
+	using PFN_DXGISwapChain1_SetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION);
 
-    using PFN_DXGISwapChain2_GetFrameLatencyWaitableObject = HANDLE(STDMETHODCALLTYPE*)(IDXGISwapChain2*);
-    using PFN_DXGISwapChain2_GetMatrixTransform = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, DXGI_MATRIX_3X2_F*);
-    using PFN_DXGISwapChain2_GetMaximumFrameLatency = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT*);
-    using PFN_DXGISwapChain2_GetSourceSize = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT*, UINT*);
-    using PFN_DXGISwapChain2_SetMatrixTransform = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, const DXGI_MATRIX_3X2_F*);
-    using PFN_DXGISwapChain2_SetMaximumFrameLatency = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT);
-    using PFN_DXGISwapChain2_SetSourceSize = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT, UINT);
+	using PFN_DXGISwapChain2_GetFrameLatencyWaitableObject = HANDLE(STDMETHODCALLTYPE*)(IDXGISwapChain2*);
+	using PFN_DXGISwapChain2_GetMatrixTransform = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, DXGI_MATRIX_3X2_F*);
+	using PFN_DXGISwapChain2_GetMaximumFrameLatency = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT*);
+	using PFN_DXGISwapChain2_GetSourceSize = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT*, UINT*);
+	using PFN_DXGISwapChain2_SetMatrixTransform = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, const DXGI_MATRIX_3X2_F*);
+	using PFN_DXGISwapChain2_SetMaximumFrameLatency = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT);
+	using PFN_DXGISwapChain2_SetSourceSize = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT, UINT);
 
-    using PFN_DXGISwapChain3_CheckColorSpaceSupport = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE, UINT*);
-    using PFN_DXGISwapChain3_GetCurrentBackBufferIndex = UINT(STDMETHODCALLTYPE*)(IDXGISwapChain3*);
-    using PFN_DXGISwapChain3_ResizeBuffers1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, UINT, UINT, UINT, DXGI_FORMAT, UINT, const UINT*, IUnknown* const*);
-    using PFN_DXGISwapChain3_SetColorSpace1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE);
+	using PFN_DXGISwapChain3_CheckColorSpaceSupport = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE, UINT*);
+	using PFN_DXGISwapChain3_GetCurrentBackBufferIndex = UINT(STDMETHODCALLTYPE*)(IDXGISwapChain3*);
+	using PFN_DXGISwapChain3_ResizeBuffers1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, UINT, UINT, UINT, DXGI_FORMAT, UINT, const UINT*, IUnknown* const*);
+	using PFN_DXGISwapChain3_SetColorSpace1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE);
 
 	using PFN_D3D11Device_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, REFIID, void**);
 	using PFN_D3D11Device_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D11Device*);
@@ -77,7 +79,7 @@ namespace directhook::d3d11
 	using PFN_D3D11Device_CreateDeferredContext = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, UINT, ID3D11DeviceContext**);
 	using PFN_D3D11Device_OpenSharedResource = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, HANDLE, REFIID, void**);
 	using PFN_D3D11Device_CheckFormatSupport = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, DXGI_FORMAT, UINT*);
-	using PFN_D3D11Device_CheckMultisampleQualityLevels = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, DXGI_FORMAT, UINT*, UINT*);
+	using PFN_D3D11Device_CheckMultisampleQualityLevels = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, DXGI_FORMAT, UINT, UINT*);
 	using PFN_D3D11Device_CheckCounterInfo = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, D3D11_COUNTER_INFO*);
 	using PFN_D3D11Device_CheckCounter = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, D3D11_COUNTER, UINT*, UINT*);
 	using PFN_D3D11Device_CheckFeatureSupport = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, D3D11_FEATURE, void*, UINT);
@@ -237,36 +239,6 @@ namespace directhook::d3d11
 	using PFN_D3D11DeviceContext_GetType = D3D11_DEVICE_CONTEXT_TYPE(STDMETHODCALLTYPE*)(ID3D11DeviceContext*);
 	using PFN_D3D11DeviceContext_GetContextFlags = UINT(STDMETHODCALLTYPE*)(ID3D11DeviceContext*);
 	using PFN_D3D11DeviceContext_FinishCommandList = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, BOOL, ID3D11CommandList**);
-	using PFN_D3D11DeviceContext_CopySubresourceRegion1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11Resource*, UINT, UINT, UINT, UINT, ID3D11Resource*, UINT, const D3D11_BOX*, UINT);
-	using PFN_D3D11DeviceContext_UpdateSubresource1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11Resource*, UINT, const D3D11_BOX*, const void*, UINT, UINT, UINT);
-	using PFN_D3D11DeviceContext_DiscardResource = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11Resource*);
-	using PFN_D3D11DeviceContext_DiscardView = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11View*);
-	using PFN_D3D11DeviceContext_SetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
-	using PFN_D3D11DeviceContext_VSSetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
-	using PFN_D3D11DeviceContext_HSSetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
-	using PFN_D3D11DeviceContext_DSSetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
-	using PFN_D3D11DeviceContext_GSSetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
-	using PFN_D3D11DeviceContext_PSSetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
-	using PFN_D3D11DeviceContext_CSSetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer* const*, const UINT*, const UINT*);
-	using PFN_D3D11DeviceContext_VSGetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
-	using PFN_D3D11DeviceContext_HSGetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
-	using PFN_D3D11DeviceContext_DSGetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
-	using PFN_D3D11DeviceContext_GSGetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
-	using PFN_D3D11DeviceContext_PSGetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
-	using PFN_D3D11DeviceContext_CSGetConstantBuffers1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer**, UINT*, UINT*);
-	using PFN_D3D11DeviceContext_SwapDeviceContextState = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3DDeviceContextState*);
-	using PFN_D3D11DeviceContext_ClearView = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11View*, const FLOAT[4], const D3D11_RECT*, UINT);
-	using PFN_D3D11DeviceContext_DiscardView1 = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11View*, const D3D11_RECT*, UINT);
-	using PFN_D3D11DeviceContext_UpdateTileMappings = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11Resource*, UINT, const D3D11_TILED_RESOURCE_COORDINATE*, ID3D11Buffer*, UINT, const UINT*, const D3D11_TILE_REGION_SIZE*, UINT, const UINT*);
-	using PFN_D3D11DeviceContext_CopyTileMappings = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11Resource*, const D3D11_TILED_RESOURCE_COORDINATE*, ID3D11Buffer*, const D3D11_TILED_RESOURCE_COORDINATE*, const D3D11_TILE_REGION_SIZE*, D3D11_TILE_MAPPING_FLAG);
-	using PFN_D3D11DeviceContext_CopyTiles = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11Resource*, const D3D11_TILED_RESOURCE_COORDINATE*, const D3D11_TILE_REGION_SIZE*, void*, UINT, D3D11_TILE_COPY_FLAG);
-	using PFN_D3D11DeviceContext_UpdateTiles = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11Resource*, const D3D11_TILED_RESOURCE_COORDINATE*, const D3D11_TILE_REGION_SIZE*, const void*, UINT);
-	using PFN_D3D11DeviceContext_ResizeTilePool = HRESULT(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11Buffer*, UINT64);
-	using PFN_D3D11DeviceContext_TiledResourceBarrier = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, ID3D11DeviceChild*, ID3D11DeviceChild*);
-	using PFN_D3D11DeviceContext_IsAnnotationEnabled = BOOL(STDMETHODCALLTYPE*)(ID3D11DeviceContext*);
-	using PFN_D3D11DeviceContext_SetMarkerInt = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, LPCWSTR, INT);
-	using PFN_D3D11DeviceContext_BeginEventInt = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*, LPCWSTR, INT);
-	using PFN_D3D11DeviceContext_EndEvent = void(STDMETHODCALLTYPE*)(ID3D11DeviceContext*);
 
 	using PFN_D3D11DeviceContext1_CopySubresourceRegion1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, ID3D11Resource*, UINT, UINT, UINT, UINT, ID3D11Resource*, UINT, const D3D11_BOX*, UINT);
 	using PFN_D3D11DeviceContext1_UpdateSubresource1 = void (STDMETHODCALLTYPE*)(ID3D11DeviceContext1*, ID3D11Resource*, UINT, const D3D11_BOX*, const void*, UINT, UINT, UINT);
