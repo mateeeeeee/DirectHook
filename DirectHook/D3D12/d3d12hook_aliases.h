@@ -233,7 +233,7 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandList_SetMarker = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, const void*);
 	using PFN_D3D12CommandList_BeginEvent = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, const void*);
 	using PFN_D3D12CommandList_EndEvent = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
-	using PFN_D3D12CommandList_ExecuteIndirect = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12CommandSignature*, UINT, ID3D12Resource*, UINT64, ID3D12Resource*, UINT64, void*);
+	using PFN_D3D12CommandList_ExecuteIndirect = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12CommandSignature*, UINT, ID3D12Resource*, UINT64, ID3D12Resource*, UINT64);
 
 	using PFN_D3D12CommandList1_AtomicCopyBufferUINT = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, ID3D12Resource*, UINT64, ID3D12Resource*, UINT64, UINT, ID3D12Resource* const*, const D3D12_SUBRESOURCE_RANGE_UINT64*);
 	using PFN_D3D12CommandList1_AtomicCopyBufferUINT64 = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, ID3D12Resource*, UINT64, ID3D12Resource*, UINT64, UINT, ID3D12Resource* const*, const D3D12_SUBRESOURCE_RANGE_UINT64*);
