@@ -23,7 +23,7 @@ struct ImGuiD3D12Context
 };
 
 static d3d12::PFN_D3D12CommandList_DrawInstanced D3D12Draw = nullptr;
-static d3d12::PFN_IDXGISwapChain_Present DxgiPresent = nullptr;
+static d3d12::PFN_DXGISwapChain_Present DxgiPresent = nullptr;
 static WNDPROC Win32WndProc = nullptr;
 static ImGuiD3D12Context Context;
 

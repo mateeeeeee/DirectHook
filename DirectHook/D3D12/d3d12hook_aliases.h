@@ -1,12 +1,58 @@
 #pragma once
 #include <d3d12.h>
 #include <dxgi1_4.h>
+#include <dxgi1_5.h> 
+#include <dxgi1_6.h> 
 
 namespace directhook::d3d12
 {
+	using PFN_DXGISwapChain_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFIID, void**);
+	using PFN_DXGISwapChain_AddRef = ULONG(STDMETHODCALLTYPE*)(IDXGISwapChain*);
+	using PFN_DXGISwapChain_Release = ULONG(STDMETHODCALLTYPE*)(IDXGISwapChain*);
+	using PFN_DXGISwapChain_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFGUID, UINT, const void*);
+	using PFN_DXGISwapChain_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFGUID, const IUnknown*);
+	using PFN_DXGISwapChain_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFGUID, UINT*, void*);
+	using PFN_DXGISwapChain_GetParent = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFIID, void**);
+	using PFN_DXGISwapChain_GetDevice = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFIID, void**);
+	using PFN_DXGISwapChain_Present = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT, UINT);
+	using PFN_DXGISwapChain_GetBuffer = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT, REFIID, void**);
+	using PFN_DXGISwapChain_SetFullscreenState = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, BOOL, IDXGIOutput*);
+	using PFN_DXGISwapChain_GetFullscreenState = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, BOOL*, IDXGIOutput**);
+	using PFN_DXGISwapChain_GetDesc = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, DXGI_SWAP_CHAIN_DESC*);
+	using PFN_DXGISwapChain_ResizeBuffers = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT, UINT, UINT, DXGI_FORMAT, UINT);
+	using PFN_DXGISwapChain_ResizeTarget = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, const DXGI_MODE_DESC*);
+	using PFN_DXGISwapChain_GetContainingOutput = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, IDXGIOutput**);
+	using PFN_DXGISwapChain_GetFrameStatistics = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, DXGI_FRAME_STATISTICS*);
+	using PFN_DXGISwapChain_GetLastPresentCount = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT*);
+
+	using PFN_DXGISwapChain1_GetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_RGBA*);
+	using PFN_DXGISwapChain1_GetCoreWindow = HWND(STDMETHODCALLTYPE*)(IDXGISwapChain1*);
+	using PFN_DXGISwapChain1_GetDesc1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_SWAP_CHAIN_DESC1*);
+	using PFN_DXGISwapChain1_GetFullscreenDesc = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_SWAP_CHAIN_FULLSCREEN_DESC*);
+	using PFN_DXGISwapChain1_GetHwnd = HWND(STDMETHODCALLTYPE*)(IDXGISwapChain1*);
+	using PFN_DXGISwapChain1_GetRestrictToOutput = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, IDXGIOutput**);
+	using PFN_DXGISwapChain1_GetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION*);
+	using PFN_DXGISwapChain1_IsTemporaryMonoSupported = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, BOOL*);
+	using PFN_DXGISwapChain1_Present1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, UINT, const DXGI_PRESENT_PARAMETERS*);
+	using PFN_DXGISwapChain1_SetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, const DXGI_RGBA*);
+	using PFN_DXGISwapChain1_SetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION); // Corrected
+
+	using PFN_DXGISwapChain2_GetFrameLatencyWaitableObject = HANDLE(STDMETHODCALLTYPE*)(IDXGISwapChain2*);
+	using PFN_DXGISwapChain2_GetMatrixTransform = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, DXGI_MATRIX_3X2_F*);
+	using PFN_DXGISwapChain2_GetMaximumFrameLatency = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT*);
+	using PFN_DXGISwapChain2_GetSourceSize = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT*, UINT*);
+	using PFN_DXGISwapChain2_SetMatrixTransform = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, const DXGI_MATRIX_3X2_F*);
+	using PFN_DXGISwapChain2_SetMaximumFrameLatency = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT);
+	using PFN_DXGISwapChain2_SetSourceSize = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT, UINT);
+
+	using PFN_DXGISwapChain3_CheckColorSpaceSupport = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE, UINT*);
+	using PFN_DXGISwapChain3_GetCurrentBackBufferIndex = UINT(STDMETHODCALLTYPE*)(IDXGISwapChain3*);
+	using PFN_DXGISwapChain3_ResizeBuffers1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, UINT, UINT, UINT, DXGI_FORMAT, UINT, const UINT*, IUnknown* const*);
+	using PFN_DXGISwapChain3_SetColorSpace1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE);
+
 	using PFN_D3D12Device_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, REFIID, void**);
-	using PFN_D3D12Device_AddRef = ULONG(*)(ID3D12Device*);
-	using PFN_D3D12Device_Release = ULONG(*)(ID3D12Device*);
+	using PFN_D3D12Device_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12Device*); 
+	using PFN_D3D12Device_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12Device*);
 	using PFN_D3D12Device_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, REFGUID, UINT*, void*);
 	using PFN_D3D12Device_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, REFGUID, UINT, const void*);
 	using PFN_D3D12Device_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, REFGUID, const IUnknown*);
@@ -19,7 +65,7 @@ namespace directhook::d3d12
 	using PFN_D3D12Device_CreateCommandList = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, UINT, D3D12_COMMAND_LIST_TYPE, ID3D12CommandAllocator*, ID3D12PipelineState*, REFIID, void**);
 	using PFN_D3D12Device_CheckFeatureSupport = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, D3D12_FEATURE, void*, UINT);
 	using PFN_D3D12Device_CreateDescriptorHeap = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, const D3D12_DESCRIPTOR_HEAP_DESC*, REFIID, void**);
-	using PFN_D3D12Device_GetDescriptorHandleIncrementSize = UINT(*)(ID3D12Device*, D3D12_DESCRIPTOR_HEAP_TYPE);
+	using PFN_D3D12Device_GetDescriptorHandleIncrementSize = UINT(STDMETHODCALLTYPE*)(ID3D12Device*, D3D12_DESCRIPTOR_HEAP_TYPE); // Corrected
 	using PFN_D3D12Device_CreateRootSignature = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, UINT, const void*, SIZE_T, REFIID, void**);
 	using PFN_D3D12Device_CreateConstantBufferView = void(STDMETHODCALLTYPE*)(ID3D12Device*, const D3D12_CONSTANT_BUFFER_VIEW_DESC*, D3D12_CPU_DESCRIPTOR_HANDLE);
 	using PFN_D3D12Device_CreateShaderResourceView = void(STDMETHODCALLTYPE*)(ID3D12Device*, ID3D12Resource*, const D3D12_SHADER_RESOURCE_VIEW_DESC*, D3D12_CPU_DESCRIPTOR_HANDLE);
@@ -47,24 +93,24 @@ namespace directhook::d3d12
 	using PFN_D3D12Device_SetStablePowerState = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, BOOL);
 	using PFN_D3D12Device_CreateCommandSignature = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, const D3D12_COMMAND_SIGNATURE_DESC*, REFIID, void**);
 	using PFN_D3D12Device_GetResourceTiling = void(STDMETHODCALLTYPE*)(ID3D12Device*, ID3D12Resource*, UINT*, UINT*, D3D12_SUBRESOURCE_TILING*, UINT*);
-	using PFN_D3D12Device_GetAdapterLuid = LUID(*)(ID3D12Device*);
+	using PFN_D3D12Device_GetAdapterLuid = LUID(STDMETHODCALLTYPE*)(ID3D12Device*); // Corrected
 
 	using PFN_D3D12Device1_CreatePipelineLibrary = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device1*, const void*, SIZE_T, REFIID, void**);
 	using PFN_D3D12Device1_SetEventOnMultipleFenceCompletion = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device1*, UINT, const HANDLE*, D3D12_FENCE_FLAGS, HANDLE);
-	using PFN_D3D12Device1_SetResidencyPriority = void (STDMETHODCALLTYPE*)(ID3D12Device1*, UINT, ID3D12Resource* const*, D3D12_RESIDENCY_PRIORITY*);
+	using PFN_D3D12Device1_SetResidencyPriority = void (STDMETHODCALLTYPE*)(ID3D12Device1*, UINT, ID3D12Resource* const*, const D3D12_RESIDENCY_PRIORITY*); 
 
 	using PFN_D3D12Device2_CreatePipelineState = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device2*, const D3D12_PIPELINE_STATE_STREAM_DESC*, REFIID, void**);
 
 	using PFN_D3D12Device3_OpenExistingHeapFromFileMapping = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, HANDLE, REFIID, void**);
 	using PFN_D3D12Device3_OpenExistingHeapFromAddress = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, void*, REFIID, void**);
-	using PFN_D3D12Device3_EnqueueMakeResident = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, UINT, ID3D12Resource* const*, UINT*);
+	using PFN_D3D12Device3_EnqueueMakeResident = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, UINT, ID3D12Resource* const*, const UINT*); 
 
 	using PFN_D3D12Device4_CreateCommandList1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, UINT, D3D12_COMMAND_LIST_TYPE, D3D12_COMMAND_LIST_FLAGS, REFIID, void**);
 	using PFN_D3D12Device4_CreateProtectedResourceSession = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, const D3D12_PROTECTED_RESOURCE_SESSION_DESC*, REFIID, void**);
 	using PFN_D3D12Device4_CreateCommittedResource1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, const D3D12_HEAP_PROPERTIES*, D3D12_HEAP_FLAGS, const D3D12_RESOURCE_DESC*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
 	using PFN_D3D12Device4_CreateHeap1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, const D3D12_HEAP_DESC*, ID3D12ProtectedResourceSession*, REFIID, void**);
 	using PFN_D3D12Device4_CreateReservedResource1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, const D3D12_RESOURCE_DESC*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
-	using PFN_D3D12Device4_GetResourceAllocationInfo1 = void (STDMETHODCALLTYPE*)(ID3D12Device4*, UINT, UINT, const D3D12_RESOURCE_DESC*, const D3D12_RESOURCE_ALLOCATION_INFO*);
+	using PFN_D3D12Device4_GetResourceAllocationInfo1 = void (STDMETHODCALLTYPE*)(ID3D12Device4*, UINT, UINT, const D3D12_RESOURCE_DESC*, D3D12_RESOURCE_ALLOCATION_INFO1*);
 
 	using PFN_D3D12Device5_CreateLifetimeTracker = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device5*, ID3D12LifetimeOwner*, REFIID, void**);
 	using PFN_D3D12Device5_RemoveDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device5*);
@@ -77,10 +123,10 @@ namespace directhook::d3d12
 
 	using PFN_D3D12Device6_SetBackgroundProcessingMode = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device6*, D3D12_BACKGROUND_PROCESSING_MODE, D3D12_MEASUREMENTS_ACTION, HANDLE, BOOL*);
 
-	using PFN_D3D12Device7_AddToStateObject = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device7*, D3D12_BACKGROUND_PROCESSING_MODE, D3D12_MEASUREMENTS_ACTION, HANDLE, BOOL*);
-	using PFN_D3D12Device7_CreateProtectedResourceSession1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device7*, D3D12_BACKGROUND_PROCESSING_MODE, D3D12_MEASUREMENTS_ACTION, HANDLE, BOOL*);
+	using PFN_D3D12Device7_AddToStateObject = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device7*, const D3D12_STATE_OBJECT_CONFIG*, ID3D12StateObject*, UINT, const D3D12_STATE_SUBOBJECT*); 
+	using PFN_D3D12Device7_CreateProtectedResourceSession1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device7*, const D3D12_PROTECTED_RESOURCE_SESSION_DESC1*, REFIID, void**);
 
-	using PFN_D3D12Device8_GetResourceAllocationInfo2 = D3D12_RESOURCE_ALLOCATION_INFO(STDMETHODCALLTYPE*)(ID3D12Device8*, UINT, UINT, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_ALLOCATION_INFO1*);
+	using PFN_D3D12Device8_GetResourceAllocationInfo2 = void(STDMETHODCALLTYPE*)(ID3D12Device8*, UINT, UINT, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_ALLOCATION_INFO*, D3D12_RESOURCE_ALLOCATION_INFO1*); 
 	using PFN_D3D12Device8_CreateCommittedResource2 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device8*, const D3D12_HEAP_PROPERTIES*, D3D12_HEAP_FLAGS, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
 	using PFN_D3D12Device8_CreatePlacedResource1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device8*, ID3D12Heap*, UINT64, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, REFIID, void**);
 	using PFN_D3D12Device8_CreateSamplerFeedbackUnorderedAccessView = void(STDMETHODCALLTYPE*)(ID3D12Device8*, ID3D12Resource*, ID3D12Resource*, D3D12_CPU_DESCRIPTOR_HANDLE);
@@ -95,9 +141,8 @@ namespace directhook::d3d12
 #if defined(__ID3D12Device10_INTERFACE_DEFINED__)
 	using PFN_D3D12Device10_CreateCommittedResource3 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, const D3D12_HEAP_PROPERTIES*, D3D12_HEAP_FLAGS, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
 	using PFN_D3D12Device10_CreatePlacedResource2 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, ID3D12Heap*, UINT64, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
-	using PFN_D3D12Device10_CreateReservedResource2 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*,ID3D12ProtectedResourceSession*, REFIID, void**);
+	using PFN_D3D12Device10_CreateReservedResource2 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
 #endif
-
 
 	using PFN_D3D12CommandQueue_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, REFIID, void**);
 	using PFN_D3D12CommandQueue_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandQueue*);
@@ -107,9 +152,9 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandQueue_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, REFGUID, const IUnknown*);
 	using PFN_D3D12CommandQueue_SetName = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, LPCWSTR);
 	using PFN_D3D12CommandQueue_GetDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, REFIID, void**);
-	using PFN_D3D12CommandQueue_UpdateTileMappings = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, ID3D12Resource*, UINT, const D3D12_TILED_RESOURCE_COORDINATE*, UINT, const D3D12_TILE_REGION_SIZE*, ID3D12Heap*, UINT, const D3D12_TILE_MAPPING_FLAGS*);
+	using PFN_D3D12CommandQueue_UpdateTileMappings = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, ID3D12Resource*, UINT, const D3D12_TILED_RESOURCE_COORDINATE*, UINT, const D3D12_TILE_REGION_SIZE*, ID3D12Heap*, UINT, const D3D12_TILE_MAPPING_FLAGS*); 
 	using PFN_D3D12CommandQueue_CopyTileMappings = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, ID3D12Resource*, const D3D12_TILED_RESOURCE_COORDINATE*, ID3D12Resource*, const D3D12_TILED_RESOURCE_COORDINATE*, const D3D12_TILE_REGION_SIZE*, D3D12_TILE_MAPPING_FLAGS);
-	using PFN_D3D12CommandQueue_ExecuteCommandLists = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, ID3D12CommandList* const*);
+	using PFN_D3D12CommandQueue_ExecuteCommandLists = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, ID3D12CommandList* const*); 
 	using PFN_D3D12CommandQueue_SetMarker = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, const void*);
 	using PFN_D3D12CommandQueue_BeginEvent = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, const void*);
 	using PFN_D3D12CommandQueue_EndEvent = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*);
@@ -119,10 +164,9 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandQueue_GetClockCalibration = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT64*, UINT64*);
 	using PFN_D3D12CommandQueue_GetDesc = D3D12_COMMAND_QUEUE_DESC(STDMETHODCALLTYPE*)(ID3D12CommandQueue*);
 
-
 	using PFN_D3D12CommandAllocator_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFIID, void**);
-	using PFN_D3D12CommandAllocator_AddRef = ULONG(*)(ID3D12CommandAllocator*);
-	using PFN_D3D12CommandAllocator_Release = ULONG(*)(ID3D12CommandAllocator*);
+	using PFN_D3D12CommandAllocator_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*); // Corrected
+	using PFN_D3D12CommandAllocator_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*); // Corrected
 	using PFN_D3D12CommandAllocator_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFGUID, UINT*, void*);
 	using PFN_D3D12CommandAllocator_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFGUID, UINT, const void*);
 	using PFN_D3D12CommandAllocator_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFGUID, const IUnknown*);
@@ -130,16 +174,15 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandAllocator_GetDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFIID, void**);
 	using PFN_D3D12CommandAllocator_Reset = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*);
 
-
-	using PFN_D3D12CommandList_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandList*, REFIID, void**);
-	using PFN_D3D12CommandList_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandList*);
-	using PFN_D3D12CommandList_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandList*);
-	using PFN_D3D12CommandList_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandList*, REFGUID, UINT*, void*);
-	using PFN_D3D12CommandList_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandList*, REFGUID, UINT, const void*);
-	using PFN_D3D12CommandList_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandList*, REFGUID, const IUnknown*);
-	using PFN_D3D12CommandList_SetName = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandList*, LPCWSTR);
-	using PFN_D3D12CommandList_GetDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandList*, REFIID, void**);
-	using PFN_D3D12CommandList_GetType = D3D12_COMMAND_LIST_TYPE(STDMETHODCALLTYPE*)(ID3D12CommandList*);
+	using PFN_D3D12CommandList_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFIID, void**); 
+	using PFN_D3D12CommandList_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*); 
+	using PFN_D3D12CommandList_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
+	using PFN_D3D12CommandList_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFGUID, UINT*, void*); 
+	using PFN_D3D12CommandList_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFGUID, UINT, const void*);
+	using PFN_D3D12CommandList_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFGUID, const IUnknown*); 
+	using PFN_D3D12CommandList_SetName = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, LPCWSTR); 
+	using PFN_D3D12CommandList_GetDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFIID, void**); 
+	using PFN_D3D12CommandList_GetType = D3D12_COMMAND_LIST_TYPE(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*); 
 	using PFN_D3D12CommandList_Close = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
 	using PFN_D3D12CommandList_Reset = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12CommandAllocator*, ID3D12PipelineState*);
 	using PFN_D3D12CommandList_ClearState = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12PipelineState*);
@@ -186,16 +229,16 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandList_BeginQuery = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12QueryHeap*, D3D12_QUERY_TYPE, UINT);
 	using PFN_D3D12CommandList_EndQuery = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12QueryHeap*, D3D12_QUERY_TYPE, UINT);
 	using PFN_D3D12CommandList_ResolveQueryData = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12QueryHeap*, D3D12_QUERY_TYPE, UINT, UINT, ID3D12Resource*, UINT, UINT);
-	using PFN_D3D12CommandList_SetPredication = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12Resource*, UINT, D3D12_PREDICATION_OP);
+	using PFN_D3D12CommandList_SetPredication = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12Resource*, UINT64, D3D12_PREDICATION_OP);
 	using PFN_D3D12CommandList_SetMarker = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, const void*);
 	using PFN_D3D12CommandList_BeginEvent = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, const void*);
 	using PFN_D3D12CommandList_EndEvent = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
-	using PFN_D3D12CommandList_ExecuteIndirect = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12CommandSignature*, UINT, ID3D12Resource*, UINT, ID3D12Resource*, UINT, void*);
+	using PFN_D3D12CommandList_ExecuteIndirect = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12CommandSignature*, UINT, ID3D12Resource*, UINT64, ID3D12Resource*, UINT64, void*);
 
 	using PFN_D3D12CommandList1_AtomicCopyBufferUINT = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, ID3D12Resource*, UINT64, ID3D12Resource*, UINT64, UINT, ID3D12Resource* const*, const D3D12_SUBRESOURCE_RANGE_UINT64*);
 	using PFN_D3D12CommandList1_AtomicCopyBufferUINT64 = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, ID3D12Resource*, UINT64, ID3D12Resource*, UINT64, UINT, ID3D12Resource* const*, const D3D12_SUBRESOURCE_RANGE_UINT64*);
 	using PFN_D3D12CommandList1_OMSetDepthBounds = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, FLOAT, FLOAT);
-	using PFN_D3D12CommandList1_SetSamplePositions = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, UINT, UINT, D3D12_SAMPLE_POSITION*);
+	using PFN_D3D12CommandList1_SetSamplePositions = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, UINT, UINT, D3D12_SAMPLE_POSITION*); 
 	using PFN_D3D12CommandList1_ResolveSubresourceRegion = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, ID3D12Resource*, UINT, UINT, UINT, ID3D12Resource*, UINT, D3D12_RECT*, DXGI_FORMAT, D3D12_RESOLVE_MODE);
 	using PFN_D3D12CommandList1_SetViewInstanceMask = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, UINT);
 
@@ -214,61 +257,15 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandList4_DispatchRays = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList4*, const D3D12_DISPATCH_RAYS_DESC*);
 
 	using PFN_D3D12CommandList5_RSSetShadingRate = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList5*, D3D12_SHADING_RATE, const D3D12_SHADING_RATE_COMBINER*);
-	using PFN_D3D12CommandList5_RSSetShadingRateImage = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList5*, ID3D12Resource*);
+	using PFN_D3D12CommandList5_RSSetShadingRateImage = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList5*, ID3D12Resource*); 
 
 #if defined(__ID3D12GraphicsCommandList6_INTERFACE_DEFINED__)
-	using PFN_D3D12CommandList6_DispatchMesh = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList6*, UINT, UINT, UINT);
+	using PFN_D3D12CommandList6_DispatchMesh = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList6*, UINT, UINT, UINT); 
 #endif
 
 #if defined(__ID3D12GraphicsCommandList7_INTERFACE_DEFINED__)
-	using PFN_D3D12CommandList7_Barrier = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList7*, UINT, const D3D12_BARRIER_GROUP*);
+	using PFN_D3D12CommandList7_Barrier = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList7*, UINT, const D3D12_BARRIER_GROUP*); 
 #endif
-
-
-	using PFN_IDXGISwapChain_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFIID, void**);
-	using PFN_IDXGISwapChain_AddRef = ULONG(STDMETHODCALLTYPE*)(IDXGISwapChain*);
-	using PFN_IDXGISwapChain_Release = ULONG(STDMETHODCALLTYPE*)(IDXGISwapChain*);
-	using PFN_IDXGISwapChain_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFGUID, UINT, const void*);
-	using PFN_IDXGISwapChain_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFGUID, const IUnknown*);
-	using PFN_IDXGISwapChain_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFGUID, UINT*, void*);
-	using PFN_IDXGISwapChain_GetParent = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFIID, void**);
-	using PFN_IDXGISwapChain_GetDevice = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, REFIID, void**);
-	using PFN_IDXGISwapChain_Present = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT, UINT);
-	using PFN_IDXGISwapChain_GetBuffer = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT, REFIID, void**);
-	using PFN_IDXGISwapChain_SetFullscreenState = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, BOOL, IDXGIOutput*);
-	using PFN_IDXGISwapChain_GetFullscreenState = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, BOOL*, IDXGIOutput**);
-	using PFN_IDXGISwapChain_GetDesc = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, DXGI_SWAP_CHAIN_DESC*);
-	using PFN_IDXGISwapChain_ResizeBuffers = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT, UINT, DXGI_FORMAT, UINT);
-	using PFN_IDXGISwapChain_ResizeTarget = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, const DXGI_MODE_DESC*);
-	using PFN_IDXGISwapChain_GetContainingOutput = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, IDXGIOutput**);
-	using PFN_IDXGISwapChain_GetFrameStatistics = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, DXGI_FRAME_STATISTICS*);
-	using PFN_IDXGISwapChain_GetLastPresentCount = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT*);
-
-    using PFN_DXGISwapChain1_GetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_RGBA*);
-    using PFN_DXGISwapChain1_GetCoreWindow = HWND(STDMETHODCALLTYPE*)(IDXGISwapChain1*);
-    using PFN_DXGISwapChain1_GetDesc1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_SWAP_CHAIN_DESC1*);
-    using PFN_DXGISwapChain1_GetFullscreenDesc = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_SWAP_CHAIN_FULLSCREEN_DESC*);
-    using PFN_DXGISwapChain1_GetHwnd = HWND(STDMETHODCALLTYPE*)(IDXGISwapChain1*);
-    using PFN_DXGISwapChain1_GetRestrictToOutput = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, IDXGIOutput**);
-    using PFN_DXGISwapChain1_GetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION*);
-    using PFN_DXGISwapChain1_IsTemporaryMonoSupported = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, BOOL*);
-    using PFN_DXGISwapChain1_Present1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, UINT, const DXGI_PRESENT_PARAMETERS*);
-    using PFN_DXGISwapChain1_SetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, const DXGI_RGBA*);
-    using PFN_DXGISwapChain1_SetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION*);
-
-    using PFN_DXGISwapChain2_GetFrameLatencyWaitableObject = HANDLE(STDMETHODCALLTYPE*)(IDXGISwapChain2*);
-    using PFN_DXGISwapChain2_GetMatrixTransform = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, DXGI_MATRIX_3X2_F*);
-    using PFN_DXGISwapChain2_GetMaximumFrameLatency = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT*);
-    using PFN_DXGISwapChain2_GetSourceSize = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT*, UINT*);
-    using PFN_DXGISwapChain2_SetMatrixTransform = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, const DXGI_MATRIX_3X2_F*);
-    using PFN_DXGISwapChain2_SetMaximumFrameLatency = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT);
-    using PFN_DXGISwapChain2_SetSourceSize = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain2*, UINT, UINT);
-
-    using PFN_DXGISwapChain3_CheckColorSpaceSupport = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE, UINT*);
-    using PFN_DXGISwapChain3_GetCurrentBackBufferIndex = UINT(STDMETHODCALLTYPE*)(IDXGISwapChain3*);
-    using PFN_DXGISwapChain3_ResizeBuffers1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, UINT, UINT, UINT, DXGI_FORMAT, UINT, const UINT*, IUnknown* const*);
-    using PFN_DXGISwapChain3_SetColorSpace1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE);
-
 
 	using PFN_D3D12Resource_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12Resource*, REFIID, void**);
 	using PFN_D3D12Resource_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12Resource*);
@@ -289,7 +286,6 @@ namespace directhook::d3d12
 	using PFN_D3D12Resource1_GetProtectedResourceSession = HRESULT(STDMETHODCALLTYPE*)(ID3D12Resource1*, REFIID, void**);
 
 	using PFN_D3D12Resource2_GetDesc1 = D3D12_RESOURCE_DESC1(STDMETHODCALLTYPE*)(ID3D12Resource2*);
-
 
 	using PFN_D3D12Fence_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12Fence*, REFIID, void**);
 	using PFN_D3D12Fence_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12Fence*);

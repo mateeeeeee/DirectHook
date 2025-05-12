@@ -199,6 +199,8 @@ void InitD3D()
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nShowCmd) 
 {
+	LoadLibrary(L"D3D11Hook.dll");
+
 	hInst = hInstance;
 	WNDCLASS wc{};
 	wc.lpfnWndProc = WindowProc;
@@ -210,8 +212,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nShowCmd)
 	ShowWindow(hWnd, nShowCmd);
 
 	InitD3D();
-
-	LoadLibrary(L"D3D11Hook.dll");
 
 	MSG msg{};
 	while (msg.message != WM_QUIT) 

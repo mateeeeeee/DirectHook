@@ -1,5 +1,6 @@
 #pragma once
 #include <d3d10.h>
+#include <dxgi.h> 
 
 namespace directhook::d3d10
 {
