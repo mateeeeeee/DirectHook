@@ -155,8 +155,8 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandQueue_UpdateTileMappings = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, ID3D12Resource*, UINT, const D3D12_TILED_RESOURCE_COORDINATE*, UINT, const D3D12_TILE_REGION_SIZE*, ID3D12Heap*, UINT, const D3D12_TILE_MAPPING_FLAGS*); 
 	using PFN_D3D12CommandQueue_CopyTileMappings = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, ID3D12Resource*, const D3D12_TILED_RESOURCE_COORDINATE*, ID3D12Resource*, const D3D12_TILED_RESOURCE_COORDINATE*, const D3D12_TILE_REGION_SIZE*, D3D12_TILE_MAPPING_FLAGS);
 	using PFN_D3D12CommandQueue_ExecuteCommandLists = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, ID3D12CommandList* const*); 
-	using PFN_D3D12CommandQueue_SetMarker = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, const void*);
-	using PFN_D3D12CommandQueue_BeginEvent = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, const void*);
+	using PFN_D3D12CommandQueue_SetMarker = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, const void*, UINT);
+	using PFN_D3D12CommandQueue_BeginEvent = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, const void*, UINT);
 	using PFN_D3D12CommandQueue_EndEvent = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*);
 	using PFN_D3D12CommandQueue_Signal = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, ID3D12Fence*, UINT64);
 	using PFN_D3D12CommandQueue_Wait = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, ID3D12Fence*, UINT64);
@@ -230,8 +230,8 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandList_EndQuery = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12QueryHeap*, D3D12_QUERY_TYPE, UINT);
 	using PFN_D3D12CommandList_ResolveQueryData = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12QueryHeap*, D3D12_QUERY_TYPE, UINT, UINT, ID3D12Resource*, UINT, UINT);
 	using PFN_D3D12CommandList_SetPredication = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12Resource*, UINT64, D3D12_PREDICATION_OP);
-	using PFN_D3D12CommandList_SetMarker = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, const void*);
-	using PFN_D3D12CommandList_BeginEvent = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, const void*);
+	using PFN_D3D12CommandList_SetMarker = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, const void*, UINT);
+	using PFN_D3D12CommandList_BeginEvent = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, UINT, const void*, UINT);
 	using PFN_D3D12CommandList_EndEvent = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
 	using PFN_D3D12CommandList_ExecuteIndirect = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12CommandSignature*, UINT, ID3D12Resource*, UINT64, ID3D12Resource*, UINT64);
 
