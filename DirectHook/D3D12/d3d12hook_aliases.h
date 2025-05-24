@@ -51,7 +51,7 @@ namespace directhook::d3d12
 	using PFN_DXGISwapChain3_SetColorSpace1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain3*, DXGI_COLOR_SPACE_TYPE);
 
 	using PFN_D3D12Device_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, REFIID, void**);
-	using PFN_D3D12Device_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12Device*); 
+	using PFN_D3D12Device_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12Device*);
 	using PFN_D3D12Device_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12Device*);
 	using PFN_D3D12Device_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, REFGUID, UINT*, void*);
 	using PFN_D3D12Device_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, REFGUID, UINT, const void*);
@@ -93,17 +93,17 @@ namespace directhook::d3d12
 	using PFN_D3D12Device_SetStablePowerState = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, BOOL);
 	using PFN_D3D12Device_CreateCommandSignature = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, const D3D12_COMMAND_SIGNATURE_DESC*, ID3D12RootSignature*, REFIID, void**);
 	using PFN_D3D12Device_GetResourceTiling = void(STDMETHODCALLTYPE*)(ID3D12Device*, ID3D12Resource*, UINT*, UINT*, D3D12_SUBRESOURCE_TILING*, UINT*);
-	using PFN_D3D12Device_GetAdapterLuid = LUID(STDMETHODCALLTYPE*)(ID3D12Device*); 
+	using PFN_D3D12Device_GetAdapterLuid = LUID(STDMETHODCALLTYPE*)(ID3D12Device*);
 
 	using PFN_D3D12Device1_CreatePipelineLibrary = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device1*, const void*, SIZE_T, REFIID, void**);
 	using PFN_D3D12Device1_SetEventOnMultipleFenceCompletion = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device1*, UINT, const HANDLE*, D3D12_FENCE_FLAGS, HANDLE);
-	using PFN_D3D12Device1_SetResidencyPriority = void (STDMETHODCALLTYPE*)(ID3D12Device1*, UINT, ID3D12Resource* const*, const D3D12_RESIDENCY_PRIORITY*); 
+	using PFN_D3D12Device1_SetResidencyPriority = void (STDMETHODCALLTYPE*)(ID3D12Device1*, UINT, ID3D12Resource* const*, const D3D12_RESIDENCY_PRIORITY*);
 
 	using PFN_D3D12Device2_CreatePipelineState = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device2*, const D3D12_PIPELINE_STATE_STREAM_DESC*, REFIID, void**);
 
 	using PFN_D3D12Device3_OpenExistingHeapFromFileMapping = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, HANDLE, REFIID, void**);
 	using PFN_D3D12Device3_OpenExistingHeapFromAddress = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, void*, REFIID, void**);
-	using PFN_D3D12Device3_EnqueueMakeResident = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, UINT, ID3D12Resource* const*, const UINT*); 
+	using PFN_D3D12Device3_EnqueueMakeResident = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device3*, UINT, ID3D12Resource* const*, const UINT*);
 
 	using PFN_D3D12Device4_CreateCommandList1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, UINT, D3D12_COMMAND_LIST_TYPE, D3D12_COMMAND_LIST_FLAGS, REFIID, void**);
 	using PFN_D3D12Device4_CreateProtectedResourceSession = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device4*, const D3D12_PROTECTED_RESOURCE_SESSION_DESC*, REFIID, void**);
@@ -123,25 +123,25 @@ namespace directhook::d3d12
 
 	using PFN_D3D12Device6_SetBackgroundProcessingMode = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device6*, D3D12_BACKGROUND_PROCESSING_MODE, D3D12_MEASUREMENTS_ACTION, HANDLE, BOOL*);
 
-	using PFN_D3D12Device7_AddToStateObject = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device7*, const D3D12_STATE_OBJECT_CONFIG*, ID3D12StateObject*, UINT, const D3D12_STATE_SUBOBJECT*); 
+	using PFN_D3D12Device7_AddToStateObject = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device7*, const D3D12_STATE_OBJECT_DESC*, ID3D12StateObject*, REFIID, void**);
 	using PFN_D3D12Device7_CreateProtectedResourceSession1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device7*, const D3D12_PROTECTED_RESOURCE_SESSION_DESC1*, REFIID, void**);
 
-	using PFN_D3D12Device8_GetResourceAllocationInfo2 = void(STDMETHODCALLTYPE*)(ID3D12Device8*, UINT, UINT, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_ALLOCATION_INFO*, D3D12_RESOURCE_ALLOCATION_INFO1*); 
+	using PFN_D3D12Device8_GetResourceAllocationInfo2 = D3D12_RESOURCE_ALLOCATION_INFO(STDMETHODCALLTYPE*)(ID3D12Device8*, UINT, UINT, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_ALLOCATION_INFO1*);
 	using PFN_D3D12Device8_CreateCommittedResource2 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device8*, const D3D12_HEAP_PROPERTIES*, D3D12_HEAP_FLAGS, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
 	using PFN_D3D12Device8_CreatePlacedResource1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device8*, ID3D12Heap*, UINT64, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, REFIID, void**);
 	using PFN_D3D12Device8_CreateSamplerFeedbackUnorderedAccessView = void(STDMETHODCALLTYPE*)(ID3D12Device8*, ID3D12Resource*, ID3D12Resource*, D3D12_CPU_DESCRIPTOR_HANDLE);
 	using PFN_D3D12Device8_GetCopyableFootprints1 = void(STDMETHODCALLTYPE*)(ID3D12Device8*, const D3D12_RESOURCE_DESC1*, UINT, UINT, UINT64, D3D12_PLACED_SUBRESOURCE_FOOTPRINT*, UINT*, UINT64*, UINT64*);
 
 #if defined(__ID3D12Device9_INTERFACE_DEFINED__)
-	using PFN_D3D12Device9_CreateShaderCacheSession = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device9*, const D3D12_SHADER_CACHE_SESSION_DESC*, REFIID, void**);
+	using PFN_D3D12Device9_CreateShaderCacheSession = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device9*, const D3D12_SHADER_CACHE_SESSION_DESC*, REFIID, void**); 
 	using PFN_D3D12Device9_ShaderCacheControl = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device9*, D3D12_SHADER_CACHE_KIND_FLAGS, D3D12_SHADER_CACHE_CONTROL_FLAGS);
 	using PFN_D3D12Device9_CreateCommandQueue1 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device9*, const D3D12_COMMAND_QUEUE_DESC*, REFIID, REFIID, void**);
 #endif
 
 #if defined(__ID3D12Device10_INTERFACE_DEFINED__)
-	using PFN_D3D12Device10_CreateCommittedResource3 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, const D3D12_HEAP_PROPERTIES*, D3D12_HEAP_FLAGS, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
-	using PFN_D3D12Device10_CreatePlacedResource2 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, ID3D12Heap*, UINT64, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
-	using PFN_D3D12Device10_CreateReservedResource2 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, const D3D12_RESOURCE_DESC1*, D3D12_RESOURCE_STATES, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, REFIID, void**);
+	using PFN_D3D12Device10_CreateCommittedResource3 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, const D3D12_HEAP_PROPERTIES*, D3D12_HEAP_FLAGS, const D3D12_RESOURCE_DESC1*, D3D12_BARRIER_LAYOUT, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, UINT32, const DXGI_FORMAT*, REFIID, void**); 
+	using PFN_D3D12Device10_CreatePlacedResource2 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, ID3D12Heap*, UINT64, const D3D12_RESOURCE_DESC1*, D3D12_BARRIER_LAYOUT, const D3D12_CLEAR_VALUE*, UINT32, const DXGI_FORMAT*, REFIID, void**); 
+	using PFN_D3D12Device10_CreateReservedResource2 = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device10*, const D3D12_RESOURCE_DESC*, D3D12_BARRIER_LAYOUT, const D3D12_CLEAR_VALUE*, ID3D12ProtectedResourceSession*, UINT32, const DXGI_FORMAT*, REFIID, void**);
 #endif
 
 	using PFN_D3D12CommandQueue_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, REFIID, void**);
@@ -152,9 +152,9 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandQueue_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, REFGUID, const IUnknown*);
 	using PFN_D3D12CommandQueue_SetName = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, LPCWSTR);
 	using PFN_D3D12CommandQueue_GetDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, REFIID, void**);
-	using PFN_D3D12CommandQueue_UpdateTileMappings = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, ID3D12Resource*, UINT, const D3D12_TILED_RESOURCE_COORDINATE*, UINT, const D3D12_TILE_REGION_SIZE*, ID3D12Heap*, UINT, const D3D12_TILE_MAPPING_FLAGS*); 
+	using PFN_D3D12CommandQueue_UpdateTileMappings = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, ID3D12Resource*, UINT, const D3D12_TILED_RESOURCE_COORDINATE*, UINT, const D3D12_TILE_REGION_SIZE*, ID3D12Heap*, UINT, const D3D12_TILE_MAPPING_FLAGS*);
 	using PFN_D3D12CommandQueue_CopyTileMappings = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, ID3D12Resource*, const D3D12_TILED_RESOURCE_COORDINATE*, ID3D12Resource*, const D3D12_TILED_RESOURCE_COORDINATE*, const D3D12_TILE_REGION_SIZE*, D3D12_TILE_MAPPING_FLAGS);
-	using PFN_D3D12CommandQueue_ExecuteCommandLists = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, ID3D12CommandList* const*); 
+	using PFN_D3D12CommandQueue_ExecuteCommandLists = void(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, ID3D12CommandList* const*);
 	using PFN_D3D12CommandQueue_SetMarker = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, const void*, UINT);
 	using PFN_D3D12CommandQueue_BeginEvent = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*, UINT, const void*, UINT);
 	using PFN_D3D12CommandQueue_EndEvent = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandQueue*);
@@ -165,8 +165,8 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandQueue_GetDesc = D3D12_COMMAND_QUEUE_DESC(STDMETHODCALLTYPE*)(ID3D12CommandQueue*);
 
 	using PFN_D3D12CommandAllocator_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFIID, void**);
-	using PFN_D3D12CommandAllocator_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*); // Corrected
-	using PFN_D3D12CommandAllocator_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*); // Corrected
+	using PFN_D3D12CommandAllocator_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*);
+	using PFN_D3D12CommandAllocator_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*);
 	using PFN_D3D12CommandAllocator_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFGUID, UINT*, void*);
 	using PFN_D3D12CommandAllocator_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFGUID, UINT, const void*);
 	using PFN_D3D12CommandAllocator_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFGUID, const IUnknown*);
@@ -174,15 +174,15 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandAllocator_GetDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*, REFIID, void**);
 	using PFN_D3D12CommandAllocator_Reset = HRESULT(STDMETHODCALLTYPE*)(ID3D12CommandAllocator*);
 
-	using PFN_D3D12CommandList_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFIID, void**); 
-	using PFN_D3D12CommandList_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*); 
+	using PFN_D3D12CommandList_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFIID, void**);
+	using PFN_D3D12CommandList_AddRef = ULONG(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
 	using PFN_D3D12CommandList_Release = ULONG(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
-	using PFN_D3D12CommandList_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFGUID, UINT*, void*); 
+	using PFN_D3D12CommandList_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFGUID, UINT*, void*);
 	using PFN_D3D12CommandList_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFGUID, UINT, const void*);
-	using PFN_D3D12CommandList_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFGUID, const IUnknown*); 
-	using PFN_D3D12CommandList_SetName = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, LPCWSTR); 
-	using PFN_D3D12CommandList_GetDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFIID, void**); 
-	using PFN_D3D12CommandList_GetType = D3D12_COMMAND_LIST_TYPE(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*); 
+	using PFN_D3D12CommandList_SetPrivateDataInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFGUID, const IUnknown*);
+	using PFN_D3D12CommandList_SetName = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, LPCWSTR);
+	using PFN_D3D12CommandList_GetDevice = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, REFIID, void**);
+	using PFN_D3D12CommandList_GetType = D3D12_COMMAND_LIST_TYPE(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
 	using PFN_D3D12CommandList_Close = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*);
 	using PFN_D3D12CommandList_Reset = HRESULT(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12CommandAllocator*, ID3D12PipelineState*);
 	using PFN_D3D12CommandList_ClearState = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList*, ID3D12PipelineState*);
@@ -238,7 +238,7 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandList1_AtomicCopyBufferUINT = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, ID3D12Resource*, UINT64, ID3D12Resource*, UINT64, UINT, ID3D12Resource* const*, const D3D12_SUBRESOURCE_RANGE_UINT64*);
 	using PFN_D3D12CommandList1_AtomicCopyBufferUINT64 = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, ID3D12Resource*, UINT64, ID3D12Resource*, UINT64, UINT, ID3D12Resource* const*, const D3D12_SUBRESOURCE_RANGE_UINT64*);
 	using PFN_D3D12CommandList1_OMSetDepthBounds = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, FLOAT, FLOAT);
-	using PFN_D3D12CommandList1_SetSamplePositions = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, UINT, UINT, D3D12_SAMPLE_POSITION*); 
+	using PFN_D3D12CommandList1_SetSamplePositions = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, UINT, UINT, D3D12_SAMPLE_POSITION*);
 	using PFN_D3D12CommandList1_ResolveSubresourceRegion = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, ID3D12Resource*, UINT, UINT, UINT, ID3D12Resource*, UINT, D3D12_RECT*, DXGI_FORMAT, D3D12_RESOLVE_MODE);
 	using PFN_D3D12CommandList1_SetViewInstanceMask = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList1*, UINT);
 
@@ -257,14 +257,14 @@ namespace directhook::d3d12
 	using PFN_D3D12CommandList4_DispatchRays = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList4*, const D3D12_DISPATCH_RAYS_DESC*);
 
 	using PFN_D3D12CommandList5_RSSetShadingRate = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList5*, D3D12_SHADING_RATE, const D3D12_SHADING_RATE_COMBINER*);
-	using PFN_D3D12CommandList5_RSSetShadingRateImage = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList5*, ID3D12Resource*); 
+	using PFN_D3D12CommandList5_RSSetShadingRateImage = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList5*, ID3D12Resource*);
 
 #if defined(__ID3D12GraphicsCommandList6_INTERFACE_DEFINED__)
-	using PFN_D3D12CommandList6_DispatchMesh = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList6*, UINT, UINT, UINT); 
+	using PFN_D3D12CommandList6_DispatchMesh = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList6*, UINT, UINT, UINT);
 #endif
 
 #if defined(__ID3D12GraphicsCommandList7_INTERFACE_DEFINED__)
-	using PFN_D3D12CommandList7_Barrier = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList7*, UINT, const D3D12_BARRIER_GROUP*); 
+	using PFN_D3D12CommandList7_Barrier = void(STDMETHODCALLTYPE*)(ID3D12GraphicsCommandList7*, UINT, const D3D12_BARRIER_GROUP*);
 #endif
 
 	using PFN_D3D12Resource_QueryInterface = HRESULT(STDMETHODCALLTYPE*)(ID3D12Resource*, REFIID, void**);
