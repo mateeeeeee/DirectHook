@@ -23,7 +23,7 @@ namespace directhook
 			{
 				methods.push_back(vTableBase[i]);
 			}
-			for (unsigned int i = 0; i < max(maxInterfaceVTableEntriesCount - interfaceVTableEntriesCount, 0); ++i)
+			for (unsigned int i = 0; i < std::max<unsigned int>(maxInterfaceVTableEntriesCount - interfaceVTableEntriesCount, 0u); ++i)
 			{
 				methods.push_back(nullptr);
 			}
