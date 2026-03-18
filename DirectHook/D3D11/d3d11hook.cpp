@@ -20,7 +20,7 @@ namespace directhook::d3d11
 		ID3D11DeviceContext**);
 
 	template<typename ComT>
-	void SafeRelease(ComT* ptr)
+	void SafeRelease(ComT*& ptr)
 	{
 		if (ptr) ptr->Release();
 		ptr = nullptr;
@@ -120,11 +120,11 @@ namespace directhook::d3d11
 			methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
 		}
 
-		ID3D11Device* device1 = nullptr;
-		ID3D11Device* device2 = nullptr;
-		ID3D11Device* device3 = nullptr;
-		ID3D11Device* device4 = nullptr;
-		ID3D11Device* device5 = nullptr;
+		ID3D11Device1* device1 = nullptr;
+		ID3D11Device2* device2 = nullptr;
+		ID3D11Device3* device3 = nullptr;
+		ID3D11Device4* device4 = nullptr;
+		ID3D11Device5* device5 = nullptr;
 		if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device5))))
 		{
 			methodTable.AddEntries(device5, DEVICE5_ENTRIES, MAX_DEVICE_ENTRIES);

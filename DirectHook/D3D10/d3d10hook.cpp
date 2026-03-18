@@ -114,8 +114,8 @@ namespace directhook::d3d10
 			return DH_Status::Error_GfxApiInitFailed;
 		}
 
-		methodTable.AddEntries(swapChain, 18);
-		methodTable.AddEntries(device, 98);
+		methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
+		methodTable.AddEntries(device, DEVICE_ENTRIES);
 
 		swapChain->Release();
 		swapChain = nullptr;

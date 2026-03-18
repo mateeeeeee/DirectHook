@@ -82,7 +82,7 @@ namespace directhook::d3d10
 	using PFN_D3D10Device_OMGetRenderTargets = void (STDMETHODCALLTYPE*)(ID3D10Device*, UINT, ID3D10RenderTargetView**, ID3D10DepthStencilView**);
 	using PFN_D3D10Device_OMGetBlendState = void (STDMETHODCALLTYPE*)(ID3D10Device*, ID3D10BlendState**, FLOAT[4], UINT*);
 	using PFN_D3D10Device_OMGetDepthStencilState = void (STDMETHODCALLTYPE*)(ID3D10Device*, ID3D10DepthStencilState**, UINT*);
-	using PFN_D3D10Device_SOGetTargets = void (STDMETHODCALLTYPE*)(ID3D10Device*, UINT, ID3D10Buffer**);
+	using PFN_D3D10Device_SOGetTargets = void (STDMETHODCALLTYPE*)(ID3D10Device*, UINT, ID3D10Buffer**, UINT*);
 	using PFN_D3D10Device_RSGetState = void (STDMETHODCALLTYPE*)(ID3D10Device*, ID3D10RasterizerState**);
 	using PFN_D3D10Device_RSGetViewports = void (STDMETHODCALLTYPE*)(ID3D10Device*, UINT*, D3D10_VIEWPORT*);
 	using PFN_D3D10Device_RSGetScissorRects = void (STDMETHODCALLTYPE*)(ID3D10Device*, UINT*, D3D10_RECT*);
@@ -104,6 +104,7 @@ namespace directhook::d3d10
 	using PFN_D3D10Device_CreateInputLayout = HRESULT(STDMETHODCALLTYPE*)(ID3D10Device*, const D3D10_INPUT_ELEMENT_DESC*, UINT, const void*, SIZE_T, ID3D10InputLayout**);
 	using PFN_D3D10Device_CreateVertexShader = HRESULT(STDMETHODCALLTYPE*)(ID3D10Device*, const void*, SIZE_T, ID3D10VertexShader**);
 	using PFN_D3D10Device_CreateGeometryShader = HRESULT(STDMETHODCALLTYPE*)(ID3D10Device*, const void*, SIZE_T, ID3D10GeometryShader**);
+	using PFN_D3D10Device_CreateGeometryShaderWithStreamOutput = HRESULT(STDMETHODCALLTYPE*)(ID3D10Device*, const void*, SIZE_T, const D3D10_SO_DECLARATION_ENTRY*, UINT, UINT, ID3D10GeometryShader**);
 	using PFN_D3D10Device_CreatePixelShader = HRESULT(STDMETHODCALLTYPE*)(ID3D10Device*, const void*, SIZE_T, ID3D10PixelShader**);
 	using PFN_D3D10Device_CreateBlendState = HRESULT(STDMETHODCALLTYPE*)(ID3D10Device*, const D3D10_BLEND_DESC*, ID3D10BlendState**);
 	using PFN_D3D10Device_CreateDepthStencilState = HRESULT(STDMETHODCALLTYPE*)(ID3D10Device*, const D3D10_DEPTH_STENCIL_DESC*, ID3D10DepthStencilState**);

@@ -32,7 +32,7 @@ namespace directhook::d3d11
 	using PFN_DXGISwapChain1_GetRestrictToOutput = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, IDXGIOutput**);
 	using PFN_DXGISwapChain1_GetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION*);
 	using PFN_DXGISwapChain1_IsTemporaryMonoSupported = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, BOOL*);
-	using PFN_DXGISwapChain1_Present1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, UINT, const DXGI_PRESENT_PARAMETERS*);
+	using PFN_DXGISwapChain1_Present1 = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, UINT, UINT, const DXGI_PRESENT_PARAMETERS*);
 	using PFN_DXGISwapChain1_SetBackgroundColor = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, const DXGI_RGBA*);
 	using PFN_DXGISwapChain1_SetRotation = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain1*, DXGI_MODE_ROTATION);
 
@@ -80,8 +80,8 @@ namespace directhook::d3d11
 	using PFN_D3D11Device_OpenSharedResource = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, HANDLE, REFIID, void**);
 	using PFN_D3D11Device_CheckFormatSupport = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, DXGI_FORMAT, UINT*);
 	using PFN_D3D11Device_CheckMultisampleQualityLevels = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, DXGI_FORMAT, UINT, UINT*);
-	using PFN_D3D11Device_CheckCounterInfo = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, D3D11_COUNTER_INFO*);
-	using PFN_D3D11Device_CheckCounter = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, D3D11_COUNTER, UINT*, UINT*);
+	using PFN_D3D11Device_CheckCounterInfo = void(STDMETHODCALLTYPE*)(ID3D11Device*, D3D11_COUNTER_INFO*);
+	using PFN_D3D11Device_CheckCounter = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, const D3D11_COUNTER_DESC*, D3D11_COUNTER_TYPE*, UINT*, LPSTR, UINT*, LPSTR, UINT*, LPSTR, UINT*);
 	using PFN_D3D11Device_CheckFeatureSupport = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, D3D11_FEATURE, void*, UINT);
 	using PFN_D3D11Device_GetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, REFGUID, UINT*, void*);
 	using PFN_D3D11Device_SetPrivateData = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, REFGUID, UINT, const void*);
@@ -90,18 +90,18 @@ namespace directhook::d3d11
 	using PFN_D3D11Device_GetCreationFlags = UINT(STDMETHODCALLTYPE*)(ID3D11Device*);
 	using PFN_D3D11Device_GetDeviceRemovedReason = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*);
 	using PFN_D3D11Device_GetImmediateContext = void(STDMETHODCALLTYPE*)(ID3D11Device*, ID3D11DeviceContext**);
-	using PFN_D3D11Device_SetExceptionMode = void(STDMETHODCALLTYPE*)(ID3D11Device*, UINT);
+	using PFN_D3D11Device_SetExceptionMode = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device*, UINT);
 	using PFN_D3D11Device_GetExceptionMode = UINT(STDMETHODCALLTYPE*)(ID3D11Device*);
 
 	using PFN_D3D11Device1_CreateBlendState1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, const D3D11_BLEND_DESC1*, ID3D11BlendState1**);
 	using PFN_D3D11Device1_CreateDeferredContext1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, UINT, ID3D11DeviceContext1**);
-	using PFN_D3D11Device1_CreateDeviceContextState = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, UINT, const D3D_FEATURE_LEVEL*, UINT, UINT, D3D_FEATURE_LEVEL*, UINT*, ID3DDeviceContextState**);
+	using PFN_D3D11Device1_CreateDeviceContextState = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, UINT, const D3D_FEATURE_LEVEL*, UINT, UINT, REFIID, D3D_FEATURE_LEVEL*, ID3DDeviceContextState**);
 	using PFN_D3D11Device1_CreateRasterizerState1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, const D3D11_RASTERIZER_DESC1*, ID3D11RasterizerState1**);
 	using PFN_D3D11Device1_GetImmediateContext1 = void (STDMETHODCALLTYPE*)(ID3D11Device1*, ID3D11DeviceContext1**);
 	using PFN_D3D11Device1_OpenSharedResource1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, HANDLE, REFIID, void**);
 	using PFN_D3D11Device1_OpenSharedResourceByName = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device1*, LPCWSTR, DWORD, REFIID, void**);
 
-	using PFN_D3D11Device2_CheckMultisampleQualityLevels1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device2*, DXGI_FORMAT, UINT, UINT*);
+	using PFN_D3D11Device2_CheckMultisampleQualityLevels1 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device2*, DXGI_FORMAT, UINT, UINT, UINT*);
 	using PFN_D3D11Device2_CreateDeferredContext2 = HRESULT(STDMETHODCALLTYPE*)(ID3D11Device2*, UINT, ID3D11DeviceContext2**);
 	using PFN_D3D11Device2_GetImmediateContext2 = void (STDMETHODCALLTYPE*)(ID3D11Device2*, ID3D11DeviceContext2**);
 	using PFN_D3D11Device2_GetResourceTiling = void (STDMETHODCALLTYPE*)(ID3D11Device2*, ID3D11Resource*, UINT*, D3D11_PACKED_MIP_DESC*, D3D11_TILE_SHAPE*, UINT*, UINT*);

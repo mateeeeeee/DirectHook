@@ -72,6 +72,13 @@ namespace directhook::ddraw
 		methodTable.AddEntries(Main, SURFACE_ENTRIES);
 		methodTable.AddEntries(Clipper, CLIPPER_ENTRIES);
 
+		Clipper->Release();
+		Main->Release();
+		Instance->Release();
+
+		DestroyWindow(hwnd);
+		UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
+
 		return DH_Status::Success;
 	}
 

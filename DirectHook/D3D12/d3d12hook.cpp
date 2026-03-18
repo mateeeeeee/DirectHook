@@ -6,7 +6,7 @@
 namespace directhook::d3d12
 {
     template<typename ObjectT>
-    void SafeRelease(ObjectT* ptr)
+    void SafeRelease(ObjectT*& ptr)
     {
         if (ptr) ptr->Release();
         ptr = nullptr;
@@ -251,9 +251,19 @@ namespace directhook::d3d12
 			ID3D12GraphicsCommandList3* commandList3 = nullptr;
 			ID3D12GraphicsCommandList4* commandList4 = nullptr;
 			ID3D12GraphicsCommandList5* commandList5 = nullptr;
-			if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList3))))
+			if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList5))))
 			{
-				methodTable.AddEntries(commandList2, LIST3_ENTRIES, MAX_LIST_ENTRIES);
+				methodTable.AddEntries(commandList5, LIST5_ENTRIES, MAX_LIST_ENTRIES);
+				SafeRelease(commandList5);
+			}
+			else if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList4))))
+			{
+				methodTable.AddEntries(commandList4, LIST4_ENTRIES, MAX_LIST_ENTRIES);
+				SafeRelease(commandList4);
+			}
+			else if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList3))))
+			{
+				methodTable.AddEntries(commandList3, LIST3_ENTRIES, MAX_LIST_ENTRIES);
 				SafeRelease(commandList3);
 			}
 			else if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList2))))
