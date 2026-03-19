@@ -92,7 +92,7 @@ namespace directhook::d3d12
 	using PFN_D3D12Device_CreateQueryHeap = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, const D3D12_QUERY_HEAP_DESC*, REFIID, void**);
 	using PFN_D3D12Device_SetStablePowerState = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, BOOL);
 	using PFN_D3D12Device_CreateCommandSignature = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device*, const D3D12_COMMAND_SIGNATURE_DESC*, ID3D12RootSignature*, REFIID, void**);
-	using PFN_D3D12Device_GetResourceTiling = void(STDMETHODCALLTYPE*)(ID3D12Device*, ID3D12Resource*, UINT*, D3D12_PACKED_MIP_DESC*, D3D12_TILE_SHAPE*, UINT*, UINT, D3D12_SUBRESOURCE_TILING*);
+	using PFN_D3D12Device_GetResourceTiling = void(STDMETHODCALLTYPE*)(ID3D12Device*, ID3D12Resource*, UINT*, D3D12_PACKED_MIP_INFO*, D3D12_TILE_SHAPE*, UINT*, UINT, D3D12_SUBRESOURCE_TILING*);
 	using PFN_D3D12Device_GetAdapterLuid = LUID(STDMETHODCALLTYPE*)(ID3D12Device*);
 
 	using PFN_D3D12Device1_CreatePipelineLibrary = HRESULT(STDMETHODCALLTYPE*)(ID3D12Device1*, const void*, SIZE_T, REFIID, void**);
