@@ -186,7 +186,7 @@ namespace directhook::d3d12
 #endif
 #if defined(__ID3D12Device10_INTERFACE_DEFINED__)
 		ID3D12Device10* device10 = nullptr;
-		if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device10))))
+		if (!deviceEntriesAdded && SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device10))))
 		{
 			methodTable.AddEntries(device10, DEVICE10_ENTRIES, MAX_DEVICE_ENTRIES);
 			SafeRelease(device10);
@@ -291,7 +291,7 @@ namespace directhook::d3d12
 #endif
 #if defined(__ID3D12GraphicsCommandList7_INTERFACE_DEFINED__)
 		ID3D12GraphicsCommandList7* commandList7 = nullptr;
-		if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList7))))
+		if (!listEntriesAdded && SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList7))))
 		{
 			methodTable.AddEntries(commandList7, LIST7_ENTRIES, MAX_LIST_ENTRIES);
 			SafeRelease(commandList7);
