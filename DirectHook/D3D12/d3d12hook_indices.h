@@ -109,6 +109,18 @@ namespace directhook::d3d12
 		Device10_CreateReservedResource2,
 		Device10_LastEntry = Device10_CreateReservedResource2,
 
+		Device11_CreateSampler2,
+		Device11_LastEntry = Device11_CreateSampler2,
+
+		Device12_GetResourceAllocationInfo3,
+		Device12_LastEntry = Device12_GetResourceAllocationInfo3,
+
+		Device13_OpenExistingHeapFromAddress1,
+		Device13_LastEntry = Device13_OpenExistingHeapFromAddress1,
+
+		Device14_CreateRootSignatureFromSubobjectInLibrary,
+		Device14_LastEntry = Device14_CreateRootSignatureFromSubobjectInLibrary,
+
 		Queue_FirstEntry,
 		Queue_QueryInterface = Queue_FirstEntry,
 		Queue_AddRef,
@@ -241,6 +253,17 @@ namespace directhook::d3d12
 		List7_Barrier,
 		List7_LastEntry = List7_Barrier,
 
+		List8_OMSetFrontAndBackStencilRef,
+		List8_LastEntry = List8_OMSetFrontAndBackStencilRef,
+
+		List9_RSSetDepthBias,
+		List9_IASetIndexBufferStripCutValue,
+		List9_LastEntry = List9_IASetIndexBufferStripCutValue,
+
+		List10_SetProgram,
+		List10_DispatchGraph,
+		List10_LastEntry = List10_DispatchGraph,
+
 		SwapChain_FirstEntry,
 		SwapChain_QueryInterface = SwapChain_FirstEntry,
 		SwapChain_AddRef,
@@ -343,7 +366,11 @@ namespace directhook::d3d12
 	static constexpr int DEVICE8_ENTRIES = ENTRY_COUNT_(Device, 8);
 	static constexpr int DEVICE9_ENTRIES = ENTRY_COUNT_(Device, 9);
 	static constexpr int DEVICE10_ENTRIES = ENTRY_COUNT_(Device, 10);
-	static constexpr int MAX_DEVICE_ENTRIES = DEVICE10_ENTRIES;
+	static constexpr int DEVICE11_ENTRIES = ENTRY_COUNT_(Device, 11);
+	static constexpr int DEVICE12_ENTRIES = ENTRY_COUNT_(Device, 12);
+	static constexpr int DEVICE13_ENTRIES = ENTRY_COUNT_(Device, 13);
+	static constexpr int DEVICE14_ENTRIES = ENTRY_COUNT_(Device, 14);
+	static constexpr int MAX_DEVICE_ENTRIES = DEVICE14_ENTRIES;
 
 	static constexpr int QUEUE_ENTRIES  = ENTRY_COUNT(Queue);
 	static constexpr int ALLOCATOR_ENTRIES  = ENTRY_COUNT(Allocator);
@@ -356,7 +383,10 @@ namespace directhook::d3d12
 	static constexpr int LIST5_ENTRIES = ENTRY_COUNT_(List, 5);
 	static constexpr int LIST6_ENTRIES = ENTRY_COUNT_(List, 6);
 	static constexpr int LIST7_ENTRIES = ENTRY_COUNT_(List, 7);
-	static constexpr int MAX_LIST_ENTRIES = LIST7_ENTRIES;
+	static constexpr int LIST8_ENTRIES = ENTRY_COUNT_(List, 8);
+	static constexpr int LIST9_ENTRIES = ENTRY_COUNT_(List, 9);
+	static constexpr int LIST10_ENTRIES = ENTRY_COUNT_(List, 10);
+	static constexpr int MAX_LIST_ENTRIES = LIST10_ENTRIES;
 
 	static constexpr int SWAPCHAIN_ENTRIES  = ENTRY_COUNT(SwapChain);
     static constexpr int SWAPCHAIN1_ENTRIES = ENTRY_COUNT_(SwapChain, 1);

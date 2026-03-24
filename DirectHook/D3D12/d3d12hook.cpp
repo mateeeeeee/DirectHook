@@ -148,6 +148,42 @@ namespace directhook::d3d12
 		}
 
 		bool deviceEntriesAdded = false;
+#if defined(__ID3D12Device14_INTERFACE_DEFINED__)
+		ID3D12Device14* device14 = nullptr;
+		if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device14))))
+		{
+			methodTable.AddEntries(device14, DEVICE14_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device14);
+			deviceEntriesAdded = true;
+		}
+#endif
+#if defined(__ID3D12Device13_INTERFACE_DEFINED__)
+		ID3D12Device13* device13 = nullptr;
+		if (!deviceEntriesAdded && SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device13))))
+		{
+			methodTable.AddEntries(device13, DEVICE13_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device13);
+			deviceEntriesAdded = true;
+		}
+#endif
+#if defined(__ID3D12Device12_INTERFACE_DEFINED__)
+		ID3D12Device12* device12 = nullptr;
+		if (!deviceEntriesAdded && SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device12))))
+		{
+			methodTable.AddEntries(device12, DEVICE12_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device12);
+			deviceEntriesAdded = true;
+		}
+#endif
+#if defined(__ID3D12Device11_INTERFACE_DEFINED__)
+		ID3D12Device11* device11 = nullptr;
+		if (!deviceEntriesAdded && SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device11))))
+		{
+			methodTable.AddEntries(device11, DEVICE11_ENTRIES, MAX_DEVICE_ENTRIES);
+			SafeRelease(device11);
+			deviceEntriesAdded = true;
+		}
+#endif
 #if defined(__ID3D12Device10_INTERFACE_DEFINED__)
 		ID3D12Device10* device10 = nullptr;
 		if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device10))))
@@ -226,6 +262,33 @@ namespace directhook::d3d12
 		methodTable.AddEntries(commandAllocator, ALLOCATOR_ENTRIES);
 
 		bool listEntriesAdded = false;
+#if defined(__ID3D12GraphicsCommandList10_INTERFACE_DEFINED__)
+		ID3D12GraphicsCommandList10* commandList10 = nullptr;
+		if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList10))))
+		{
+			methodTable.AddEntries(commandList10, LIST10_ENTRIES, MAX_LIST_ENTRIES);
+			SafeRelease(commandList10);
+			listEntriesAdded = true;
+		}
+#endif
+#if defined(__ID3D12GraphicsCommandList9_INTERFACE_DEFINED__)
+		ID3D12GraphicsCommandList9* commandList9 = nullptr;
+		if (!listEntriesAdded && SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList9))))
+		{
+			methodTable.AddEntries(commandList9, LIST9_ENTRIES, MAX_LIST_ENTRIES);
+			SafeRelease(commandList9);
+			listEntriesAdded = true;
+		}
+#endif
+#if defined(__ID3D12GraphicsCommandList8_INTERFACE_DEFINED__)
+		ID3D12GraphicsCommandList8* commandList8 = nullptr;
+		if (!listEntriesAdded && SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList8))))
+		{
+			methodTable.AddEntries(commandList8, LIST8_ENTRIES, MAX_LIST_ENTRIES);
+			SafeRelease(commandList8);
+			listEntriesAdded = true;
+		}
+#endif
 #if defined(__ID3D12GraphicsCommandList7_INTERFACE_DEFINED__)
 		ID3D12GraphicsCommandList7* commandList7 = nullptr;
 		if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList7))))
