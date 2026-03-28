@@ -42,42 +42,36 @@ The following example demonstrates how to use DirectHook to intercept the `Prese
 
 1. **Hook Indices**: Enumerated constants to specify the function to intercept:
 ```cpp
-namespace directhook::d3d11
-{
-    enum {
-       // Other indices...
-       SwapChain_Present = 8, // Index for Present call
-       // Other indices...
-    };
-}
+enum {
+    // Other indices...
+    D3D11_SwapChain_Present,    // Index for Present call
+    // Other indices...
+};
 ```
 2. **Function Typedefs**: Aliases to simplify function pointer declarations:
 ```cpp
-namespace directhook::d3d11 {
-    // Other typedefs...
-    using PFN_DXGISwapChain_Present = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT, UINT);
-    // Other typedefs...
-}
+// Other typedefs...
+using PFN_D3D11_DXGISwapChain_Present = HRESULT(STDMETHODCALLTYPE*)(IDXGISwapChain*, UINT, UINT);
+// Other typedefs...
 ```
 3. **Hook Implementation**: Intercept `Present` call to add custom behavior.
 ```cpp
 #include "directhook.h"
-using namespace directhook;
 
-static d3d11::PFN_DXGISwapChain_Present dxgiPresent = nullptr;
+static PFN_D3D11_DXGISwapChain_Present g_pfnDxgiPresent = nullptr;
 
-HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags) {
-    static BOOL called = FALSE;
-    if (!called) {
+HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags) {
+    static BOOL bCalled = FALSE;
+    if (!bCalled) {
        MessageBoxA(0, "Called MyPresent!", "DirectHook", MB_OK);
-       called = TRUE;
+       bCalled = TRUE;
     }
-    return dxgiPresent(SwapChain, SyncInterval, Flags);
+    return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
 }
 
 INT D3D11HookThread() {
-    if (DH_Status dh = DH_Initialize(); dh == Status::Success) {
-       Hook(d3d11::SwapChain_Present, dxgiPresent, MyPresent);
+    if (DH_Initialize() == DH_STATUS_SUCCESS) {
+       DH_Hook(D3D11_SwapChain_Present, g_pfnDxgiPresent, MyPresent);
     }
     return 0;
 }

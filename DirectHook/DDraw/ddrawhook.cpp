@@ -1,47 +1,50 @@
 #define DIRECTDRAW_VERSION 0x0700
 #include <ddraw.h>
 #include "ddrawhook.h"
-#include "../method_table.h"
 
 #pragma comment(lib, "ddraw.lib")
 #pragma comment(lib, "dxguid.lib")
 
-namespace directhook::ddraw
+#define WINDOW_CLASS_NAME L"DirectHook_DDraw"
+#define WINDOW_TITLE_NAME L"DirectHook_DDraw"
+
+DH_STATUS WINAPI DH_DDRAW_Initialize(PDH_METHOD_TABLE pTable)
 {
-	#define WINDOW_CLASS_NAME L"DirectDraw"
-	#define WINDOW_TITLE_NAME L"DirectDraw"
+	WNDCLASS wc{};
+	wc.lpfnWndProc = DefWindowProc;
+	wc.hInstance = GetModuleHandle(nullptr);
+	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wc.lpszClassName = WINDOW_CLASS_NAME;
 
-	DH_Status Initialize(MethodTable& methodTable)
+	if (!RegisterClass(&wc))
 	{
-		WNDCLASS wc{};
-		wc.lpfnWndProc = DefWindowProc;
-		wc.hInstance = GetModuleHandle(nullptr);
-		wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-		wc.lpszClassName = WINDOW_CLASS_NAME;
+		return DH_STATUS_ERROR_GFX_API_INIT_FAILED;
+	}
 
-		if (!RegisterClass(&wc)) { return DH_Status::Error_GfxApiInitFailed; }
+	HWND hwnd = CreateWindow(
+		wc.lpszClassName,
+		WINDOW_TITLE_NAME,
+		WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+		CW_USEDEFAULT, CW_USEDEFAULT, 100, 100, NULL, NULL, wc.hInstance, NULL);
 
-		HWND hwnd = CreateWindow(
-			wc.lpszClassName,
-			WINDOW_TITLE_NAME,
-			WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-			CW_USEDEFAULT, CW_USEDEFAULT, 100, 100, NULL, NULL, wc.hInstance, NULL);
+	if (hwnd == nullptr)
+	{
+		UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
+		return DH_STATUS_ERROR_GFX_API_INIT_FAILED;
+	}
 
-		if (hwnd == nullptr) 
-		{ 
-			UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance); return DH_Status::Error_GfxApiInitFailed; 
-		}
+	IDirectDraw7* pInstance = NULL;
+	IDirectDrawSurface7* pSurface = NULL;
+	IDirectDrawClipper* pClipper = NULL;
+	DH_STATUS status = DH_STATUS_ERROR_GFX_API_INIT_FAILED;
 
-		IDirectDraw7* Instance = NULL;
-		if (DirectDrawCreateEx(NULL, (void**)&Instance, IID_IDirectDraw7, NULL) != DD_OK)
-		{
-			DestroyWindow(hwnd);
-			UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
-		}
-		Instance->SetCooperativeLevel(hwnd, DDSCL_NORMAL);
+	if (DirectDrawCreateEx(NULL, (LPVOID*)&pInstance, IID_IDirectDraw7, NULL) != DD_OK)
+	{
+		goto cleanup;
+	}
+	pInstance->SetCooperativeLevel(hwnd, DDSCL_NORMAL);
 
-		IDirectDrawSurface7* Main = NULL;
+	{
 		DDSURFACEDESC2 desc;
 		ZeroMemory(&desc, sizeof(DDSURFACEDESC2));
 		desc.dwSize = sizeof(DDSURFACEDESC2);
@@ -50,37 +53,28 @@ namespace directhook::ddraw
 		desc.dwHeight = 100;
 		desc.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
 
-		if (HRESULT hr = Instance->CreateSurface(&desc, &Main, NULL); hr != DD_OK)
+		if (pInstance->CreateSurface(&desc, &pSurface, NULL) != DD_OK)
 		{
-			Instance->Release();
-			DestroyWindow(hwnd);
-			UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		IDirectDrawClipper* Clipper = NULL;
-		if (Instance->CreateClipper(0, &Clipper, NULL) != DD_OK)
+		if (pInstance->CreateClipper(0, &pClipper, NULL) != DD_OK)
 		{
-			Instance->Release();
-			Main->Release();
-			DestroyWindow(hwnd);
-			UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		methodTable.AddEntries(Instance, DEVICE_ENTRIES);
-		methodTable.AddEntries(Main, SURFACE_ENTRIES);
-		methodTable.AddEntries(Clipper, CLIPPER_ENTRIES);
+		DH_MethodTableAddEntries(pTable, pInstance, DDRAW_DEVICE_ENTRIES);
+		DH_MethodTableAddEntries(pTable, pSurface, DDRAW_SURFACE_ENTRIES);
+		DH_MethodTableAddEntries(pTable, pClipper, DDRAW_CLIPPER_ENTRIES);
 
-		Clipper->Release();
-		Main->Release();
-		Instance->Release();
-
-		DestroyWindow(hwnd);
-		UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
-
-		return DH_Status::Success;
+		status = DH_STATUS_SUCCESS;
 	}
 
+cleanup:
+	if (pClipper) pClipper->Release();
+	if (pSurface) pSurface->Release();
+	if (pInstance) pInstance->Release();
+	DestroyWindow(hwnd);
+	UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
+	return status;
 }
-

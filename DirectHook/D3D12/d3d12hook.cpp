@@ -1,86 +1,161 @@
 #include <dxgi.h>
 #include <d3d12.h>
 #include "d3d12hook.h"
-#include "../method_table.h"
+#include "com_utils.h"
 
-namespace directhook::d3d12
+using PFN_CreateDXGIFactory = HRESULT(STDMETHODCALLTYPE*)(REFIID, void**);
+using PFN_CreateD3D12Device = HRESULT(STDMETHODCALLTYPE*)(IUnknown*, D3D_FEATURE_LEVEL, REFIID, void**);
+
+template <typename T, typename BaseT>
+static BOOL TryQIAddEntries(PDH_METHOD_TABLE pTable, BaseT* pBase, UINT cEntries, UINT cMaxEntries)
 {
-    template<typename ObjectT>
-    void SafeRelease(ObjectT*& ptr)
-    {
-        if (ptr) ptr->Release();
-        ptr = nullptr;
-    }
-
-	using PFN_CreateDXGIFactory = HRESULT(STDMETHODCALLTYPE*)(REFIID, void**);
-	using PFN_CreateD3D12Device = HRESULT(STDMETHODCALLTYPE*)(IUnknown*, D3D_FEATURE_LEVEL, REFIID, void**);
-
-	DH_Status Initialize(MethodTable& methodTable)
+	T* p = nullptr;
+	if (FAILED(pBase->QueryInterface(IID_PPV_ARGS(&p)))) 
 	{
-		WNDCLASSEX windowClass;
-		windowClass.cbSize = sizeof(WNDCLASSEX);
-		windowClass.style = CS_HREDRAW | CS_VREDRAW;
-		windowClass.lpfnWndProc = DefWindowProc;
-		windowClass.cbClsExtra = 0;
-		windowClass.cbWndExtra = 0;
-		windowClass.hInstance = GetModuleHandle(nullptr);
-		windowClass.hIcon = nullptr;
-		windowClass.hCursor = nullptr;
-		windowClass.hbrBackground = nullptr;
-		windowClass.lpszMenuName = nullptr;
-		windowClass.lpszClassName = L"DirectHook";
-		windowClass.hIconSm = nullptr;
+		return FALSE;
+	}
+	DH_MethodTableAddEntries(pTable, p, cEntries, cMaxEntries);
+	SafeRelease(p);
+	return TRUE;
+}
 
-		::RegisterClassEx(&windowClass);
-		HWND window = ::CreateWindow(windowClass.lpszClassName, L"Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, windowClass.hInstance, nullptr);
+#define DH_TRY(Type, Entries, Max) \
+	do { if (TryQIAddEntries<Type>(pTable, pBase, Entries, Max)) return; } while (0)
 
-		HMODULE libDXGI = ::GetModuleHandle(L"dxgi.dll");
-		HMODULE libD3D12 = ::GetModuleHandle(L"d3d12.dll");
-		if (libDXGI == nullptr || libD3D12 == nullptr)
+static void AddDeviceEntries(PDH_METHOD_TABLE pTable, ID3D12Device* pBase)
+{
+#if defined(__ID3D12Device14_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12Device14, D3D12_DEVICE14_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+#endif
+#if defined(__ID3D12Device13_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12Device13, D3D12_DEVICE13_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+#endif
+#if defined(__ID3D12Device12_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12Device12, D3D12_DEVICE12_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+#endif
+#if defined(__ID3D12Device11_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12Device11, D3D12_DEVICE11_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+#endif
+#if defined(__ID3D12Device10_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12Device10, D3D12_DEVICE10_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+#endif
+#if defined(__ID3D12Device9_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12Device9, D3D12_DEVICE9_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+#endif
+	DH_TRY(ID3D12Device8, D3D12_DEVICE8_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+	DH_TRY(ID3D12Device7, D3D12_DEVICE7_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+	DH_TRY(ID3D12Device6, D3D12_DEVICE6_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+	DH_TRY(ID3D12Device5, D3D12_DEVICE5_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+	DH_TRY(ID3D12Device4, D3D12_DEVICE4_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+	DH_TRY(ID3D12Device3, D3D12_DEVICE3_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+	DH_TRY(ID3D12Device2, D3D12_DEVICE2_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+	DH_TRY(ID3D12Device1, D3D12_DEVICE1_ENTRIES, D3D12_MAX_DEVICE_ENTRIES);
+	DH_MethodTableAddEntries(pTable, pBase, D3D12_DEVICE_ENTRIES);
+}
+
+static void AddCommandListEntries(PDH_METHOD_TABLE pTable, ID3D12GraphicsCommandList* pBase)
+{
+#if defined(__ID3D12GraphicsCommandList10_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12GraphicsCommandList10, D3D12_LIST10_ENTRIES, D3D12_MAX_LIST_ENTRIES);
+#endif
+#if defined(__ID3D12GraphicsCommandList9_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12GraphicsCommandList9, D3D12_LIST9_ENTRIES, D3D12_MAX_LIST_ENTRIES);
+#endif
+#if defined(__ID3D12GraphicsCommandList8_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12GraphicsCommandList8, D3D12_LIST8_ENTRIES, D3D12_MAX_LIST_ENTRIES);
+#endif
+#if defined(__ID3D12GraphicsCommandList7_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12GraphicsCommandList7, D3D12_LIST7_ENTRIES, D3D12_MAX_LIST_ENTRIES);
+#endif
+#if defined(__ID3D12GraphicsCommandList6_INTERFACE_DEFINED__)
+	DH_TRY(ID3D12GraphicsCommandList6, D3D12_LIST6_ENTRIES, D3D12_MAX_LIST_ENTRIES);
+#endif
+	DH_TRY(ID3D12GraphicsCommandList5, D3D12_LIST5_ENTRIES, D3D12_MAX_LIST_ENTRIES);
+	DH_TRY(ID3D12GraphicsCommandList4, D3D12_LIST4_ENTRIES, D3D12_MAX_LIST_ENTRIES);
+	DH_TRY(ID3D12GraphicsCommandList3, D3D12_LIST3_ENTRIES, D3D12_MAX_LIST_ENTRIES);
+	DH_TRY(ID3D12GraphicsCommandList2, D3D12_LIST2_ENTRIES, D3D12_MAX_LIST_ENTRIES);
+	DH_TRY(ID3D12GraphicsCommandList1, D3D12_LIST1_ENTRIES, D3D12_MAX_LIST_ENTRIES);
+	DH_MethodTableAddEntries(pTable, pBase, D3D12_LIST_ENTRIES);
+}
+
+static void AddSwapChainEntries(PDH_METHOD_TABLE pTable, IDXGISwapChain* pBase)
+{
+	DH_TRY(IDXGISwapChain4, D3D12_SWAPCHAIN4_ENTRIES, D3D12_MAX_SWAPCHAIN_ENTRIES);
+	DH_TRY(IDXGISwapChain3, D3D12_SWAPCHAIN3_ENTRIES, D3D12_MAX_SWAPCHAIN_ENTRIES);
+	DH_TRY(IDXGISwapChain2, D3D12_SWAPCHAIN2_ENTRIES, D3D12_MAX_SWAPCHAIN_ENTRIES);
+	DH_TRY(IDXGISwapChain1, D3D12_SWAPCHAIN1_ENTRIES, D3D12_MAX_SWAPCHAIN_ENTRIES);
+	DH_MethodTableAddEntries(pTable, pBase, D3D12_SWAPCHAIN_ENTRIES, D3D12_MAX_SWAPCHAIN_ENTRIES);
+}
+
+static void AddResourceEntries(PDH_METHOD_TABLE pTable, ID3D12Resource* pBase)
+{
+	DH_TRY(ID3D12Resource2, D3D12_RESOURCE2_ENTRIES, D3D12_MAX_RESOURCE_ENTRIES);
+	DH_TRY(ID3D12Resource1, D3D12_RESOURCE1_ENTRIES, D3D12_MAX_RESOURCE_ENTRIES);
+	DH_MethodTableAddEntries(pTable, pBase, D3D12_RESOURCE_ENTRIES, D3D12_MAX_RESOURCE_ENTRIES);
+}
+
+static void AddFenceEntries(PDH_METHOD_TABLE pTable, ID3D12Fence* pBase)
+{
+	DH_TRY(ID3D12Fence1, D3D12_FENCE1_ENTRIES, D3D12_MAX_FENCE_ENTRIES);
+	DH_MethodTableAddEntries(pTable, pBase, D3D12_FENCE_ENTRIES, D3D12_MAX_FENCE_ENTRIES);
+}
+
+DH_STATUS WINAPI DH_D3D12_Initialize(PDH_METHOD_TABLE pTable)
+{
+	WNDCLASSEX windowClass{};
+	windowClass.cbSize = sizeof(WNDCLASSEX);
+	windowClass.style = CS_HREDRAW | CS_VREDRAW;
+	windowClass.lpfnWndProc = DefWindowProc;
+	windowClass.hInstance = GetModuleHandle(nullptr);
+	windowClass.lpszClassName = L"DirectHook_D3D12";
+
+	::RegisterClassEx(&windowClass);
+	HWND hWnd = ::CreateWindow(windowClass.lpszClassName, L"Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, windowClass.hInstance, nullptr);
+
+	IDXGIFactory* pFactory = nullptr;
+	IDXGIAdapter* pAdapter = nullptr;
+	ID3D12Device* pDevice = nullptr;
+	ID3D12CommandQueue* pQueue = nullptr;
+	ID3D12CommandAllocator* pAllocator = nullptr;
+	ID3D12GraphicsCommandList* pList = nullptr;
+	IDXGISwapChain* pSwapChain = nullptr;
+	ID3D12Resource* pResource = nullptr;
+	ID3D12Fence* pFence = nullptr;
+	DH_STATUS status = DH_STATUS_ERROR_GFX_API_INIT_FAILED;
+
+	HMODULE hLibDXGI = ::GetModuleHandle(L"dxgi.dll");
+	HMODULE hLibD3D12 = ::GetModuleHandle(L"d3d12.dll");
+	if (hLibDXGI == nullptr || hLibD3D12 == nullptr)
+	{
+		goto cleanup;
+	}
+
+	{
+		PFN_CreateDXGIFactory pfnCreateDXGIFactory = (PFN_CreateDXGIFactory)::GetProcAddress(hLibDXGI, "CreateDXGIFactory");
+		if (pfnCreateDXGIFactory == nullptr)
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		PFN_CreateDXGIFactory CreateDXGIFactory = (PFN_CreateDXGIFactory)::GetProcAddress(libDXGI, "CreateDXGIFactory");
-		if (CreateDXGIFactory == nullptr)
+		if (FAILED(pfnCreateDXGIFactory(IID_PPV_ARGS(&pFactory))))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		IDXGIFactory* factory = nullptr;
-		if (CreateDXGIFactory(IID_PPV_ARGS(&factory)) != S_OK)
+		if (FAILED(pFactory->EnumAdapters(0, &pAdapter)))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		IDXGIAdapter* adapter = nullptr;
-		if (factory->EnumAdapters(0, &adapter) == DXGI_ERROR_NOT_FOUND)
+		PFN_CreateD3D12Device pfnD3D12CreateDevice = (PFN_CreateD3D12Device)::GetProcAddress(hLibD3D12, "D3D12CreateDevice");
+		if (pfnD3D12CreateDevice == nullptr)
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		PFN_CreateD3D12Device D3D12CreateDevice = (PFN_CreateD3D12Device)::GetProcAddress(libD3D12, "D3D12CreateDevice");
-		if (D3D12CreateDevice == nullptr)
+		if (FAILED(pfnD3D12CreateDevice(pAdapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&pDevice))))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
-		}
-
-		ID3D12Device* device = nullptr;
-		if (D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device)) != S_OK)
-		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
 		D3D12_COMMAND_QUEUE_DESC queueDesc{};
@@ -89,28 +164,19 @@ namespace directhook::d3d12
 		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 		queueDesc.NodeMask = 0;
 
-		ID3D12CommandQueue* commandQueue = nullptr;
-		if (device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue)) != S_OK)
+		if (FAILED(pDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&pQueue))))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		ID3D12CommandAllocator* commandAllocator = nullptr;
-		if (device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator)) < 0)
+		if (FAILED(pDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&pAllocator))))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		ID3D12GraphicsCommandList* commandList = nullptr;
-		if (device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr, IID_PPV_ARGS(&commandList)) < 0)
+		if (FAILED(pDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, pAllocator, nullptr, IID_PPV_ARGS(&pList))))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
 		DXGI_RATIONAL refreshRate{};
@@ -134,243 +200,15 @@ namespace directhook::d3d12
 		swapChainDesc.SampleDesc = sampleDesc;
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.BufferCount = 2;
-		swapChainDesc.OutputWindow = window;
+		swapChainDesc.OutputWindow = hWnd;
 		swapChainDesc.Windowed = 1;
 		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-		IDXGISwapChain* swapChain = nullptr;
-		if (factory->CreateSwapChain(commandQueue, &swapChainDesc, &swapChain) != S_OK)
+		if (FAILED(pFactory->CreateSwapChain(pQueue, &swapChainDesc, &pSwapChain)))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
-
-		bool deviceEntriesAdded = false;
-#if defined(__ID3D12Device14_INTERFACE_DEFINED__)
-		ID3D12Device14* device14 = nullptr;
-		if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device14))))
-		{
-			methodTable.AddEntries(device14, DEVICE14_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device14);
-			deviceEntriesAdded = true;
-		}
-#endif
-#if defined(__ID3D12Device13_INTERFACE_DEFINED__)
-		ID3D12Device13* device13 = nullptr;
-		if (!deviceEntriesAdded && SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device13))))
-		{
-			methodTable.AddEntries(device13, DEVICE13_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device13);
-			deviceEntriesAdded = true;
-		}
-#endif
-#if defined(__ID3D12Device12_INTERFACE_DEFINED__)
-		ID3D12Device12* device12 = nullptr;
-		if (!deviceEntriesAdded && SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device12))))
-		{
-			methodTable.AddEntries(device12, DEVICE12_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device12);
-			deviceEntriesAdded = true;
-		}
-#endif
-#if defined(__ID3D12Device11_INTERFACE_DEFINED__)
-		ID3D12Device11* device11 = nullptr;
-		if (!deviceEntriesAdded && SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device11))))
-		{
-			methodTable.AddEntries(device11, DEVICE11_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device11);
-			deviceEntriesAdded = true;
-		}
-#endif
-#if defined(__ID3D12Device10_INTERFACE_DEFINED__)
-		ID3D12Device10* device10 = nullptr;
-		if (!deviceEntriesAdded && SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device10))))
-		{
-			methodTable.AddEntries(device10, DEVICE10_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device10);
-			deviceEntriesAdded = true;
-		}
-#endif
-#if defined(__ID3D12Device9_INTERFACE_DEFINED__)
-		ID3D12Device9* device9 = nullptr;
-		if (!deviceEntriesAdded && SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device9))))
-		{
-			methodTable.AddEntries(device9, DEVICE9_ENTRIES, MAX_DEVICE_ENTRIES);
-			SafeRelease(device9);
-			deviceEntriesAdded = true;
-		}
-#endif
-		if (!deviceEntriesAdded)
-		{
-			ID3D12Device8* device8 = nullptr;
-			ID3D12Device7* device7 = nullptr;
-			ID3D12Device6* device6 = nullptr;
-			ID3D12Device5* device5 = nullptr;
-			ID3D12Device4* device4 = nullptr;
-			ID3D12Device3* device3 = nullptr;
-			ID3D12Device2* device2 = nullptr;
-			ID3D12Device1* device1 = nullptr;
-			if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device8))))
-			{
-				methodTable.AddEntries(device8, DEVICE8_ENTRIES, MAX_DEVICE_ENTRIES);
-				SafeRelease(device8);
-			}
-			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device7))))
-			{
-				methodTable.AddEntries(device7, DEVICE7_ENTRIES, MAX_DEVICE_ENTRIES);
-				SafeRelease(device7);
-			}
-			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device6))))
-			{
-				methodTable.AddEntries(device6, DEVICE6_ENTRIES, MAX_DEVICE_ENTRIES);
-				SafeRelease(device6);
-			}
-			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device5))))
-			{
-				methodTable.AddEntries(device5, DEVICE5_ENTRIES, MAX_DEVICE_ENTRIES);
-				SafeRelease(device5);
-			}
-			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device4))))
-			{
-				methodTable.AddEntries(device4, DEVICE4_ENTRIES, MAX_DEVICE_ENTRIES);
-				SafeRelease(device4);
-			}
-			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device3))))
-			{
-				methodTable.AddEntries(device3, DEVICE3_ENTRIES, MAX_DEVICE_ENTRIES);
-				SafeRelease(device3);
-			}
-			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device2))))
-			{
-				methodTable.AddEntries(device2, DEVICE2_ENTRIES, MAX_DEVICE_ENTRIES);
-				SafeRelease(device2);
-			}
-			else if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&device1))))
-			{
-				methodTable.AddEntries(device1, DEVICE1_ENTRIES, MAX_DEVICE_ENTRIES);
-				SafeRelease(device1);
-			}
-			else
-			{
-				methodTable.AddEntries(device, DEVICE_ENTRIES);
-			}
-		}
-		
-		methodTable.AddEntries(commandQueue, QUEUE_ENTRIES);
-		methodTable.AddEntries(commandAllocator, ALLOCATOR_ENTRIES);
-
-		bool listEntriesAdded = false;
-#if defined(__ID3D12GraphicsCommandList10_INTERFACE_DEFINED__)
-		ID3D12GraphicsCommandList10* commandList10 = nullptr;
-		if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList10))))
-		{
-			methodTable.AddEntries(commandList10, LIST10_ENTRIES, MAX_LIST_ENTRIES);
-			SafeRelease(commandList10);
-			listEntriesAdded = true;
-		}
-#endif
-#if defined(__ID3D12GraphicsCommandList9_INTERFACE_DEFINED__)
-		ID3D12GraphicsCommandList9* commandList9 = nullptr;
-		if (!listEntriesAdded && SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList9))))
-		{
-			methodTable.AddEntries(commandList9, LIST9_ENTRIES, MAX_LIST_ENTRIES);
-			SafeRelease(commandList9);
-			listEntriesAdded = true;
-		}
-#endif
-#if defined(__ID3D12GraphicsCommandList8_INTERFACE_DEFINED__)
-		ID3D12GraphicsCommandList8* commandList8 = nullptr;
-		if (!listEntriesAdded && SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList8))))
-		{
-			methodTable.AddEntries(commandList8, LIST8_ENTRIES, MAX_LIST_ENTRIES);
-			SafeRelease(commandList8);
-			listEntriesAdded = true;
-		}
-#endif
-#if defined(__ID3D12GraphicsCommandList7_INTERFACE_DEFINED__)
-		ID3D12GraphicsCommandList7* commandList7 = nullptr;
-		if (!listEntriesAdded && SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList7))))
-		{
-			methodTable.AddEntries(commandList7, LIST7_ENTRIES, MAX_LIST_ENTRIES);
-			SafeRelease(commandList7);
-			listEntriesAdded = true;
-		}
-#endif
-#if defined(__ID3D12GraphicsCommandList6_INTERFACE_DEFINED__)
-		ID3D12GraphicsCommandList6* commandList6 = nullptr;
-		if (!listEntriesAdded && SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList6))))
-		{
-			methodTable.AddEntries(commandList6, LIST6_ENTRIES, MAX_LIST_ENTRIES);
-			SafeRelease(commandList6);
-			listEntriesAdded = true;
-		}
-#endif
-		if (!listEntriesAdded)
-		{
-			ID3D12GraphicsCommandList1* commandList1 = nullptr;
-			ID3D12GraphicsCommandList2* commandList2 = nullptr;
-			ID3D12GraphicsCommandList3* commandList3 = nullptr;
-			ID3D12GraphicsCommandList4* commandList4 = nullptr;
-			ID3D12GraphicsCommandList5* commandList5 = nullptr;
-			if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList5))))
-			{
-				methodTable.AddEntries(commandList5, LIST5_ENTRIES, MAX_LIST_ENTRIES);
-				SafeRelease(commandList5);
-			}
-			else if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList4))))
-			{
-				methodTable.AddEntries(commandList4, LIST4_ENTRIES, MAX_LIST_ENTRIES);
-				SafeRelease(commandList4);
-			}
-			else if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList3))))
-			{
-				methodTable.AddEntries(commandList3, LIST3_ENTRIES, MAX_LIST_ENTRIES);
-				SafeRelease(commandList3);
-			}
-			else if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList2))))
-			{
-				methodTable.AddEntries(commandList2, LIST2_ENTRIES, MAX_LIST_ENTRIES);
-				SafeRelease(commandList2);
-			}
-			else if (SUCCEEDED(commandList->QueryInterface(IID_PPV_ARGS(&commandList1))))
-			{
-				methodTable.AddEntries(commandList1, LIST1_ENTRIES, MAX_LIST_ENTRIES);
-				SafeRelease(commandList1);
-			}
-			else
-			{
-				methodTable.AddEntries(commandList, LIST_ENTRIES);
-			}
-		}
-
-        IDXGISwapChain3* swapChain3 = nullptr;
-		IDXGISwapChain2* swapChain2 = nullptr;
-		IDXGISwapChain1* swapChain1 = nullptr;
-		if (SUCCEEDED(swapChain->QueryInterface(IID_PPV_ARGS(&swapChain3))))
-		{
-			methodTable.AddEntries(swapChain3, SWAPCHAIN3_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
-			SafeRelease(swapChain3);
-		}
-		else if (SUCCEEDED(swapChain->QueryInterface(IID_PPV_ARGS(&swapChain2))))
-		{
-			methodTable.AddEntries(swapChain2, SWAPCHAIN2_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
-			SafeRelease(swapChain2);
-		}
-		else if (SUCCEEDED(swapChain->QueryInterface(IID_PPV_ARGS(&swapChain1))))
-		{
-			methodTable.AddEntries(swapChain1, SWAPCHAIN1_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
-			SafeRelease(swapChain1);
-		}
-		else
-		{
-			methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES, MAX_SWAPCHAIN_ENTRIES);
-		}
-
-		ID3D12Resource* resource = nullptr;
-		ID3D12Resource1* resource1 = nullptr;
-		ID3D12Resource2* resource2 = nullptr;
 
 		D3D12_HEAP_PROPERTIES heapProps{};
 		heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -386,74 +224,38 @@ namespace directhook::d3d12
 		desc.Alignment = 0;
 		desc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
-		if (FAILED(device->CreateCommittedResource(
-			&heapProps,
-			D3D12_HEAP_FLAG_NONE,
-			&desc,
-			D3D12_RESOURCE_STATE_GENERIC_READ,
-			nullptr,
-			IID_PPV_ARGS(&resource))))
+		if (FAILED(pDevice->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&pResource))))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		if (SUCCEEDED(resource->QueryInterface(IID_PPV_ARGS(&resource2))))
+		if (FAILED(pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&pFence))))
 		{
-			methodTable.AddEntries(resource2, RESOURCE2_ENTRIES, MAX_RESOURCE_ENTRIES);
-			SafeRelease(resource2);
-		}
-		else if (SUCCEEDED(resource->QueryInterface(IID_PPV_ARGS(&resource1))))
-		{
-			methodTable.AddEntries(resource1, RESOURCE1_ENTRIES, MAX_RESOURCE_ENTRIES);
-			SafeRelease(resource1);
-		}
-		else
-		{
-			methodTable.AddEntries(resource, RESOURCE_ENTRIES, MAX_RESOURCE_ENTRIES);
+			goto cleanup;
 		}
 
-		ID3D12Fence* fence = nullptr;
-		ID3D12Fence1* fence1 = nullptr;
-		UINT64 initialFenceValue = 0;
-		HRESULT hr = device->CreateFence(
-			initialFenceValue,
-			D3D12_FENCE_FLAG_NONE, 
-			IID_PPV_ARGS(&fence)
-		);
+		AddDeviceEntries(pTable, pDevice);
+		DH_MethodTableAddEntries(pTable, pQueue, D3D12_QUEUE_ENTRIES);
+		DH_MethodTableAddEntries(pTable, pAllocator, D3D12_ALLOCATOR_ENTRIES);
+		AddCommandListEntries(pTable, pList);
+		AddSwapChainEntries(pTable, pSwapChain);
+		AddResourceEntries(pTable, pResource);
+		AddFenceEntries(pTable, pFence);
 
-		if (FAILED(hr)) 
-		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
-		}
-
-		hr = fence->QueryInterface(IID_PPV_ARGS(&fence1));
-		if (SUCCEEDED(hr)) 
-		{
-			methodTable.AddEntries(fence1, FENCE1_ENTRIES, MAX_FENCE_ENTRIES); 
-			SafeRelease(fence1);
-		}
-		else 
-		{
-			methodTable.AddEntries(fence, FENCE_ENTRIES, MAX_FENCE_ENTRIES);
-		}
-
-		SafeRelease(fence);
-		SafeRelease(resource);
-        SafeRelease(device);
-        SafeRelease(commandQueue);
-        SafeRelease(commandAllocator);
-        SafeRelease(commandList);
-        SafeRelease(swapChain);
-
-		::DestroyWindow(window);
-		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-
-		return DH_Status::Success;
+		status = DH_STATUS_SUCCESS;
 	}
 
+cleanup:
+	SafeRelease(pFence);
+	SafeRelease(pResource);
+	SafeRelease(pSwapChain);
+	SafeRelease(pList);
+	SafeRelease(pAllocator);
+	SafeRelease(pQueue);
+	SafeRelease(pDevice);
+	SafeRelease(pAdapter);
+	SafeRelease(pFactory);
+	::DestroyWindow(hWnd);
+	::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
+	return status;
 }
-

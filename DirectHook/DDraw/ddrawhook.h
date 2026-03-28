@@ -1,12 +1,7 @@
 #pragma once
-#include "../directhook.h"
+#include "directhook.h"
+#include "method_table.h"
+#include "ddrawhook_indices.h"
+#include "ddrawhook_aliases.h"
 
-namespace directhook
-{
-	class MethodTable;
-
-	namespace ddraw
-	{
-		DH_Status Initialize(MethodTable& methodTable);
-	}
-}
+DH_STATUS WINAPI DH_DDRAW_Initialize(PDH_METHOD_TABLE pTable);

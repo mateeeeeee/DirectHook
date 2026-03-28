@@ -1,29 +1,5 @@
 #pragma once
-#include <cstdint>
-#include <cassert>
-
-#define DH_ASSERT(cond) assert(cond)
-#define DH_ASSERT_MSG(cond, msg) assert(cond && msg)
-
-#ifndef DH_USE_DDRAW
-#define DH_USE_DDRAW  0
-#endif
-
-#ifndef DH_USE_D3D9
-#define DH_USE_D3D9  0
-#endif
-
-#ifndef DH_USE_D3D10
-#define DH_USE_D3D10  0
-#endif
-
-#ifndef DH_USE_D3D11
-#define DH_USE_D3D11  0
-#endif
-
-#ifndef DH_USE_D3D12
-#define DH_USE_D3D12  0
-#endif
+#include <windows.h>
 
 #if DH_USE_DDRAW
 #include "DDraw/ddrawhook_aliases.h"
@@ -50,35 +26,50 @@
 #include "D3D12/d3d12hook_indices.h"
 #endif
 
-namespace directhook
+typedef enum DH_STATUS
 {
-	enum class DH_Status
-	{
-		Success,
-		Error_MinHookInitFailed,
-		Error_GfxApiInitFailed,
-		Error_DHAlreadyInitialized,
-		Error_MinHookFailed,
-		Error_MinHookEnableFailed,
-		Error_NoGfxApi,
-	};
+	DH_STATUS_SUCCESS = 0,
+	DH_STATUS_ERROR_MIN_HOOK_INIT_FAILED,
+	DH_STATUS_ERROR_GFX_API_INIT_FAILED,
+	DH_STATUS_ERROR_DH_ALREADY_INITIALIZED,
+	DH_STATUS_ERROR_MIN_HOOK_FAILED,
+	DH_STATUS_ERROR_MIN_HOOK_ENABLE_FAILED,
+	DH_STATUS_ERROR_NO_GFX_API,
+} DH_STATUS;
 
-	DH_Status	DH_Initialize();
-	void	DH_Shutdown();
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-	DH_Status Hook(unsigned int index, void** original, void* function);
-	DH_Status Unhook(unsigned int index);
-	void* GetOriginal(unsigned int index);
+DH_STATUS WINAPI DH_Initialize(VOID);
+VOID      WINAPI DH_Shutdown(VOID);
 
-	template<typename FuncT>
-	DH_Status Hook(unsigned int index, FuncT*& original, FuncT& function)
-	{
-		return Hook(index, (void**)&original, (void*)function);
-	}
+DH_STATUS WINAPI DH_Hook(UINT uIndex, LPVOID* lpOriginal, LPVOID lpFunction);
+DH_STATUS WINAPI DH_Unhook(UINT uIndex);
+LPVOID    WINAPI DH_GetOriginal(UINT uIndex);
 
-	template<typename FuncT>
-	void SaveOriginal(unsigned int index, FuncT& F)
-	{
-		F = (FuncT)GetOriginal(index);
-	}
+DH_STATUS WINAPI DH_HookFunction(LPVOID lpTarget, LPVOID* lpOriginal, LPVOID lpFunction);
+DH_STATUS WINAPI DH_UnhookFunction(LPVOID lpTarget);
+
+#ifdef __cplusplus
+} // extern "C"
+
+template<typename FuncT>
+inline DH_STATUS DH_Hook(UINT uIndex, FuncT*& lpOriginal, FuncT& lpFunction)
+{
+	return DH_Hook(uIndex, (LPVOID*)&lpOriginal, (LPVOID)lpFunction);
 }
+
+template<typename FuncT>
+inline VOID DH_SaveOriginal(UINT uIndex, FuncT& F)
+{
+	F = (FuncT)DH_GetOriginal(uIndex);
+}
+
+template<typename FuncT>
+inline DH_STATUS DH_HookFunction(FuncT* lpTarget, FuncT*& lpOriginal, FuncT& lpFunction)
+{
+	return DH_HookFunction((LPVOID)lpTarget, (LPVOID*)&lpOriginal, (LPVOID)lpFunction);
+}
+
+#endif

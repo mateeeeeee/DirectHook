@@ -1,81 +1,67 @@
 #include <dxgi.h>
 #include <d3d10.h>
 #include "d3d10hook.h"
-#include "../method_table.h"
+#include "com_utils.h"
 
-namespace directhook::d3d10
+using PFN_CreateDXGIFactory = HRESULT(WINAPI*)(REFIID, void**);
+
+using PFN_D3D10CreateDeviceAndSwapChain = HRESULT(WINAPI*)(
+	IDXGIAdapter*,
+	D3D10_DRIVER_TYPE,
+	HMODULE,
+	UINT,
+	UINT,
+	DXGI_SWAP_CHAIN_DESC*,
+	IDXGISwapChain**,
+	ID3D10Device**
+);
+
+DH_STATUS WINAPI DH_D3D10_Initialize(PDH_METHOD_TABLE pTable)
 {
-	using PFN_CreateDXGIFactory = HRESULT(STDMETHODCALLTYPE*)(REFIID, void**);
+	WNDCLASSEX windowClass{};
+	windowClass.cbSize = sizeof(WNDCLASSEX);
+	windowClass.style = CS_HREDRAW | CS_VREDRAW;
+	windowClass.lpfnWndProc = DefWindowProc;
+	windowClass.hInstance = GetModuleHandle(nullptr);
+	windowClass.lpszClassName = L"DirectHook_D3D10";
 
-	using PFN_D3D10CreateDeviceAndSwapChain = HRESULT(*)(
-		IDXGIAdapter*,
-		D3D10_DRIVER_TYPE,
-		HMODULE,
-		UINT,
-		UINT,
-		DXGI_SWAP_CHAIN_DESC*,
-		IDXGISwapChain** ,
-		ID3D10Device**
-	);
+	::RegisterClassEx(&windowClass);
+	HWND hWnd = ::CreateWindow(windowClass.lpszClassName, L"Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, windowClass.hInstance, nullptr);
 
-	DH_Status Initialize(MethodTable& methodTable)
+	IDXGIFactory* pFactory = nullptr;
+	IDXGIAdapter* pAdapter = nullptr;
+	IDXGISwapChain* pSwapChain = nullptr;
+	ID3D10Device* pDevice = nullptr;
+	DH_STATUS status = DH_STATUS_ERROR_GFX_API_INIT_FAILED;
+
+	HMODULE hLibDXGI  = ::GetModuleHandle(L"dxgi.dll");
+	HMODULE hLibD3D10 = ::GetModuleHandle(L"d3d10.dll");
+	if (!hLibDXGI || !hLibD3D10)
 	{
-		WNDCLASSEX windowClass;
-		windowClass.cbSize = sizeof(WNDCLASSEX);
-		windowClass.style = CS_HREDRAW | CS_VREDRAW;
-		windowClass.lpfnWndProc = DefWindowProc;
-		windowClass.cbClsExtra = 0;
-		windowClass.cbWndExtra = 0;
-		windowClass.hInstance = GetModuleHandle(nullptr);
-		windowClass.hIcon = nullptr;
-		windowClass.hCursor = nullptr;
-		windowClass.hbrBackground = nullptr;
-		windowClass.lpszMenuName = nullptr;
-		windowClass.lpszClassName = L"DirectHook";
-		windowClass.hIconSm = nullptr;
+		goto cleanup;
+	}
 
-		::RegisterClassEx(&windowClass);
-		HWND window = ::CreateWindow(windowClass.lpszClassName, L"Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, windowClass.hInstance, nullptr);
-
-		HMODULE libDXGI  = ::GetModuleHandle(L"dxgi.dll");
-		HMODULE libD3D10 = ::GetModuleHandle(L"d3d10.dll");
-		if (!libDXGI || !libD3D10)
+	{
+		PFN_CreateDXGIFactory pfnCreateDXGIFactory = (PFN_CreateDXGIFactory)::GetProcAddress(hLibDXGI, "CreateDXGIFactory");
+		if (!pfnCreateDXGIFactory)
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		PFN_CreateDXGIFactory CreateDXGIFactory = (PFN_CreateDXGIFactory)::GetProcAddress(libDXGI, "CreateDXGIFactory");
-		if (!CreateDXGIFactory)
+		if (FAILED(pfnCreateDXGIFactory(IID_PPV_ARGS(&pFactory))))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		IDXGIFactory* factory = nullptr;
-		if (CreateDXGIFactory(IID_PPV_ARGS(&factory)) != S_OK)
+		if (FAILED(pFactory->EnumAdapters(0, &pAdapter)))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		IDXGIAdapter* adapter = nullptr;
-		if (factory->EnumAdapters(0, &adapter) == DXGI_ERROR_NOT_FOUND)
+		PFN_D3D10CreateDeviceAndSwapChain pfnD3D10CreateDeviceAndSwapChain = (PFN_D3D10CreateDeviceAndSwapChain)::GetProcAddress(hLibD3D10, "D3D10CreateDeviceAndSwapChain");
+		if (!pfnD3D10CreateDeviceAndSwapChain)
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
-		}
-
-		PFN_D3D10CreateDeviceAndSwapChain D3D10CreateDeviceAndSwapChain = (PFN_D3D10CreateDeviceAndSwapChain)::GetProcAddress(libD3D10, "D3D10CreateDeviceAndSwapChain");
-		if (!D3D10CreateDeviceAndSwapChain)
-		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
 		DXGI_RATIONAL refreshRate{};
@@ -99,35 +85,28 @@ namespace directhook::d3d10
 		swapChainDesc.SampleDesc = sampleDesc;
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.BufferCount = 1;
-		swapChainDesc.OutputWindow = window;
+		swapChainDesc.OutputWindow = hWnd;
 		swapChainDesc.Windowed = 1;
 		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-		IDXGISwapChain* swapChain;
-		ID3D10Device* device;
-
-		if (D3D10CreateDeviceAndSwapChain(adapter, D3D10_DRIVER_TYPE_HARDWARE, NULL, 0, D3D10_SDK_VERSION, &swapChainDesc, &swapChain, &device) != S_OK)
+		if (FAILED(pfnD3D10CreateDeviceAndSwapChain(pAdapter, D3D10_DRIVER_TYPE_HARDWARE, NULL, 0, D3D10_SDK_VERSION, &swapChainDesc, &pSwapChain, &pDevice)))
 		{
-			::DestroyWindow(window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return DH_Status::Error_GfxApiInitFailed;
+			goto cleanup;
 		}
 
-		methodTable.AddEntries(swapChain, SWAPCHAIN_ENTRIES);
-		methodTable.AddEntries(device, DEVICE_ENTRIES);
+		DH_MethodTableAddEntries(pTable, pSwapChain, D3D10_SWAPCHAIN_ENTRIES);
+		DH_MethodTableAddEntries(pTable, pDevice, D3D10_DEVICE_ENTRIES);
 
-		swapChain->Release();
-		swapChain = nullptr;
-
-		device->Release();
-		device = nullptr;
-
-		::DestroyWindow(window);
-		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-
-		return DH_Status::Success;
+		status = DH_STATUS_SUCCESS;
 	}
 
+cleanup:
+	SafeRelease(pDevice);
+	SafeRelease(pSwapChain);
+	SafeRelease(pAdapter);
+	SafeRelease(pFactory);
+	::DestroyWindow(hWnd);
+	::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
+	return status;
 }
-

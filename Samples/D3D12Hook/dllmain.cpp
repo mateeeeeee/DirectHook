@@ -5,8 +5,6 @@
 #include "ImGui/imgui_impl_dx12.h"
 #include "ImGui/imgui_impl_win32.h"
 
-using namespace directhook;
-
 #pragma comment(lib, "dxgi.lib")
 
 struct ImGuiD3D12Context
@@ -22,10 +20,10 @@ struct ImGuiD3D12Context
 	UINT BufferCount;
 };
 
-static d3d12::PFN_D3D12CommandList_DrawInstanced D3D12Draw = nullptr;
-static d3d12::PFN_DXGISwapChain_Present DxgiPresent = nullptr;
-static WNDPROC Win32WndProc = nullptr;
-static ImGuiD3D12Context Context;
+static PFN_D3D12_CommandList_DrawInstanced     g_pfnD3D12Draw = nullptr;
+static PFN_D3D12_DXGISwapChain_Present  g_pfnDxgiPresent = nullptr;
+static WNDPROC g_pfnWin32WndProc = nullptr;
+static ImGuiD3D12Context g_Context;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 static LRESULT CALLBACK MyWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -34,7 +32,7 @@ static LRESULT CALLBACK MyWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 	{
 		return 1L;
 	}
-	return ::CallWindowProcA(Win32WndProc, hwnd, uMsg, wParam, lParam);
+	return ::CallWindowProcA(g_pfnWin32WndProc, hwnd, uMsg, wParam, lParam);
 }
 
 static BOOL GetCommandQueueOffset(UINT& offset)
@@ -50,9 +48,22 @@ static BOOL GetCommandQueueOffset(UINT& offset)
 		{
 			if (rtlGetVersion(&osInfo) == 0)
 			{
-				if (osInfo.dwBuildNumber >= 26100) offset = 0x138;
-				else if (osInfo.dwBuildNumber >= 21996) offset = 0x168;
-				else offset = 0x118;
+				if (osInfo.dwBuildNumber >= 26200)
+				{
+					offset = 0x140;
+				}
+				else if (osInfo.dwBuildNumber >= 26100)
+				{
+					offset = 0x138;
+				}
+				else if (osInfo.dwBuildNumber >= 21996)
+				{
+					offset = 0x168;
+				}
+				else
+				{
+					offset = 0x118;
+				}
 				return TRUE;
 			}
 			else
@@ -63,108 +74,136 @@ static BOOL GetCommandQueueOffset(UINT& offset)
 	}
 	return FALSE;
 }
-static HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncInterval, UINT Flags)
+
+static HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
-	static BOOL initialized = FALSE;
-	if (!initialized)
+	static LONG initStatus = 0;
+	LONG prev = InterlockedCompareExchange(&initStatus, 1, 0);
+	if (prev == 1)
+	{
+		return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
+	}
+	if (prev == 0)
 	{
 		DXGI_SWAP_CHAIN_DESC swapchainDesc{};
-		if (FAILED(SwapChain->GetDesc(&swapchainDesc)))
+		if (FAILED(pSwapChain->GetDesc(&swapchainDesc)))
 		{
-			return DxgiPresent(SwapChain, SyncInterval, Flags);
+			InterlockedExchange(&initStatus, 0);
+			return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
 		}
-		Win32WndProc = (WNDPROC)::SetWindowLongPtr(swapchainDesc.OutputWindow, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(MyWindowProc));
+		g_pfnWin32WndProc = (WNDPROC)::SetWindowLongPtr(swapchainDesc.OutputWindow, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(MyWindowProc));
 
-		ID3D12Device* device = nullptr;
-		if (FAILED(SwapChain->GetDevice(IID_PPV_ARGS(&device))))
+		ID3D12Device* pDevice = nullptr;
+		if (FAILED(pSwapChain->GetDevice(IID_PPV_ARGS(&pDevice))))
 		{
-			return DxgiPresent(SwapChain, SyncInterval, Flags);
+			InterlockedExchange(&initStatus, 0);
+			return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
 		}
 
-        if (!Context.CommandQueue)
-        {
+		if (!g_Context.CommandQueue)
+		{
 			UINT queueOffset;
-            if (GetCommandQueueOffset(queueOffset))
-            {
-				Context.CommandQueue = *reinterpret_cast<ID3D12CommandQueue**>((uintptr_t)SwapChain + queueOffset);
-            }
-        }
-
-		D3D12_DESCRIPTOR_HEAP_DESC fontHeapDesc{};
-		fontHeapDesc.NumDescriptors = 1;
-		fontHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV; 
-		fontHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE; 
-		fontHeapDesc.NodeMask = 0; 
-		if (FAILED(device->CreateDescriptorHeap(&fontHeapDesc, IID_PPV_ARGS(&Context.FontDescriptorHeap))))
-		{
-			return DxgiPresent(SwapChain, SyncInterval, Flags);
-		}
-
-		IDXGISwapChain3* SwapChain3 = nullptr;
-		if (FAILED(SwapChain->QueryInterface(&SwapChain3)))
-		{
-			return DxgiPresent(SwapChain, SyncInterval, Flags);
-		}
-
-		Context.BufferIndex = SwapChain3->GetCurrentBackBufferIndex();
-		Context.BufferCount = swapchainDesc.BufferCount;
-
-		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
-		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-		rtvHeapDesc.NumDescriptors = Context.BufferCount;
-		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-
-		if (device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&Context.RTVDescriptorHeap)) != S_OK)
-		{
-			return DxgiPresent(SwapChain, SyncInterval, Flags);
-		}
-
-		Context.BackBuffers.resize(Context.BufferCount);
-		Context.BackBufferDescriptors.resize(Context.BufferCount);
-		UINT rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = Context.RTVDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-		for (UINT i = 0; i < Context.BufferCount; i++)
-		{
-			Context.BackBufferDescriptors[i] = rtvHandle;
-			SwapChain->GetBuffer(i, IID_PPV_ARGS(&Context.BackBuffers[i]));
-			device->CreateRenderTargetView(Context.BackBuffers[i], nullptr, rtvHandle);
-			rtvHandle.ptr += rtvDescriptorSize;
-		}
-		
-		Context.CommandAllocators.resize(Context.BufferCount);
-		for (UINT i = 0; i < Context.BufferCount; ++i)
-		{
-			if (FAILED(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&Context.CommandAllocators[i]))))
+			if (GetCommandQueueOffset(queueOffset))
 			{
-				return DxgiPresent(SwapChain, SyncInterval, Flags);
+				g_Context.CommandQueue = *reinterpret_cast<ID3D12CommandQueue**>((uintptr_t)pSwapChain + queueOffset);
 			}
 		}
 
-		if (FAILED(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, Context.CommandAllocators[0], nullptr, IID_PPV_ARGS(&Context.CommandList))))
+		D3D12_DESCRIPTOR_HEAP_DESC fontHeapDesc{};
+		fontHeapDesc.NumDescriptors = 1;
+		fontHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+		fontHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+		fontHeapDesc.NodeMask = 0;
+		if (FAILED(pDevice->CreateDescriptorHeap(&fontHeapDesc, IID_PPV_ARGS(&g_Context.FontDescriptorHeap))))
 		{
-			return DxgiPresent(SwapChain, SyncInterval, Flags);
+			pDevice->Release();
+			InterlockedExchange(&initStatus, 0);
+			return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
 		}
 
-		D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = Context.FontDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-		D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = Context.FontDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
+		IDXGISwapChain3* pSwapChain3 = nullptr;
+		if (FAILED(pSwapChain->QueryInterface(&pSwapChain3)))
+		{
+			pDevice->Release();
+			InterlockedExchange(&initStatus, 0);
+			return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
+		}
+
+		g_Context.BufferIndex = pSwapChain3->GetCurrentBackBufferIndex();
+		g_Context.BufferCount = swapchainDesc.BufferCount;
+		pSwapChain3->Release();
+
+		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
+		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+		rtvHeapDesc.NumDescriptors = g_Context.BufferCount;
+		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+
+		if (FAILED(pDevice->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&g_Context.RTVDescriptorHeap))))
+		{
+			pDevice->Release();
+			InterlockedExchange(&initStatus, 0);
+			return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
+		}
+
+		g_Context.BackBuffers.resize(g_Context.BufferCount);
+		g_Context.BackBufferDescriptors.resize(g_Context.BufferCount);
+		UINT rtvDescriptorSize = pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = g_Context.RTVDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+		for (UINT i = 0; i < g_Context.BufferCount; i++)
+		{
+			g_Context.BackBufferDescriptors[i] = rtvHandle;
+			pSwapChain->GetBuffer(i, IID_PPV_ARGS(&g_Context.BackBuffers[i]));
+			pDevice->CreateRenderTargetView(g_Context.BackBuffers[i], nullptr, rtvHandle);
+			rtvHandle.ptr += rtvDescriptorSize;
+		}
+
+		g_Context.CommandAllocators.resize(g_Context.BufferCount);
+		BOOL bAllocatorsOk = TRUE;
+		for (UINT i = 0; i < g_Context.BufferCount; ++i)
+		{
+			if (FAILED(pDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&g_Context.CommandAllocators[i]))))
+			{
+				bAllocatorsOk = FALSE;
+				break;
+			}
+		}
+		if (!bAllocatorsOk)
+		{
+			pDevice->Release();
+			InterlockedExchange(&initStatus, 0);
+			return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
+		}
+
+		if (FAILED(pDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, g_Context.CommandAllocators[0], nullptr, IID_PPV_ARGS(&g_Context.CommandList))))
+		{
+			pDevice->Release();
+			InterlockedExchange(&initStatus, 0);
+			return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
+		}
+
+		D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = g_Context.FontDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+		D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = g_Context.FontDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
 		ImGui::CreateContext();
 		ImGui_ImplWin32_Init(swapchainDesc.OutputWindow);
 		ImGui_ImplDX12_InitInfo init_info;
-		init_info.Device = device;
+		init_info.Device = pDevice;
 		init_info.NumFramesInFlight = swapchainDesc.BufferCount;
 		init_info.RTVFormat = swapchainDesc.BufferDesc.Format;
-		init_info.SrvDescriptorHeap = Context.FontDescriptorHeap;
+		init_info.SrvDescriptorHeap = g_Context.FontDescriptorHeap;
 		init_info.LegacySingleSrvCpuDescriptor = cpuHandle;
 		init_info.LegacySingleSrvGpuDescriptor = gpuHandle;
-		init_info.CommandQueue = Context.CommandQueue;
+		init_info.CommandQueue = g_Context.CommandQueue;
 		ImGui_ImplDX12_Init(&init_info);
-		initialized = TRUE;
+
+		pDevice->Release();
+		InterlockedExchange(&initStatus, 2);
 	}
-	if (!Context.CommandQueue)
+
+	if (!g_Context.CommandQueue)
 	{
-		return DxgiPresent(SwapChain, SyncInterval, Flags);
+		return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
 	}
-	
+
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
@@ -176,44 +215,46 @@ static HRESULT STDMETHODCALLTYPE MyPresent(IDXGISwapChain* SwapChain, UINT SyncI
 	D3D12_RESOURCE_BARRIER Barrier;
 	Barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	Barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	Barrier.Transition.pResource = Context.BackBuffers[Context.BufferIndex];
+	Barrier.Transition.pResource = g_Context.BackBuffers[g_Context.BufferIndex];
 	Barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 	Barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
 	Barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	Context.CommandList->OMSetRenderTargets(1, &Context.BackBufferDescriptors[Context.BufferIndex], FALSE, nullptr);
+	g_Context.CommandList->ResourceBarrier(1, &Barrier);
+	g_Context.CommandList->OMSetRenderTargets(1, &g_Context.BackBufferDescriptors[g_Context.BufferIndex], FALSE, nullptr);
 
-	Context.CommandList->SetDescriptorHeaps(1, &Context.FontDescriptorHeap);
-	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), Context.CommandList);
+	g_Context.CommandList->SetDescriptorHeaps(1, &g_Context.FontDescriptorHeap);
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), g_Context.CommandList);
 
 	Barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	Barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-	Context.CommandList->ResourceBarrier(1, &Barrier);
+	g_Context.CommandList->ResourceBarrier(1, &Barrier);
 
-	Context.CommandList->Close();
-	Context.CommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList* const*>(&Context.CommandList));
-	Context.CommandAllocators[Context.BufferIndex]->Reset();
-	Context.CommandList->Reset(Context.CommandAllocators[Context.BufferIndex], nullptr);
+	g_Context.CommandList->Close();
+	g_Context.CommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList* const*>(&g_Context.CommandList));
+	g_Context.CommandAllocators[g_Context.BufferIndex]->Reset();
+	g_Context.CommandList->Reset(g_Context.CommandAllocators[g_Context.BufferIndex], nullptr);
 
-	Context.BufferIndex = (Context.BufferIndex + 1) % Context.BufferCount;
-	return DxgiPresent(SwapChain, SyncInterval, Flags);
+	g_Context.BufferIndex = (g_Context.BufferIndex + 1) % g_Context.BufferCount;
+	return g_pfnDxgiPresent(pSwapChain, SyncInterval, Flags);
 }
-static void STDMETHODCALLTYPE MyDraw(ID3D12GraphicsCommandList* CmdList, UINT VertexCountPerInstance, UINT InstanceCount, UINT StartVertexLocation, UINT StartInstanceLocation)
+
+static void STDMETHODCALLTYPE MyDraw(ID3D12GraphicsCommandList* pCmdList, UINT VertexCountPerInstance, UINT InstanceCount, UINT StartVertexLocation, UINT StartInstanceLocation)
 {
-	static BOOL called = FALSE;
-	if (!called)
+	static BOOL bCalled = FALSE;
+	if (!bCalled)
 	{
 		MessageBoxA(0, "Called MyDraw!", "DirectHook", MB_OK);
-		called = TRUE;
+		bCalled = TRUE;
 	}
-	D3D12Draw(CmdList, VertexCountPerInstance, InstanceCount, StartVertexLocation, StartInstanceLocation);
+	g_pfnD3D12Draw(pCmdList, VertexCountPerInstance, InstanceCount, StartVertexLocation, StartInstanceLocation);
 }
 
 INT D3D12HookThread()
 {
-	if (DH_Status dh = DH_Initialize(); dh == DH_Status::Success)
+	if (DH_Initialize() == DH_STATUS_SUCCESS)
 	{
-		Hook(d3d12::SwapChain_Present, DxgiPresent, MyPresent);
-		Hook(d3d12::List_DrawInstanced, D3D12Draw, MyDraw);
+		DH_Hook(D3D12_SwapChain_Present, g_pfnDxgiPresent, MyPresent);
+		DH_Hook(D3D12_List_DrawInstanced, g_pfnD3D12Draw, MyDraw);
 	}
 	return 0;
 }
@@ -229,5 +270,3 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID)
 	}
 	return TRUE;
 }
-
-
